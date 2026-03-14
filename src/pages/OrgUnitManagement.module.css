@@ -1,0 +1,38 @@
+.page {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 1400px;
+}
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.title {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--colors-grey900, #212934);
+  margin: 0;
+  line-height: 1.3;
+}
+.subtitle {
+  font-size: 13px;
+  color: var(--colors-grey600, #6c7787);
+  margin-top: 4px;
+  display: block;
+}
+.toolbar {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.paginationRow {
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 8px;
+}

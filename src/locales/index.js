@@ -10,12 +10,10 @@ import i18n from '@dhis2/d2-i18n'
 
 import READMETranslations from './README/translations.json'
 import enTranslations from './en/translations.json'
-import enTranslations from './en/translations.json'
 import frTranslations from './fr/translations.json'
 
 const namespace = 'default'
 i18n.addResources('README', namespace, READMETranslations)
-i18n.addResources('en', namespace, enTranslations)
 i18n.addResources('en', namespace, enTranslations)
 i18n.addResources('fr', namespace, frTranslations)
 

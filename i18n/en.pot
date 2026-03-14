@@ -5,14 +5,11 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-14T13:05:01.995Z\n"
-"PO-Revision-Date: 2026-03-14T13:05:01.996Z\n"
+"POT-Creation-Date: 2026-03-14T17:58:44.487Z\n"
+"PO-Revision-Date: 2026-03-14T17:58:44.488Z\n"
 
-msgid "DHIS2 NexAdmin"
-msgstr "DHIS2 NexAdmin"
-
-msgid "IS Administration Toolkit · Phase 0 scaffold"
-msgstr "IS Administration Toolkit · Phase 0 scaffold"
+msgid "{{total}} total"
+msgstr "{{total}} total"
 
 msgid "Language"
 msgstr "Language"
@@ -20,5 +17,159 @@ msgstr "Language"
 msgid "Switch to {{lang}}"
 msgstr "Switch to {{lang}}"
 
+msgid "Delete organisation unit"
+msgstr "Delete organisation unit"
+
+msgid "Cannot delete — org unit has children or associated data"
+msgstr "Cannot delete — org unit has children or associated data"
+
+msgid "Delete failed"
+msgstr "Delete failed"
+
+msgid ""
+"This organisation unit cannot be deleted because it has child units or "
+"associated data. Remove all associations first."
+msgstr ""
+"This organisation unit cannot be deleted because it has child units or "
+"associated data. Remove all associations first."
+
+msgid "Are you sure you want to delete {{name}}? This action cannot be undone."
+msgstr "Are you sure you want to delete {{name}}? This action cannot be undone."
+
+msgid "Close"
+msgstr "Close"
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Deleting…"
+msgstr "Deleting…"
+
+msgid "Delete"
+msgstr "Delete"
+
+msgid "Edit organisation unit"
+msgstr "Edit organisation unit"
+
+msgid "Create organisation unit"
+msgstr "Create organisation unit"
+
+msgid "Save failed"
+msgstr "Save failed"
+
+msgid "Name *"
+msgstr "Name *"
+
+msgid "Short name *"
+msgstr "Short name *"
+
+msgid "Code"
+msgstr "Code"
+
+msgid "Opening date *"
+msgstr "Opening date *"
+
+msgid "Closed date"
+msgstr "Closed date"
+
+msgid "Parent org unit ID *"
+msgstr "Parent org unit ID *"
+
+msgid "Enter the ID of the parent organisation unit"
+msgstr "Enter the ID of the parent organisation unit"
+
+msgid "Description"
+msgstr "Description"
+
+msgid "Comment"
+msgstr "Comment"
+
+msgid "Save changes"
+msgstr "Save changes"
+
+msgid "Create"
+msgstr "Create"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Short name"
+msgstr "Short name"
+
+msgid "Level"
+msgstr "Level"
+
+msgid "Opening date"
+msgstr "Opening date"
+
+msgid "Status"
+msgstr "Status"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "Closed"
+msgstr "Closed"
+
+msgid "Open"
+msgstr "Open"
+
+msgid "Edit"
+msgstr "Edit"
+
+msgid "Main navigation"
+msgstr "Main navigation"
+
+msgid "Collapse sidebar"
+msgstr "Collapse sidebar"
+
+msgid "Expand sidebar"
+msgstr "Expand sidebar"
+
 msgid "Health Dashboard"
 msgstr "Health Dashboard"
+
+msgid "Access Control"
+msgstr "Access Control"
+
+msgid "This module is under construction."
+msgstr "This module is under construction."
+
+msgid "Audit Log"
+msgstr "Audit Log"
+
+msgid "Data Quality"
+msgstr "Data Quality"
+
+msgid "Hierarchy Viewer"
+msgstr "Hierarchy Viewer"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Org Unit Groups"
+msgstr "Org Unit Groups"
+
+msgid "Organisation Units"
+msgstr "Organisation Units"
+
+msgid "Add organisation unit"
+msgstr "Add organisation unit"
+
+msgid "Error loading organisation units"
+msgstr "Error loading organisation units"
+
+msgid "Roles Authorities"
+msgstr "Roles Authorities"
+
+msgid "System Settings"
+msgstr "System Settings"
+
+msgid "Usage Statistics"
+msgstr "Usage Statistics"
+
+msgid "User Groups"
+msgstr "User Groups"
+
+msgid "User Management"
+msgstr "User Management"

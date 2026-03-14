@@ -23,7 +23,8 @@
     "isolatedModules": true,
     "paths": {
       "@/*": ["./src/*"]
-    }
+    },
+    "types": ["jest", "@testing-library/jest-dom"]
   },
   "include": ["src"],
   "exclude": ["node_modules", "build", "dist"]

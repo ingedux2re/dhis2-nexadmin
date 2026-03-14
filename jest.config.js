@@ -5,6 +5,7 @@ module.exports = {
   ],
   moduleNameMapper: {
     '^@dhis2/d2-i18n$': '<rootDir>/src/__mocks__/d2-i18n.ts',
+    '^.+\\.module\\.(css|scss|less)$': 'identity-obj-proxy',
   },
   setupFilesAfterEnv: ['@testing-library/jest-dom'],
 }
