@@ -1,0 +1,1625 @@
+# DHIS2 NexAdmin — Français translations
+# Language: fr
+# Generated: 2026-03-13
+# Tool: @dhis2/d2-i18n (i18next Gettext backend)
+# 
+# Interpolation: {{variable}} — i18next double-brace syntax
+# Plurals: use msgid + msgid_plural + msgstr[0] + msgstr[1]
+#
+# Add translations below (msgstr must not be empty)
+#
+msgid ""
+msgstr ""
+"Language: fr\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 0 — App Shell, Common Strings & Settings
+# ══════════════════════════════════════════════════════════════
+
+# — app —
+msgid "DHIS2 NexAdmin"
+msgstr "DHIS2 NexAdmin"
+
+# — app —
+msgid "IS Administration Toolkit"
+msgstr "Boîte à outils d'administration SI"
+
+# — app —
+msgid "Sierra Leone Demo"
+msgstr "Démo Sierra Leone"
+
+# — nav —
+msgid "Overview"
+msgstr "Vue d'ensemble"
+
+# — nav —
+msgid "Analysis Tools"
+msgstr "Outils d'analyse"
+
+# — nav —
+msgid "Governance"
+msgstr "Gouvernance"
+
+# — nav —
+msgid "System"
+msgstr "Système"
+
+# — nav —
+msgid "Metadata Tools"
+msgstr "Outils de métadonnées"
+
+# — common —
+msgid "Save"
+msgstr "Enregistrer"
+
+# — common —
+msgid "Cancel"
+msgstr "Annuler"
+
+# — common —
+msgid "Close"
+msgstr "Fermer"
+
+# — common —
+msgid "Back"
+msgstr "Retour"
+
+# — common —
+msgid "Next"
+msgstr "Suivant"
+
+# — common —
+msgid "Confirm"
+msgstr "Confirmer"
+
+# — common —
+msgid "Delete"
+msgstr "Supprimer"
+
+# — common —
+msgid "Edit"
+msgstr "Modifier"
+
+# — common —
+msgid "View"
+msgstr "Voir"
+
+# — common —
+msgid "Export"
+msgstr "Exporter"
+
+# — common —
+msgid "Import"
+msgstr "Importer"
+
+# — common —
+msgid "Refresh"
+msgstr "Actualiser"
+
+# — common —
+msgid "Retry"
+msgstr "Réessayer"
+
+# — common —
+msgid "Search"
+msgstr "Rechercher"
+
+# — common —
+msgid "Filter"
+msgstr "Filtrer"
+
+# — common —
+msgid "Clear"
+msgstr "Effacer"
+
+# — common —
+msgid "Reset"
+msgstr "Réinitialiser"
+
+# — common —
+msgid "Apply"
+msgstr "Appliquer"
+
+# — common —
+msgid "Download"
+msgstr "Télécharger"
+
+# — common —
+msgid "Yes"
+msgstr "Oui"
+
+# — common —
+msgid "No"
+msgstr "Non"
+
+# — common —
+msgid "OK"
+msgstr "OK"
+
+# — common —
+msgid "All"
+msgstr "Tous"
+
+# — common —
+msgid "None"
+msgstr "Aucun"
+
+# — common —
+msgid "Select All"
+msgstr "Tout sélectionner"
+
+# — common —
+msgid "Deselect All"
+msgstr "Tout désélectionner"
+
+# — common —
+msgid "Export CSV"
+msgstr "Exporter CSV"
+
+# — common —
+msgid "Export PDF"
+msgstr "Exporter PDF"
+
+# — common —
+msgid "Preview"
+msgstr "Aperçu"
+
+# — common —
+msgid "Execute"
+msgstr "Exécuter"
+
+# — common —
+msgid "Report"
+msgstr "Rapport"
+
+# — common —
+msgid "Actions"
+msgstr "Actions"
+
+# — common —
+msgid "Status"
+msgstr "Statut"
+
+# — common —
+msgid "Name"
+msgstr "Nom"
+
+# — common —
+msgid "Code"
+msgstr "Code"
+
+# — common —
+msgid "Level"
+msgstr "Niveau"
+
+# — common —
+msgid "Date"
+msgstr "Date"
+
+# — common —
+msgid "Type"
+msgstr "Type"
+
+# — common —
+msgid "Description"
+msgstr "Description"
+
+# — common —
+msgid "District"
+msgstr "District"
+
+# — common —
+msgid "High"
+msgstr "Élevée"
+
+# — common —
+msgid "Medium"
+msgstr "Moyenne"
+
+# — common —
+msgid "Low"
+msgstr "Faible"
+
+# — common —
+msgid "Manual"
+msgstr "Manuel"
+
+# — common —
+msgid "Automatic"
+msgstr "Automatique"
+
+# — common —
+msgid "Added"
+msgstr "Ajouté"
+
+# — common —
+msgid "Removed"
+msgstr "Supprimé"
+
+# — common —
+msgid "Modified"
+msgstr "Modifié"
+
+# — common —
+msgid "Email"
+msgstr "E-mail"
+
+# — common —
+msgid "SMS"
+msgstr "SMS"
+
+# — common —
+msgid "Both"
+msgstr "Les deux"
+
+# — common —
+msgid "Enabled"
+msgstr "Activé"
+
+# — common —
+msgid "Disabled"
+msgstr "Désactivé"
+
+# — common —
+msgid "Never"
+msgstr "Jamais"
+
+# — common —
+msgid "Pending"
+msgstr "En attente"
+
+# — common —
+msgid "Skipped"
+msgstr "Ignoré"
+
+# — feedback —
+msgid "Loading..."
+msgstr "Chargement..."
+
+# — feedback —
+msgid "Loading data..."
+msgstr "Chargement des données..."
+
+# — feedback —
+msgid "Saving..."
+msgstr "Enregistrement..."
+
+# — feedback —
+msgid "Deleting..."
+msgstr "Suppression..."
+
+# — feedback —
+msgid "Scanning..."
+msgstr "Analyse en cours..."
+
+# — feedback —
+msgid "No data found"
+msgstr "Aucune donnée trouvée"
+
+# — feedback —
+msgid "No results"
+msgstr "Aucun résultat"
+
+# — feedback —
+msgid "Operation completed successfully"
+msgstr "Opération effectuée avec succès"
+
+# — feedback —
+msgid "Operation failed"
+msgstr "Opération échouée"
+
+# — feedback —
+msgid "Changes saved"
+msgstr "Modifications enregistrées"
+
+# — feedback —
+msgid "Changes discarded"
+msgstr "Modifications ignorées"
+
+# — feedback —
+msgid "{{count}} items selected"
+msgstr "{{count}} éléments sélectionnés"
+
+# — feedback —
+msgid "No items selected"
+msgstr "Aucun élément sélectionné"
+
+# — feedback —
+msgid "Select at least one item"
+msgstr "Sélectionnez au moins un élément"
+
+# — feedback —
+msgid "Are you sure?"
+msgstr "Êtes-vous sûr ?"
+
+# — feedback —
+msgid "This action cannot be undone"
+msgstr "Cette action ne peut pas être annulée"
+
+# — feedback —
+msgid "Required field"
+msgstr "Champ obligatoire"
+
+# — feedback —
+msgid "Invalid input"
+msgstr "Saisie invalide"
+
+# — errors —
+msgid "Something went wrong"
+msgstr "Une erreur s'est produite"
+
+# — errors —
+msgid "Please try again"
+msgstr "Veuillez réessayer"
+
+# — errors —
+msgid "Network error — check your connection"
+msgstr "Erreur réseau — vérifiez votre connexion"
+
+# — errors —
+msgid "Session expired — please log in again"
+msgstr "Session expirée — veuillez vous reconnecter"
+
+# — errors —
+msgid "Unauthorized — you do not have permission to perform this action"
+msgstr "Non autorisé — vous n'avez pas la permission d'effectuer cette action"
+
+# — errors —
+msgid "Not found"
+msgstr "Introuvable"
+
+# — errors —
+msgid "Invalid transition"
+msgstr "Transition invalide"
+
+# — settings —
+msgid "Settings"
+msgstr "Paramètres"
+
+# — settings —
+msgid "General Settings"
+msgstr "Paramètres généraux"
+
+# — settings —
+msgid "Notification Settings"
+msgstr "Paramètres de notification"
+
+# — settings —
+msgid "Security Settings"
+msgstr "Paramètres de sécurité"
+
+# — settings —
+msgid "About"
+msgstr "À propos"
+
+# — settings —
+msgid "App Version"
+msgstr "Version de l'application"
+
+# — settings —
+msgid "DHIS2 Instance"
+msgstr "Instance DHIS2"
+
+# — settings —
+msgid "Language"
+msgstr "Langue"
+
+# — settings —
+msgid "Theme"
+msgstr "Thème"
+
+# — settings —
+msgid "Light"
+msgstr "Clair"
+
+# — settings —
+msgid "Dark"
+msgstr "Sombre"
+
+# — settings —
+msgid "Safety Checks"
+msgstr "Vérifications de sécurité"
+
+# — settings —
+msgid "Require confirmation for bulk operations"
+msgstr "Exiger une confirmation pour les opérations en masse"
+
+# — settings —
+msgid "Maximum bulk operation size"
+msgstr "Taille maximale des opérations en masse"
+
+# — settings —
+msgid "Auto-snapshot before bulk operations"
+msgstr "Snapshot automatique avant les opérations en masse"
+
+# — settings —
+msgid "Role Emails"
+msgstr "E-mails par rôle"
+
+# — settings —
+msgid "System Administrator"
+msgstr "Administrateur système"
+
+# — settings —
+msgid "DHIS2 Admin"
+msgstr "Administrateur DHIS2"
+
+# — settings —
+msgid "Regional Manager"
+msgstr "Responsable régional"
+
+# — settings —
+msgid "Facility Staff"
+msgstr "Personnel de l'établissement"
+
+# — settings —
+msgid "Save Settings"
+msgstr "Enregistrer les paramètres"
+
+# — settings —
+msgid "Settings saved successfully"
+msgstr "Paramètres enregistrés avec succès"
+
+# — settings —
+msgid "Reset to defaults"
+msgstr "Réinitialiser les valeurs par défaut"
+
+# — settings —
+msgid "Configure DHIS2 NexAdmin behaviour and API connection"
+msgstr "Configurer le comportement de DHIS2 NexAdmin et la connexion API"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 1 — Core Shell & Dashboard
+# ══════════════════════════════════════════════════════════════
+
+# — nav —
+msgid "Health Dashboard"
+msgstr "Tableau de bord de santé"
+
+# — dashboard —
+msgid "Structural integrity overview for Sierra Leone · Last scan: 2 minutes ago"
+msgstr "Vue d'intégrité structurelle — Sierra Leone · Dernière analyse : il y a 2 minutes"
+
+# — dashboard —
+msgid "Last scan: {{time}} ago"
+msgstr "Dernière analyse : il y a {{time}}"
+
+# — dashboard —
+msgid "Integrity Score"
+msgstr "Score d'intégrité"
+
+# — dashboard —
+msgid "Needs Attention"
+msgstr "Nécessite une attention"
+
+# — dashboard —
+msgid "Good"
+msgstr "Bon"
+
+# — dashboard —
+msgid "Critical"
+msgstr "Critique"
+
+# — dashboard —
+msgid "Duplicate Names"
+msgstr "Noms en double"
+
+# — dashboard —
+msgid "Orphan OUs"
+msgstr "UO orphelines"
+
+# — dashboard —
+msgid "Missing Codes"
+msgstr "Codes manquants"
+
+# — dashboard —
+msgid "Geo Issues"
+msgstr "Problèmes géographiques"
+
+# — dashboard —
+msgid "Pending Requests"
+msgstr "Demandes en attente"
+
+# — dashboard —
+msgid "Pending Users"
+msgstr "Utilisateurs en attente"
+
+# — dashboard —
+msgid "Total OUs"
+msgstr "Total des UO"
+
+# — dashboard —
+msgid "Open Issues"
+msgstr "Problèmes ouverts"
+
+# — dashboard —
+msgid "Quick Actions"
+msgstr "Actions rapides"
+
+# — dashboard —
+msgid "Run Full Scan"
+msgstr "Lancer l'analyse complète"
+
+# — dashboard —
+msgid "View Report"
+msgstr "Voir le rapport"
+
+# — dashboard —
+msgid "OUs with identical names in same level"
+msgstr "UO avec des noms identiques au même niveau"
+
+# — dashboard —
+msgid "OUs without a valid parent reference"
+msgstr "UO sans référence parent valide"
+
+# — dashboard —
+msgid "Facilities created but user not yet provisioned"
+msgstr "Établissements créés mais utilisateur non encore provisionné"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 2 — Data Integrity (F3 Duplicate Detector, F5 Hierarchy Validator, F6 Geo Consistency)
+# ══════════════════════════════════════════════════════════════
+
+# — f3:nav —
+msgid "Duplicate Detector"
+msgstr "Détecteur de doublons"
+
+# — f3 —
+msgid "Find org units with identical or suspiciously similar names"
+msgstr "Rechercher les UO aux noms identiques ou suspicieusement similaires"
+
+# — f3 —
+msgid "Scan for Duplicates"
+msgstr "Analyser les doublons"
+
+# — f3 —
+msgid "{{count}} duplicates found"
+msgstr "{{count}} doublons trouvés"
+
+# — f3 —
+msgid "No duplicates found — system is clean"
+msgstr "Aucun doublon trouvé — le système est propre"
+
+# — f3 —
+msgid "Match Type"
+msgstr "Type de correspondance"
+
+# — f3 —
+msgid "Exact Match"
+msgstr "Correspondance exacte"
+
+# — f3 —
+msgid "Fuzzy Match"
+msgstr "Correspondance approximative"
+
+# — f3 —
+msgid "Severity"
+msgstr "Sévérité"
+
+# — f3 —
+msgid "Flag"
+msgstr "Signaler"
+
+# — f3 —
+msgid "Merge"
+msgstr "Fusionner"
+
+# — f3 —
+msgid "View Details"
+msgstr "Voir les détails"
+
+# — f3 —
+msgid "Similarity Score"
+msgstr "Score de similarité"
+
+# — f3 —
+msgid "Duplicate Groups"
+msgstr "Groupes de doublons"
+
+# — f5:nav —
+msgid "Hierarchy Validator"
+msgstr "Validateur de hiérarchie"
+
+# — f5 —
+msgid "Detect structural violations in the org unit hierarchy"
+msgstr "Détecter les violations structurelles dans la hiérarchie des UO"
+
+# — f5 —
+msgid "Run Validation"
+msgstr "Lancer la validation"
+
+# — f5 —
+msgid "Validation Results"
+msgstr "Résultats de validation"
+
+# — f5 —
+msgid "{{count}} violations detected"
+msgstr "{{count}} violations détectées"
+
+# — f5 —
+msgid "No violations found — hierarchy is valid"
+msgstr "Aucune violation trouvée — la hiérarchie est valide"
+
+# — f5 —
+msgid "Violation Type"
+msgstr "Type de violation"
+
+# — f5 —
+msgid "Missing Parent"
+msgstr "Parent manquant"
+
+# — f5 —
+msgid "Level Inconsistency"
+msgstr "Incohérence de niveau"
+
+# — f5 —
+msgid "Circular Reference"
+msgstr "Référence circulaire"
+
+# — f5 —
+msgid "Orphan Unit"
+msgstr "Unité orpheline"
+
+# — f5 —
+msgid "Fix Suggestion"
+msgstr "Suggestion de correction"
+
+# — f5 —
+msgid "View Org Unit"
+msgstr "Voir l'UO"
+
+# — f6:nav —
+msgid "Geo Consistency"
+msgstr "Cohérence géographique"
+
+# — f6 —
+msgid "Geo Consistency Checker"
+msgstr "Vérificateur de cohérence géographique"
+
+# — f6 —
+msgid "Identify org units with coordinates outside their district polygon"
+msgstr "Identifier les UO dont les coordonnées se trouvent hors du polygone de leur district"
+
+# — f6 —
+msgid "Run Geo Check"
+msgstr "Lancer la vérification géo"
+
+# — f6 —
+msgid "Missing Coordinates"
+msgstr "Coordonnées manquantes"
+
+# — f6 —
+msgid "Outside Boundary"
+msgstr "Hors des limites"
+
+# — f6 —
+msgid "{{count}} geo issues found"
+msgstr "{{count}} problèmes géographiques trouvés"
+
+# — f6 —
+msgid "No geo issues found"
+msgstr "Aucun problème géographique trouvé"
+
+# — f6 —
+msgid "Latitude"
+msgstr "Latitude"
+
+# — f6 —
+msgid "Longitude"
+msgstr "Longitude"
+
+# — f6 —
+msgid "Expected Boundary"
+msgstr "Limite attendue"
+
+# — f6 —
+msgid "View on Map"
+msgstr "Voir sur la carte"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 3 — Bulk Operations (F1 Bulk Reorg, F4 Bulk Rename)
+# ══════════════════════════════════════════════════════════════
+
+# — f1:nav —
+msgid "Bulk OU Reorganisation"
+msgstr "Réorganisation OU en masse"
+
+# — f1 —
+msgid "Many-to-many reassignment — pick OUs from anywhere, group them, assign each group to a different destination"
+msgstr "Réaffectation multiple — choisissez des UO, regroupez-les, assignez chaque groupe à une destination différente"
+
+# — f1 —
+msgid "Source Org Units"
+msgstr "Unités organisationnelles source"
+
+# — f1 —
+msgid "Target Parent"
+msgstr "Parent cible"
+
+# — f1 —
+msgid "Select org units to move"
+msgstr "Sélectionner les UO à déplacer"
+
+# — f1 —
+msgid "Select destination parent"
+msgstr "Sélectionner le parent de destination"
+
+# — f1 —
+msgid "Preview Impact"
+msgstr "Aperçu de l'impact"
+
+# — f1 —
+msgid "Execute Move"
+msgstr "Exécuter le déplacement"
+
+# — f1 —
+msgid "Moving {{count}} org units..."
+msgstr "Déplacement de {{count}} UO en cours..."
+
+# — f1 —
+msgid "{{count}} of {{total}} completed"
+msgstr "{{count}} sur {{total}} terminés"
+
+# — f1 —
+msgid "Move completed successfully"
+msgstr "Déplacement effectué avec succès"
+
+# — f1 —
+msgid "Operation failed. {{n}} moves rolled back."
+msgstr "Opération échouée. {{n}} déplacements annulés."
+
+# — f1 —
+msgid "Impact Analysis"
+msgstr "Analyse d'impact"
+
+# — f1 —
+msgid "Affected Data Sets"
+msgstr "Ensembles de données affectés"
+
+# — f1 —
+msgid "Affected Programs"
+msgstr "Programmes affectés"
+
+# — f1 —
+msgid "Affected Users"
+msgstr "Utilisateurs affectés"
+
+# — f1 —
+msgid "Affected User Groups"
+msgstr "Groupes d'utilisateurs affectés"
+
+# — f1 —
+msgid "This operation cannot be undone without a snapshot"
+msgstr "Cette opération ne peut pas être annulée sans snapshot"
+
+# — f1 —
+msgid "Create snapshot before proceeding"
+msgstr "Créer un snapshot avant de continuer"
+
+# — f1 —
+msgid "Drag org units here"
+msgstr "Glisser les UO ici"
+
+# — f1 —
+msgid "Selected: {{count}} org units"
+msgstr "Sélectionné : {{count}} UO"
+
+# — f4:nav —
+msgid "Bulk Rename"
+msgstr "Renommage en masse"
+
+# — f4 —
+msgid "Rename org units inline or using find-and-replace patterns"
+msgstr "Renommer les UO en ligne ou par rechercher-remplacer"
+
+# — f4 —
+msgid "Pattern Type"
+msgstr "Type de modèle"
+
+# — f4 —
+msgid "Add Prefix"
+msgstr "Ajouter un préfixe"
+
+# — f4 —
+msgid "Add Suffix"
+msgstr "Ajouter un suffixe"
+
+# — f4 —
+msgid "Find & Replace"
+msgstr "Rechercher et remplacer"
+
+# — f4 —
+msgid "Regex Replace"
+msgstr "Remplacement par regex"
+
+# — f4 —
+msgid "Pattern"
+msgstr "Modèle"
+
+# — f4 —
+msgid "Replacement"
+msgstr "Remplacement"
+
+# — f4 —
+msgid "Old Name"
+msgstr "Ancien nom"
+
+# — f4 —
+msgid "New Name"
+msgstr "Nouveau nom"
+
+# — f4 —
+msgid "Apply Rename"
+msgstr "Appliquer le renommage"
+
+# — f4 —
+msgid "Rename Preview"
+msgstr "Aperçu du renommage"
+
+# — f4 —
+msgid "{{count}} org units will be renamed"
+msgstr "{{count}} UO seront renommées"
+
+# — f4 —
+msgid "Rename completed successfully"
+msgstr "Renommage effectué avec succès"
+
+# — progress —
+msgid "Validating"
+msgstr "Validation en cours"
+
+# — progress —
+msgid "Executing"
+msgstr "Exécution en cours"
+
+# — progress —
+msgid "Complete"
+msgstr "Terminé"
+
+# — progress —
+msgid "Rolled Back"
+msgstr "Annulé"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 4 — Governance & Workflow (F11 OU Creation, F7 Audit Log, F8 Snapshots)
+# ══════════════════════════════════════════════════════════════
+
+# — f11:nav —
+msgid "OU Creation Workflow"
+msgstr "Workflow de création d'UO"
+
+# — f11 —
+msgid "Manage facility creation requests through an approval workflow"
+msgstr "Gérer les demandes de création d'établissements via un workflow d'approbation"
+
+# — f11 —
+msgid "New Facility Request"
+msgstr "Nouvelle demande d'établissement"
+
+# — f11 —
+msgid "Submit Request"
+msgstr "Soumettre la demande"
+
+# — f11 —
+msgid "Request ID"
+msgstr "ID de la demande"
+
+# — f11 —
+msgid "Facility Name"
+msgstr "Nom de l'établissement"
+
+# — f11 —
+msgid "Submitted By"
+msgstr "Soumis par"
+
+# — f11 —
+msgid "Submitted On"
+msgstr "Soumis le"
+
+# — f11 —
+msgid "Reviewed By"
+msgstr "Révisé par"
+
+# — f11 —
+msgid "Review Notes"
+msgstr "Notes de révision"
+
+# — f11 —
+msgid "Rejection Reason"
+msgstr "Motif de rejet"
+
+# — f11 —
+msgid "DHIS2 UID"
+msgstr "UID DHIS2"
+
+# — f11 —
+msgid "Submit for Review"
+msgstr "Soumettre pour révision"
+
+# — f11 —
+msgid "Approve"
+msgstr "Approuver"
+
+# — f11 —
+msgid "Reject"
+msgstr "Rejeter"
+
+# — f11 —
+msgid "Validate"
+msgstr "Valider"
+
+# — f11 —
+msgid "Create in DHIS2"
+msgstr "Créer dans DHIS2"
+
+# — f11 —
+msgid "Request History"
+msgstr "Historique de la demande"
+
+# — f11 —
+msgid "Add Comment"
+msgstr "Ajouter un commentaire"
+
+# — f11 —
+msgid "Flag for Review"
+msgstr "Signaler pour révision"
+
+# — f11 —
+msgid "Request submitted successfully"
+msgstr "Demande soumise avec succès"
+
+# — f11 —
+msgid "Request approved"
+msgstr "Demande approuvée"
+
+# — f11 —
+msgid "Request rejected"
+msgstr "Demande rejetée"
+
+# — f11 —
+msgid "Facility created in DHIS2: {{uid}}"
+msgstr "Établissement créé dans DHIS2 : {{uid}}"
+
+# — f11:states —
+msgid "DRAFT"
+msgstr "Brouillon"
+
+# — f11:states —
+msgid "SUBMITTED"
+msgstr "Soumis"
+
+# — f11:states —
+msgid "UNDER_REVIEW"
+msgstr "En révision"
+
+# — f11:states —
+msgid "VALIDATED"
+msgstr "Validé"
+
+# — f11:states —
+msgid "REJECTED"
+msgstr "Rejeté"
+
+# — f11:states —
+msgid "FLAGGED"
+msgstr "Signalé"
+
+# — f11:states —
+msgid "CREATED"
+msgstr "Créé"
+
+# — f11:states —
+msgid "PENDING_USER"
+msgstr "En attente d'utilisateur"
+
+# — f11:states —
+msgid "USER_CREATED"
+msgstr "Utilisateur créé"
+
+# — f11:states —
+msgid "SKIPPED"
+msgstr "Ignoré"
+
+# — f7:nav —
+msgid "Audit Log"
+msgstr "Journal d'audit"
+
+# — f7 —
+msgid "Full history of all structural operations performed by NexAdmin"
+msgstr "Historique complet de toutes les opérations structurelles effectuées par NexAdmin"
+
+# — f7 —
+msgid "Action"
+msgstr "Action"
+
+# — f7 —
+msgid "Actor"
+msgstr "Acteur"
+
+# — f7 —
+msgid "Timestamp"
+msgstr "Horodatage"
+
+# — f7 —
+msgid "Details"
+msgstr "Détails"
+
+# — f7 —
+msgid "Filter by action"
+msgstr "Filtrer par action"
+
+# — f7 —
+msgid "Filter by actor"
+msgstr "Filtrer par acteur"
+
+# — f7 —
+msgid "Date range"
+msgstr "Plage de dates"
+
+# — f7 —
+msgid "Export Audit Log"
+msgstr "Exporter le journal d'audit"
+
+# — f7 —
+msgid "No audit entries found"
+msgstr "Aucune entrée d'audit trouvée"
+
+# — f7 —
+msgid "Bulk Move"
+msgstr "Déplacement en masse"
+
+# — f7 —
+msgid "OU Created"
+msgstr "UO créée"
+
+# — f7 —
+msgid "OU Updated"
+msgstr "UO mise à jour"
+
+# — f7 —
+msgid "Snapshot Created"
+msgstr "Snapshot créé"
+
+# — f7 —
+msgid "Duplicate Scan"
+msgstr "Analyse des doublons"
+
+# — f7 —
+msgid "User Provisioned"
+msgstr "Utilisateur provisionné"
+
+# — f8:nav —
+msgid "Snapshot Manager"
+msgstr "Gestionnaire de snapshots"
+
+# — f8 —
+msgid "Create and restore org unit hierarchy snapshots for rollback safety"
+msgstr "Créer et restaurer des snapshots de la hiérarchie des UO pour la sécurité du retour arrière"
+
+# — f8 —
+msgid "Create Snapshot"
+msgstr "Créer un snapshot"
+
+# — f8 —
+msgid "Restore Snapshot"
+msgstr "Restaurer un snapshot"
+
+# — f8 —
+msgid "Delete Snapshot"
+msgstr "Supprimer un snapshot"
+
+# — f8 —
+msgid "Compare Snapshots"
+msgstr "Comparer les snapshots"
+
+# — f8 —
+msgid "Snapshot Name"
+msgstr "Nom du snapshot"
+
+# — f8 —
+msgid "Created By"
+msgstr "Créé par"
+
+# — f8 —
+msgid "Created At"
+msgstr "Créé le"
+
+# — f8 —
+msgid "Org Unit Count"
+msgstr "Nombre d'UO"
+
+# — f8 —
+msgid "Snapshot created successfully"
+msgstr "Snapshot créé avec succès"
+
+# — f8 —
+msgid "Snapshot restored successfully"
+msgstr "Snapshot restauré avec succès"
+
+# — f8 —
+msgid "Confirm restore — this will overwrite current hierarchy"
+msgstr "Confirmer la restauration — cela écrasera la hiérarchie actuelle"
+
+# — f8 —
+msgid "Snapshot {{name}} contains {{count}} org units"
+msgstr "Le snapshot {{name}} contient {{count}} UO"
+
+# — f8 —
+msgid "Diff View"
+msgstr "Vue différentielle"
+
+# — f8 —
+msgid "No snapshots found"
+msgstr "Aucun snapshot trouvé"
+
+# — timeline —
+msgid "Transitioned to {{state}} by {{actor}}"
+msgstr "Transitionné vers {{state}} par {{actor}}"
+
+# — timeline —
+msgid "Comment added by {{actor}}"
+msgstr "Commentaire ajouté par {{actor}}"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 5 — Advanced Analytics (F2 Impact Analyzer, F9 Simulator, F10 Refactoring Wizard)
+# ══════════════════════════════════════════════════════════════
+
+# — f2:nav —
+msgid "Impact Analyzer"
+msgstr "Analyseur d'impact"
+
+# — f2 —
+msgid "OU Impact Analyzer"
+msgstr "Analyseur d'impact des UO"
+
+# — f2 —
+msgid "Analyze the downstream impact of moving or closing an org unit"
+msgstr "Analyser l'impact en aval du déplacement ou de la fermeture d'une UO"
+
+# — f2 —
+msgid "Select Org Unit"
+msgstr "Sélectionner une UO"
+
+# — f2 —
+msgid "Impact Summary"
+msgstr "Résumé de l'impact"
+
+# — f2 —
+msgid "Affected Data Sets ({{count}})"
+msgstr "Ensembles de données affectés ({{count}})"
+
+# — f2 —
+msgid "Affected Programs ({{count}})"
+msgstr "Programmes affectés ({{count}})"
+
+# — f2 —
+msgid "Affected Users ({{count}})"
+msgstr "Utilisateurs affectés ({{count}})"
+
+# — f2 —
+msgid "Affected User Groups ({{count}})"
+msgstr "Groupes d'utilisateurs affectés ({{count}})"
+
+# — f2 —
+msgid "Export Impact Report"
+msgstr "Exporter le rapport d'impact"
+
+# — f2 —
+msgid "No impact data found"
+msgstr "Aucune donnée d'impact trouvée"
+
+# — f2 —
+msgid "Run Analysis"
+msgstr "Lancer l'analyse"
+
+# — f9:nav —
+msgid "Impact Simulator"
+msgstr "Simulateur d'impact"
+
+# — f9 —
+msgid "Simulate the impact of hierarchy changes before applying them"
+msgstr "Simuler l'impact des modifications de hiérarchie avant de les appliquer"
+
+# — f9 —
+msgid "Virtual Hierarchy"
+msgstr "Hiérarchie virtuelle"
+
+# — f9 —
+msgid "Select OU to move"
+msgstr "Sélectionner l'UO à déplacer"
+
+# — f9 —
+msgid "Drag to new parent"
+msgstr "Glisser vers un nouveau parent"
+
+# — f9 —
+msgid "Current Impact"
+msgstr "Impact actuel"
+
+# — f9 —
+msgid "Projected Impact"
+msgstr "Impact projeté"
+
+# — f9 —
+msgid "Delta"
+msgstr "Delta"
+
+# — f9 —
+msgid "No change"
+msgstr "Aucun changement"
+
+# — f9 —
+msgid "Reset Simulation"
+msgstr "Réinitialiser la simulation"
+
+# — f9 —
+msgid "Apply Changes"
+msgstr "Appliquer les modifications"
+
+# — f10:nav —
+msgid "Refactoring Assistant"
+msgstr "Assistant de refactorisation"
+
+# — f10 —
+msgid "7-step guided wizard for systematic hierarchy refactoring"
+msgstr "Assistant guidé en 7 étapes pour la refactorisation systématique de la hiérarchie"
+
+# — f10 —
+msgid "Step {{n}} of {{total}}"
+msgstr "Étape {{n}} sur {{total}}"
+
+# — f10 —
+msgid "Scan"
+msgstr "Analyser"
+
+# — f10 —
+msgid "Identify Issues"
+msgstr "Identifier les problèmes"
+
+# — f10 —
+msgid "Plan Actions"
+msgstr "Planifier les actions"
+
+# — f10 —
+msgid "Preview Changes"
+msgstr "Aperçu des modifications"
+
+# — f10 —
+msgid "Scanning system..."
+msgstr "Analyse du système en cours..."
+
+# — f10 —
+msgid "{{count}} issues identified"
+msgstr "{{count}} problèmes identifiés"
+
+# — f10 —
+msgid "Plan your refactoring actions"
+msgstr "Planifiez vos actions de refactorisation"
+
+# — f10 —
+msgid "Review {{count}} planned changes"
+msgstr "Réviser {{count}} modifications planifiées"
+
+# — f10 —
+msgid "I confirm these changes cannot be easily undone"
+msgstr "Je confirme que ces modifications ne peuvent pas être facilement annulées"
+
+# — f10 —
+msgid "Executing changes..."
+msgstr "Exécution des modifications en cours..."
+
+# — f10 —
+msgid "Refactoring complete"
+msgstr "Refactorisation terminée"
+
+# — f10 —
+msgid "Download Report"
+msgstr "Télécharger le rapport"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 6 — User Provisioning (F12)
+# ══════════════════════════════════════════════════════════════
+
+# — f12:nav —
+msgid "User Provisioning"
+msgstr "Provisionnement d'utilisateurs"
+
+# — f12 —
+msgid "Facility User Provisioning"
+msgstr "Provisionnement des utilisateurs d'établissements"
+
+# — f12 —
+msgid "Provision data entry users for newly created facilities — without leaving NexAdmin"
+msgstr "Provisionner des utilisateurs de saisie pour les établissements nouvellement créés — sans quitter NexAdmin"
+
+# — f12 —
+msgid "Personal Information"
+msgstr "Informations personnelles"
+
+# — f12 —
+msgid "First Name"
+msgstr "Prénom"
+
+# — f12 —
+msgid "Last Name"
+msgstr "Nom de famille"
+
+# — f12 —
+msgid "Email Address"
+msgstr "Adresse e-mail"
+
+# — f12 —
+msgid "Phone Number"
+msgstr "Numéro de téléphone"
+
+# — f12 —
+msgid "Account Details"
+msgstr "Détails du compte"
+
+# — f12 —
+msgid "Username"
+msgstr "Nom d'utilisateur"
+
+# — f12 —
+msgid "Auto-generate username"
+msgstr "Générer automatiquement le nom d'utilisateur"
+
+# — f12 —
+msgid "Regenerate"
+msgstr "Régénérer"
+
+# — f12 —
+msgid "Username available"
+msgstr "Nom d'utilisateur disponible"
+
+# — f12 —
+msgid "Username already taken"
+msgstr "Nom d'utilisateur déjà pris"
+
+# — f12 —
+msgid "Username checking..."
+msgstr "Vérification du nom d'utilisateur..."
+
+# — f12 —
+msgid "Username already taken — try {{suggestion}}"
+msgstr "Nom d'utilisateur déjà pris — essayez {{suggestion}}"
+
+# — f12 —
+msgid "Password Method"
+msgstr "Méthode de mot de passe"
+
+# — f12 —
+msgid "Auto-generate (16 characters)"
+msgstr "Générer automatiquement (16 caractères)"
+
+# — f12 —
+msgid "Set manually"
+msgstr "Définir manuellement"
+
+# — f12 —
+msgid "DHIS2 Assignment"
+msgstr "Attribution DHIS2"
+
+# — f12 —
+msgid "Org Unit (read-only)"
+msgstr "Unité organisationnelle (lecture seule)"
+
+# — f12 —
+msgid "User Role"
+msgstr "Rôle utilisateur"
+
+# — f12 —
+msgid "User Group"
+msgstr "Groupe d'utilisateurs"
+
+# — f12 —
+msgid "Send Invitation"
+msgstr "Envoyer l'invitation"
+
+# — f12 —
+msgid "Invite Preview"
+msgstr "Aperçu de l'invitation"
+
+# — f12 —
+msgid "Create User & Send Invite"
+msgstr "Créer l'utilisateur et envoyer l'invitation"
+
+# — f12 —
+msgid "Skip Provisioning"
+msgstr "Ignorer le provisionnement"
+
+# — f12 —
+msgid "User {{username}} created successfully"
+msgstr "Utilisateur {{username}} créé avec succès"
+
+# — f12 —
+msgid "Invitation sent via {{method}}"
+msgstr "Invitation envoyée via {{method}}"
+
+# — f12 —
+msgid "Provisioning Time"
+msgstr "Temps de provisionnement"
+
+# — f12 —
+msgid "Pending User"
+msgstr "Utilisateur en attente"
+
+# — f12 —
+msgid "Users Created (All Time)"
+msgstr "Utilisateurs créés (total)"
+
+# — f12 —
+msgid "Total Facilities Created"
+msgstr "Total des établissements créés"
+
+# — f12 —
+msgid "Avg Provisioning Time"
+msgstr "Temps de provisionnement moyen"
+
+# — f12 —
+msgid "Provision Now"
+msgstr "Provisionner maintenant"
+
+# — f12 —
+msgid "View User"
+msgstr "Voir l'utilisateur"
+
+# — f12 —
+msgid "User Status"
+msgstr "Statut de l'utilisateur"
+
+# — f12 —
+msgid "Facility Onboarding Status"
+msgstr "Statut d'intégration des établissements"
+
+# — f12 —
+msgid "Provisioned User"
+msgstr "Utilisateur provisionné"
+
+# — f12 —
+msgid "User Created"
+msgstr "Utilisateur créé"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 7 — Notification Service
+# ══════════════════════════════════════════════════════════════
+
+# — notif —
+msgid "Notifications"
+msgstr "Notifications"
+
+# — notif —
+msgid "Workflow"
+msgstr "Workflow"
+
+# — notif —
+msgid "Digest"
+msgstr "Résumé"
+
+# — notif —
+msgid "Mark as read"
+msgstr "Marquer comme lu"
+
+# — notif —
+msgid "Mark all as read"
+msgstr "Tout marquer comme lu"
+
+# — notif —
+msgid "Clear all"
+msgstr "Tout effacer"
+
+# — notif —
+msgid "No notifications yet"
+msgstr "Aucune notification pour l'instant"
+
+# — notif —
+msgid "{{count}} unread notifications"
+msgstr "{{count}} notifications non lues"
+
+# — notif —
+msgid "1 unread notification"
+msgstr "1 notification non lue"
+
+# — notif —
+msgid "Notification Rules"
+msgstr "Règles de notification"
+
+# — notif —
+msgid "Event Trigger"
+msgstr "Déclencheur d'événement"
+
+# — notif —
+msgid "Last Fired"
+msgstr "Dernier déclenchement"
+
+# — notif —
+msgid "Daily Digest"
+msgstr "Résumé quotidien"
+
+# — notif —
+msgid "Weekly Summary"
+msgstr "Résumé hebdomadaire"
+
+# — notif —
+msgid "Request Submitted"
+msgstr "Demande soumise"
+
+# — notif —
+msgid "Request Validated"
+msgstr "Demande validée"
+
+# — notif —
+msgid "Request Rejected"
+msgstr "Demande rejetée"
+
+# — notif —
+msgid "Facility Created"
+msgstr "Établissement créé"
+
+# — notif —
+msgid "Auto-Snapshot"
+msgstr "Snapshot automatique"
+
+# ══════════════════════════════════════════════════════════════
+# PHASE 8 — Production Hardening (Accessibility, Pagination)
+# ══════════════════════════════════════════════════════════════
+
+# — a11y —
+msgid "Open navigation menu"
+msgstr "Ouvrir le menu de navigation"
+
+# — a11y —
+msgid "Close navigation menu"
+msgstr "Fermer le menu de navigation"
+
+# — a11y —
+msgid "Toggle notifications panel"
+msgstr "Afficher/masquer le panneau de notifications"
+
+# — a11y —
+msgid "Switch to English"
+msgstr "Passer en anglais"
+
+# — a11y —
+msgid "Switch to French"
+msgstr "Passer en français"
+
+# — a11y —
+msgid "Go to {{page}}"
+msgstr "Aller à {{page}}"
+
+# — a11y —
+msgid "Expand row"
+msgstr "Développer la ligne"
+
+# — a11y —
+msgid "Collapse row"
+msgstr "Réduire la ligne"
+
+# — pagination —
+msgid "Page {{n}} of {{total}}"
+msgstr "Page {{n}} sur {{total}}"
+
+# — pagination —
+msgid "Showing {{from}}–{{to}} of {{total}} results"
+msgstr "Affichage de {{from}}–{{to}} sur {{total}} résultats"
+
+# — pagination —
+msgid "First page"
+msgstr "Première page"
+
+# — pagination —
+msgid "Previous page"
+msgstr "Page précédente"
+
+# — pagination —
+msgid "Next page"
+msgstr "Page suivante"
+
+# — pagination —
+msgid "Last page"
+msgstr "Dernière page"
+
