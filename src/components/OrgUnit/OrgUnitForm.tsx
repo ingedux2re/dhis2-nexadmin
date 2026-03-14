@@ -53,6 +53,13 @@ const unwrap =
   ({ value }: D2Payload) =>
     setter(value ?? '')
 
+// ── Normalize ISO date string to YYYY-MM-DD for input[type=date] ──────────────
+// DHIS2 returns "2010-01-01T00:00:00.000" — browsers require exactly "2010-01-01"
+function toDateInput(value?: string): string {
+  if (!value) return ''
+  return value.slice(0, 10)
+}
+
 // ── component ─────────────────────────────────────────────────────────────────
 export function OrgUnitForm({ unit, saving = false, error, onSave, onClose }: Props) {
   const isEdit = Boolean(unit)
@@ -61,8 +68,8 @@ export function OrgUnitForm({ unit, saving = false, error, onSave, onClose }: Pr
     name: unit?.name ?? '',
     shortName: unit?.shortName ?? '',
     code: unit?.code ?? '',
-    openingDate: unit?.openingDate ?? '',
-    closedDate: unit?.closedDate ?? '',
+    openingDate: toDateInput(unit?.openingDate),
+    closedDate: toDateInput(unit?.closedDate),
     description: unit?.description ?? '',
     comment: unit?.comment ?? '',
     parentId: unit?.parent?.id ?? '',
@@ -83,7 +90,6 @@ export function OrgUnitForm({ unit, saving = false, error, onSave, onClose }: Pr
     e.preventDefault()
     const errs = validate(values)
     setErrors(errs)
-    // mark all fields touched so errors show
     const allTouched = Object.keys(values).reduce(
       (acc, k) => ({ ...acc, [k]: true }),
       {} as Record<keyof FormValues, boolean>
