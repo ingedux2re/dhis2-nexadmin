@@ -1,0 +1,42 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/components/LanguageSwitcher/LanguageSwitcher.module.css
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  padding: 2px 4px;
+  margin-right: 10px;
+}
+
+.btn {
+  background: none;
+  border: none;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 3px 8px;
+  border-radius: 16px;
+  letter-spacing: 0.5px;
+  transition: all 0.15s ease;
+}
+
+.btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.btn.active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #0069c0;
+}
+
+/* Focus ring for keyboard navigation */
+.btn:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}

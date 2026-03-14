@@ -1,0 +1,119 @@
+name: CI — DHIS2 NexAdmin
+
+on:
+  push:
+    branches: [main, devBranch]
+  pull_request:
+    branches: [main, devBranch]
+
+jobs:
+  # ─── Job 1: Lint + Type-check + Format ───────────────────────────────────
+  lint:
+    name: Lint & Type-check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: TypeScript type-check
+        run: yarn typecheck
+
+      - name: ESLint
+        run: yarn lint
+
+      - name: Prettier format check
+        run: yarn format:check
+
+  # ─── Job 2: Unit tests ───────────────────────────────────────────────────
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Run tests
+        run: yarn test --watchAll=false --coverage --ci
+
+      - name: Upload coverage
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: coverage/
+
+  # ─── Job 3: i18n check ────────────────────────────────────────────────────
+  i18n:
+    name: i18n Completeness
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Extract i18n strings
+        run: yarn i18n:extract
+
+      - name: Check for untranslated strings in fr.po
+        run: |
+          EMPTY=$(grep -c 'msgstr ""' i18n/fr.po || true)
+          # Allow only the header entry (1 empty msgstr is the .po metadata)
+          if [ "$EMPTY" -gt 1 ]; then
+            echo "❌ Found $EMPTY untranslated strings in fr.po"
+            grep -n 'msgstr ""' i18n/fr.po
+            exit 1
+          fi
+          echo "✅ All strings translated in fr.po"
+
+  # ─── Job 4: Build ─────────────────────────────────────────────────────────
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    needs: [lint, test, i18n]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'yarn'
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Build app
+        run: yarn build
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexadmin-build
+          path: build/
+          retention-days: 7
