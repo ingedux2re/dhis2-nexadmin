@@ -23,7 +23,7 @@ export const useAppStore = create<AppState>()(
         set({ globalLoading: loading }, false, 'setGlobalLoading'),
 
       // ── Sidebar (mobile toggle) ─────────────────────────────────────────────
-      sidebarOpen: false,
+      sidebarOpen: true,
       setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }, false, 'setSidebarOpen'),
 
       // ── Active page (router) ────────────────────────────────────────────────
