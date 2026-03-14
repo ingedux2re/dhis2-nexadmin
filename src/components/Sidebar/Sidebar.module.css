@@ -1,0 +1,83 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  min-width: 240px;
+  height: 100%;
+  background: #fff;
+  border-right: 1px solid #e0e0e0;
+  overflow-y: auto;
+  transition:
+    width 0.2s ease,
+    min-width 0.2s ease;
+}
+.sidebar.collapsed {
+  width: 56px;
+  min-width: 56px;
+}
+.toggleButton {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 8px 12px;
+  border-bottom: 1px solid #e0e0e0;
+  cursor: pointer;
+  background: none;
+  border-left: none;
+  border-top: none;
+  border-right: none;
+  width: 100%;
+}
+.section {
+  padding: 0;
+}
+.sectionHeader {
+  padding: 12px 16px 4px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #6c757d;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.collapsed .sectionHeader {
+  visibility: hidden;
+  height: 0;
+  padding: 0;
+}
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  color: #212529;
+  font-size: 14px;
+  border-left: 3px solid transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: background 0.15s;
+}
+.navItem:hover {
+  background: #f5f5f5;
+}
+.navItem.active {
+  background: #e8f5e9;
+  border-left-color: #276696;
+  color: #276696;
+  font-weight: 600;
+}
+.navLabel {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.collapsed .navLabel {
+  display: none;
+}
+.navIcon {
+  flex-shrink: 0;
+  font-size: 20px;
+  font-family: "Material Icons", sans-serif;
+}

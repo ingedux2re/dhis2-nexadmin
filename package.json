@@ -1,6 +1,6 @@
 {
   "name": "dhis2-nexadmin",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "DHIS2 NexAdmin — IS Administration Toolkit",
   "license": "BSD-3-Clause",
   "author": {
@@ -10,7 +10,7 @@
   "scripts": {
     "prepare": "husky",
     "start": "d2-app-scripts start",
-    "build": "d2-app-scripts build",
+    "build": "node scripts/build.js",
     "test": "d2-app-scripts test --jestConfig jest.config.js",
     "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
@@ -29,6 +29,7 @@
     "@dhis2/ui": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.23.0",
     "zustand": "^4.5.0"
   },
   "devDependencies": {
@@ -66,7 +67,7 @@
     "app": {
       "name": "DHIS2 NexAdmin",
       "description": "IS Administration Toolkit — Org Units, Users, Governance & Analytics",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "minDHIS2Version": "2.38"
     }
   },
@@ -76,6 +77,5 @@
     "react-dom": "18.3.1",
     "styled-jsx": "4.0.1"
   },
-  "prebuild": "rm -f i18n/en.pot",
   "build": "d2-app-scripts build"
 }

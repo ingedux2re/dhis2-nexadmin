@@ -1,0 +1,24 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+"POT-Creation-Date: 2026-03-14T13:05:01.995Z\n"
+"PO-Revision-Date: 2026-03-14T13:05:01.996Z\n"
+
+msgid "DHIS2 NexAdmin"
+msgstr "DHIS2 NexAdmin"
+
+msgid "IS Administration Toolkit · Phase 0 scaffold"
+msgstr "IS Administration Toolkit · Phase 0 scaffold"
+
+msgid "Language"
+msgstr "Language"
+
+msgid "Switch to {{lang}}"
+msgstr "Switch to {{lang}}"
+
+msgid "Health Dashboard"
+msgstr "Health Dashboard"
