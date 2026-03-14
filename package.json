@@ -20,7 +20,8 @@
     "i18n:generate": "d2-app-scripts i18n generate",
     "postinstall": "node scripts/postinstall.js",
     "typecheck": "tsc --noEmit",
-    "validate": "yarn typecheck && yarn lint && yarn format:check && yarn test --watchAll=false"
+    "validate": "yarn typecheck && yarn lint && yarn format:check && yarn test --watchAll=false",
+    "prebuild": "rm -f i18n/en.pot"
   },
   "dependencies": {
     "@dhis2/app-runtime": "^3.10.0",
@@ -70,11 +71,11 @@
     }
   },
   "resolutions": {
-  "@dhis2/ui": "9.15.0",
-  "react": "18.3.1",
-  "react-dom": "18.3.1",
-  "styled-jsx": "4.0.1"
-},
-"prebuild": "rm -f i18n/en.pot",
-"build": "d2-app-scripts build"
+    "@dhis2/ui": "9.15.0",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "styled-jsx": "4.0.1"
+  },
+  "prebuild": "rm -f i18n/en.pot",
+  "build": "d2-app-scripts build"
 }
