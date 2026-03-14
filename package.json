@@ -11,7 +11,7 @@
     "prepare": "husky",
     "start": "d2-app-scripts start",
     "build": "d2-app-scripts build",
-    "test": "d2-app-scripts test",
+    "test": "d2-app-scripts test --jestConfig jest.config.js",
     "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
     "lint:fix": "eslint src --ext .ts,.tsx --fix",
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\"",
@@ -68,5 +68,13 @@
       "version": "1.0.0",
       "minDHIS2Version": "2.38"
     }
-  }
+  },
+  "resolutions": {
+  "@dhis2/ui": "9.15.0",
+  "react": "18.3.1",
+  "react-dom": "18.3.1",
+  "styled-jsx": "4.0.1"
+},
+"prebuild": "rm -f i18n/en.pot",
+"build": "d2-app-scripts build"
 }
