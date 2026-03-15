@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-15T05:41:17.516Z\n"
-"PO-Revision-Date: 2026-03-15T05:41:17.516Z\n"
+"POT-Creation-Date: 2026-03-15T07:25:33.880Z\n"
+"PO-Revision-Date: 2026-03-15T07:25:33.881Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -100,6 +100,75 @@ msgstr "Preview Rename"
 
 msgid "No org units match — nothing to rename."
 msgstr "No org units match — nothing to rename."
+
+msgid "Collapse"
+msgstr "Collapse"
+
+msgid "Expand"
+msgstr "Expand"
+
+msgid "Select board rows first"
+msgstr "Select board rows first"
+
+msgid "Assign as destination"
+msgstr "Assign as destination"
+
+msgid "Source Org Units"
+msgstr "Source Org Units"
+
+msgid "Search…"
+msgstr "Search…"
+
+msgid "All levels"
+msgstr "All levels"
+
+msgid "Level {{n}}"
+msgstr "Level {{n}}"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "Lvl"
+msgstr "Lvl"
+
+msgid "No org units match the filter."
+msgstr "No org units match the filter."
+
+msgid "Pending Moves"
+msgstr "Pending Moves"
+
+msgid "{{n}} selected — click a destination node →"
+msgstr "{{n}} selected — click a destination node →"
+
+msgid "Check rows, then click a destination in the tree →"
+msgstr "Check rows, then click a destination in the tree →"
+
+msgid "No destination"
+msgstr "No destination"
+
+msgid "Remove {{name}}"
+msgstr "Remove {{name}}"
+
+msgid "Select org units from the source list and click Add to Board."
+msgstr "Select org units from the source list and click Add to Board."
+
+msgid "{{ready}} / {{total}} assigned"
+msgstr "{{ready}} / {{total}} assigned"
+
+msgid "Clear"
+msgstr "Clear"
+
+msgid "Destination Hierarchy"
+msgstr "Destination Hierarchy"
+
+msgid "Search destinations…"
+msgstr "Search destinations…"
+
+msgid "Click any node to assign it as the new parent"
+msgstr "Click any node to assign it as the new parent"
+
+msgid "Select rows in Pending Moves first"
+msgstr "Select rows in Pending Moves first"
 
 msgid "Cancel"
 msgstr "Cancel"
@@ -290,9 +359,6 @@ msgstr "Save changes"
 
 msgid "Create"
 msgstr "Create"
-
-msgid "Name"
-msgstr "Name"
 
 msgid "Short name"
 msgstr "Short name"

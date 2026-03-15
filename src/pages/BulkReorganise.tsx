@@ -98,8 +98,8 @@ export default function BulkReorganise() {
           {isError && (
             <div className={styles.errorBanner}>
               <p>{i18n.t('Operation failed. {{n}} moves rolled back.', { n: state.rolledBack })}</p>
-              {state.errors.map((e, i) => (
-                <p key={i} className={styles.errorItem}>
+              {state.errors.map((e, idx) => (
+                <p key={idx} className={styles.errorItem}>
                   {e}
                 </p>
               ))}
