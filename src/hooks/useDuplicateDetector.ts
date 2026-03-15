@@ -7,8 +7,10 @@ export interface DuplicatePair {
   id: string
   idA: string
   nameA: string
+  parentA?: string
   idB: string
   nameB: string
+  parentB?: string
   level: number
   matchType: 'exact' | 'fuzzy'
   similarity: number
@@ -48,7 +50,6 @@ export function useDuplicateDetector(orgUnits: OrgUnitIntegrityItem[]): Duplicat
   return useMemo(() => {
     if (orgUnits.length === 0) return []
 
-    // Group by level for O(n²) within each level, not across all
     const byLevel = new Map<number, OrgUnitIntegrityItem[]>()
     for (const ou of orgUnits) {
       const list = byLevel.get(ou.level) ?? []
@@ -71,8 +72,10 @@ export function useDuplicateDetector(orgUnits: OrgUnitIntegrityItem[]): Duplicat
               id: `${a.id}-${b.id}`,
               idA: a.id,
               nameA: a.name,
+              parentA: a.parent?.name,
               idB: b.id,
               nameB: b.name,
+              parentB: b.parent?.name,
               level,
               matchType: 'exact',
               similarity: 100,
@@ -81,7 +84,6 @@ export function useDuplicateDetector(orgUnits: OrgUnitIntegrityItem[]): Duplicat
             continue
           }
 
-          // Only run Levenshtein if names are similar enough in length (perf guard)
           const lenDiff = Math.abs(normA.length - normB.length)
           if (lenDiff > 3) continue
 
@@ -92,8 +94,10 @@ export function useDuplicateDetector(orgUnits: OrgUnitIntegrityItem[]): Duplicat
               id: `${a.id}-${b.id}`,
               idA: a.id,
               nameA: a.name,
+              parentA: a.parent?.name,
               idB: b.id,
               nameB: b.name,
+              parentB: b.parent?.name,
               level,
               matchType: 'fuzzy',
               similarity: sim,
@@ -104,7 +108,6 @@ export function useDuplicateDetector(orgUnits: OrgUnitIntegrityItem[]): Duplicat
       }
     }
 
-    // Sort: error first, then by level, then by similarity desc
     return pairs.sort((a, b) => {
       const severityOrder = { error: 0, warning: 1, info: 2 }
       const s = severityOrder[a.severity] - severityOrder[b.severity]

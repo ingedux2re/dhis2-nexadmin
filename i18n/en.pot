@@ -5,11 +5,119 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-14T21:10:08.765Z\n"
-"PO-Revision-Date: 2026-03-14T21:10:08.765Z\n"
+"POT-Creation-Date: 2026-03-15T00:57:55.608Z\n"
+"PO-Revision-Date: 2026-03-15T00:57:55.608Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
+
+msgid "Exact Match"
+msgstr "Exact Match"
+
+msgid "Fuzzy Match"
+msgstr "Fuzzy Match"
+
+msgid "Org Unit A"
+msgstr "Org Unit A"
+
+msgid "Parent A"
+msgstr "Parent A"
+
+msgid "Org Unit B"
+msgstr "Org Unit B"
+
+msgid "Parent B"
+msgstr "Parent B"
+
+msgid "Level"
+msgstr "Level"
+
+msgid "Match Type"
+msgstr "Match Type"
+
+msgid "Similarity Score"
+msgstr "Similarity Score"
+
+msgid "Severity"
+msgstr "Severity"
+
+msgid "High"
+msgstr "High"
+
+msgid "Medium"
+msgstr "Medium"
+
+msgid "Low"
+msgstr "Low"
+
+msgid "Something went wrong"
+msgstr "Something went wrong"
+
+msgid "No duplicates found — system is clean"
+msgstr "No duplicates found — system is clean"
+
+msgid "Export CSV"
+msgstr "Export CSV"
+
+msgid "Actions"
+msgstr "Actions"
+
+msgid "View Details"
+msgstr "View Details"
+
+msgid "Missing Coordinates"
+msgstr "Missing Coordinates"
+
+msgid "Outside Boundary"
+msgstr "Outside Boundary"
+
+msgid "Low Precision"
+msgstr "Low Precision"
+
+msgid "Org Unit"
+msgstr "Org Unit"
+
+msgid "Issue Type"
+msgstr "Issue Type"
+
+msgid "Details"
+msgstr "Details"
+
+msgid "Latitude"
+msgstr "Latitude"
+
+msgid "Longitude"
+msgstr "Longitude"
+
+msgid "No geo issues found"
+msgstr "No geo issues found"
+
+msgid "All"
+msgstr "All"
+
+msgid "View on Map"
+msgstr "View on Map"
+
+msgid "Missing Parent"
+msgstr "Missing Parent"
+
+msgid "Orphan Unit"
+msgstr "Orphan Unit"
+
+msgid "Level Inconsistency"
+msgstr "Level Inconsistency"
+
+msgid "Circular Reference"
+msgstr "Circular Reference"
+
+msgid "Violation Type"
+msgstr "Violation Type"
+
+msgid "No violations found — hierarchy is valid"
+msgstr "No violations found — hierarchy is valid"
+
+msgid "View Org Unit"
+msgstr "View Org Unit"
 
 msgid "Language"
 msgstr "Language"
@@ -96,17 +204,11 @@ msgstr "Name"
 msgid "Short name"
 msgstr "Short name"
 
-msgid "Level"
-msgstr "Level"
-
 msgid "Opening date"
 msgstr "Opening date"
 
 msgid "Status"
 msgstr "Status"
-
-msgid "Actions"
-msgstr "Actions"
 
 msgid "Closed"
 msgstr "Closed"
@@ -141,6 +243,39 @@ msgstr "Audit Log"
 msgid "Data Quality"
 msgstr "Data Quality"
 
+msgid "Duplicate Detector"
+msgstr "Duplicate Detector"
+
+msgid "Find org units with identical or suspiciously similar names"
+msgstr "Find org units with identical or suspiciously similar names"
+
+msgid "Scanning..."
+msgstr "Scanning..."
+
+msgid "Scan for Duplicates"
+msgstr "Scan for Duplicates"
+
+msgid "Geo Consistency Checker"
+msgstr "Geo Consistency Checker"
+
+msgid "Identify org units with coordinates outside their district polygon"
+msgstr "Identify org units with coordinates outside their district polygon"
+
+msgid "Run Geo Check"
+msgstr "Run Geo Check"
+
+msgid "Hierarchy Validator"
+msgstr "Hierarchy Validator"
+
+msgid "Detect structural violations in the org unit hierarchy"
+msgstr "Detect structural violations in the org unit hierarchy"
+
+msgid "Validating"
+msgstr "Validating"
+
+msgid "Run Validation"
+msgstr "Run Validation"
+
 msgid "Hierarchy Viewer"
 msgstr "Hierarchy Viewer"
 
@@ -173,3 +308,6 @@ msgstr "User Groups"
 
 msgid "User Management"
 msgstr "User Management"
+
+msgid "…"
+msgstr "…"

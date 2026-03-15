@@ -14,7 +14,6 @@ import {
 import { SeverityBadge } from './SeverityBadge'
 import { exportCsv } from '../../utils/exportCsv'
 import type { DuplicatePair } from '../../hooks/useDuplicateDetector'
-
 import styles from './DuplicateTable.module.css'
 
 interface DuplicateTableProps {
@@ -34,7 +33,9 @@ function MatchTypeBadge({ type }: { type: 'exact' | 'fuzzy' }) {
 function handleExport(pairs: DuplicatePair[]) {
   const headers = [
     i18n.t('Org Unit A'),
+    i18n.t('Parent A'),
     i18n.t('Org Unit B'),
+    i18n.t('Parent B'),
     i18n.t('Level'),
     i18n.t('Match Type'),
     i18n.t('Similarity Score'),
@@ -42,7 +43,9 @@ function handleExport(pairs: DuplicatePair[]) {
   ]
   const rows = pairs.map((p) => [
     p.nameA,
+    p.parentA ?? '',
     p.nameB,
+    p.parentB ?? '',
     p.level,
     p.matchType === 'exact' ? i18n.t('Exact Match') : i18n.t('Fuzzy Match'),
     `${p.similarity}%`,
@@ -96,7 +99,9 @@ export const DuplicateTable: React.FC<DuplicateTableProps> = ({ pairs, loading, 
         <DataTableHead>
           <DataTableRow>
             <DataTableColumnHeader>{i18n.t('Org Unit A')}</DataTableColumnHeader>
+            <DataTableColumnHeader>{i18n.t('Parent A')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Org Unit B')}</DataTableColumnHeader>
+            <DataTableColumnHeader>{i18n.t('Parent B')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Level')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Match Type')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Similarity Score')}</DataTableColumnHeader>
@@ -112,8 +117,14 @@ export const DuplicateTable: React.FC<DuplicateTableProps> = ({ pairs, loading, 
                 <span className={styles.unitId}>{pair.idA}</span>
               </DataTableCell>
               <DataTableCell>
+                <span className={styles.parentName}>{pair.parentA ?? '—'}</span>
+              </DataTableCell>
+              <DataTableCell>
                 <span className={styles.unitName}>{pair.nameB}</span>
                 <span className={styles.unitId}>{pair.idB}</span>
+              </DataTableCell>
+              <DataTableCell>
+                <span className={styles.parentName}>{pair.parentB ?? '—'}</span>
               </DataTableCell>
               <DataTableCell>{pair.level}</DataTableCell>
               <DataTableCell>
