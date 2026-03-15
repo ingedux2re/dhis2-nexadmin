@@ -1,16 +1,9 @@
+// src/hooks/useBulkRename.ts
 import { useState, useCallback } from 'react'
 import { useDataEngine } from '@dhis2/app-runtime'
-import type { OrgUnitListItem } from '../types/orgUnit'
+import type { RenamePreview } from '../components/BulkOperations/BulkRenameTable'
 
-export type RenameMode = 'find-replace' | 'prefix' | 'suffix' | 'regex'
-
-export interface RenamePreview {
-  orgUnit: OrgUnitListItem
-  oldName: string
-  newName: string
-}
-
-export type BulkRenameStatus = 'idle' | 'previewing' | 'confirming' | 'running' | 'done' | 'error'
+export type BulkRenameStatus = 'idle' | 'confirming' | 'running' | 'done' | 'error'
 
 export interface BulkRenameState {
   status: BulkRenameStatus
@@ -18,64 +11,31 @@ export interface BulkRenameState {
   progress: number
   completed: number
   total: number
+  rolledBack: number
   errors: string[]
 }
 
-function applyRename(original: string, mode: RenameMode, find: string, replace: string): string {
-  switch (mode) {
-    case 'find-replace':
-      return original.split(find).join(replace)
-    case 'prefix':
-      return `${find}${original}`
-    case 'suffix':
-      return `${original}${find}`
-    case 'regex': {
-      try {
-        const regex = new RegExp(find, 'g')
-        return original.replace(regex, replace)
-      } catch {
-        return original
-      }
-    }
-  }
+const INITIAL: BulkRenameState = {
+  status: 'idle',
+  previews: [],
+  progress: 0,
+  completed: 0,
+  total: 0,
+  rolledBack: 0,
+  errors: [],
 }
 
 export function useBulkRename() {
   const engine = useDataEngine()
+  const [state, setState] = useState<BulkRenameState>(INITIAL)
 
-  const [state, setState] = useState<BulkRenameState>({
-    status: 'idle',
-    previews: [],
-    progress: 0,
-    completed: 0,
-    total: 0,
-    errors: [],
-  })
-
-  const preview = useCallback(
-    (orgUnits: OrgUnitListItem[], mode: RenameMode, find: string, replace: string) => {
-      if (!find.trim()) {
-        setState((s) => ({ ...s, previews: [], status: 'idle' }))
-        return
-      }
-      const previews: RenamePreview[] = orgUnits
-        .map((ou) => ({
-          orgUnit: ou,
-          oldName: ou.name,
-          newName: applyRename(ou.name, mode, find, replace),
-        }))
-        .filter((p) => p.oldName !== p.newName)
-      setState((s) => ({ ...s, previews, status: 'previewing' }))
-    },
-    []
-  )
-
-  const requestConfirm = useCallback(() => {
-    setState((s) => ({ ...s, status: 'confirming' }))
+  // ← previews param added; stored in state for confirm dialog
+  const requestConfirm = useCallback((previews: RenamePreview[]) => {
+    setState((s) => ({ ...s, status: 'confirming', previews, total: previews.length }))
   }, [])
 
   const cancelConfirm = useCallback(() => {
-    setState((s) => ({ ...s, status: 'previewing' }))
+    setState((s) => ({ ...s, status: 'idle' }))
   }, [])
 
   const execute = useCallback(
@@ -87,50 +47,64 @@ export function useBulkRename() {
         completed: 0,
         total: previews.length,
         errors: [],
+        rolledBack: 0,
       }))
 
+      const completed: RenamePreview[] = []
       const errors: string[] = []
+
       for (let i = 0; i < previews.length; i++) {
         const p = previews[i]
         const shortName = p.newName.slice(0, 50)
         try {
-          await engine.mutate({
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (engine as any).mutate({
             resource: 'organisationUnits',
             type: 'update',
-            id: p.orgUnit.id,
+            id: p.id,
             data: { name: p.newName, shortName },
           })
+          completed.push(p)
         } catch (err: unknown) {
           const msg = err instanceof Error ? err.message : String(err)
           errors.push(`${p.oldName}: ${msg}`)
+          break
         }
         setState((s) => ({
           ...s,
           completed: i + 1,
           progress: Math.round(((i + 1) / previews.length) * 100),
-          errors: [...errors],
         }))
       }
 
-      setState((s) => ({
-        ...s,
-        status: errors.length === 0 ? 'done' : 'error',
-        errors,
-      }))
+      if (errors.length === 0) {
+        setState((s) => ({ ...s, status: 'done', progress: 100 }))
+        return
+      }
+
+      // Rollback: restore original names
+      let rolledBack = 0
+      for (const p of completed) {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (engine as any).mutate({
+            resource: 'organisationUnits',
+            type: 'update',
+            id: p.id,
+            data: { name: p.oldName, shortName: p.oldName.slice(0, 50) },
+          })
+          rolledBack++
+        } catch {
+          // ignore rollback failures
+        }
+      }
+
+      setState((s) => ({ ...s, status: 'error', errors, rolledBack }))
     },
     [engine]
   )
 
-  const reset = useCallback(() => {
-    setState({
-      status: 'idle',
-      previews: [],
-      progress: 0,
-      completed: 0,
-      total: 0,
-      errors: [],
-    })
-  }, [])
+  const reset = useCallback(() => setState(INITIAL), [])
 
-  return { state, preview, requestConfirm, cancelConfirm, execute, reset }
+  return { state, requestConfirm, cancelConfirm, execute, reset }
 }

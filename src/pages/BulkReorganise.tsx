@@ -1,7 +1,8 @@
+// src/pages/BulkReorganise.tsx
 import { useState, useCallback } from 'react'
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
-import { BulkMoveTable } from '../components/BulkOperations/BulkMoveTable'
+import { BulkReorganiseBoard } from '../components/BulkOperations/BulkReorganiseBoard'
 import { ConfirmDialog } from '../components/BulkOperations/ConfirmDialog'
 import { ProgressBar } from '../components/BulkOperations/ProgressBar'
 import { useBulkMove } from '../hooks/useBulkMove'
@@ -14,7 +15,8 @@ const BULK_MOVE_QUERY = {
     resource: 'organisationUnits',
     params: {
       fields: ['id', 'name', 'shortName', 'level', 'path', 'parent[id,name]'],
-      paging: false,
+      paging: true,
+      pageSize: 10000,
     },
   },
 }
@@ -30,14 +32,13 @@ export default function BulkReorganise() {
 
   const orgUnits: OrgUnitListItem[] = data?.orgUnits?.organisationUnits ?? []
 
-  const handleOpsChange = useCallback((ops: MoveOperation[]) => {
-    setPendingOps(ops)
-  }, [])
-
-  const handleMoveClick = useCallback(() => {
-    if (pendingOps.length === 0) return
-    requestConfirm(pendingOps)
-  }, [pendingOps, requestConfirm])
+  const handleRequestExecute = useCallback(
+    (ops: MoveOperation[]) => {
+      setPendingOps(ops)
+      requestConfirm(ops)
+    },
+    [requestConfirm]
+  )
 
   const handleConfirm = useCallback(() => {
     execute(pendingOps)
@@ -59,56 +60,46 @@ export default function BulkReorganise() {
       {loading && <p className={styles.loading}>{i18n.t('Loading org units…')}</p>}
       {error && (
         <p className={styles.error}>
-          {i18n.t('Failed to load org units: {{message}}', { message: error.message })}
+          {i18n.t('Failed to load org units. {{message}}', { message: error.message })}
         </p>
       )}
 
       {!loading && !error && (
-        <>
-          <BulkMoveTable orgUnits={orgUnits} onOperationsChange={handleOpsChange} />
+        <BulkReorganiseBoard orgUnits={orgUnits} onRequestExecute={handleRequestExecute} />
+      )}
 
-          {pendingOps.length > 0 && !isRunning && !isDone && !isError && (
-            <div className={styles.actionBar}>
-              <button className={styles.moveBtn} onClick={handleMoveClick}>
-                {i18n.t('Move {{count}} Org Units', { count: pendingOps.length })}
-              </button>
-            </div>
-          )}
+      {isRunning && (
+        <ProgressBar
+          percent={state.progress}
+          label={i18n.t('Moving {{count}} org units…', { count: state.total })}
+          completed={state.completed}
+          total={state.total}
+        />
+      )}
 
-          {isRunning && (
-            <ProgressBar
-              percent={state.progress}
-              label={i18n.t('Moving {{count}} org units…', { count: state.total })}
-              completed={state.completed}
-              total={state.total}
-            />
-          )}
+      {isDone && (
+        <div className={styles.successBanner}>
+          <span>
+            {i18n.t('All {{count}} org units moved successfully.', { count: state.total })}
+          </span>
+          <button className={styles.resetBtn} onClick={reset}>
+            {i18n.t('New Operation')}
+          </button>
+        </div>
+      )}
 
-          {isDone && (
-            <div className={styles.successBanner}>
-              <span>
-                {i18n.t('All {{count}} org units moved successfully.', { count: state.total })}
-              </span>
-              <button className={styles.resetBtn} onClick={reset}>
-                {i18n.t('New Operation')}
-              </button>
-            </div>
-          )}
-
-          {isError && (
-            <div className={styles.errorBanner}>
-              <p>{i18n.t('Operation failed. {{n}} moves rolled back.', { n: state.rolledBack })}</p>
-              {state.errors.map((e, idx) => (
-                <p key={idx} className={styles.errorItem}>
-                  {e}
-                </p>
-              ))}
-              <button className={styles.resetBtn} onClick={reset}>
-                {i18n.t('Try Again')}
-              </button>
-            </div>
-          )}
-        </>
+      {isError && (
+        <div className={styles.errorBanner}>
+          <p>{i18n.t('Operation failed. {{n}} moves rolled back.', { n: state.rolledBack })}</p>
+          {state.errors.map((e, idx) => (
+            <p key={idx} className={styles.errorItem}>
+              {e}
+            </p>
+          ))}
+          <button className={styles.resetBtn} onClick={reset}>
+            {i18n.t('Try Again')}
+          </button>
+        </div>
       )}
 
       {state.status === 'confirming' && (

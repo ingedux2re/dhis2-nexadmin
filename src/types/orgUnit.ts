@@ -94,24 +94,19 @@ export interface OrgUnitsQueryParams {
   filter?: string[]
 }
 
-// ─── Phase 3 – Bulk Operations ───────────────────────────────────────────────
+// ── Phase 3: Bulk Operations ──────────────────────────────────────────────────
 
-export type BulkRenameMode = 'find-replace' | 'prefix' | 'suffix' | 'regex'
-
-/** One unit → one new parent (used in BulkReorganise) */
 export interface BulkMovePayload {
-  orgUnitId: string
+  orgUnitId: string // kept for API reference
   newParentId: string
 }
 
-/** One unit → one new name (used in BulkRename) */
 export interface BulkRenamePayload {
   orgUnitId: string
   newName: string
-  newShortName: string
+  newShortName?: string
 }
 
-/** Outcome returned after executing a bulk operation */
 export interface BulkOperationResult {
   success: boolean
   completed: number
@@ -119,3 +114,5 @@ export interface BulkOperationResult {
   rolledBack: number
   errors: string[]
 }
+
+export type BulkRenameMode = 'find-replace' | 'prefix' | 'suffix' | 'regex'

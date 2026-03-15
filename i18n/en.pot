@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-15T07:25:33.880Z\n"
-"PO-Revision-Date: 2026-03-15T07:25:33.881Z\n"
+"POT-Creation-Date: 2026-03-15T15:51:08.930Z\n"
+"PO-Revision-Date: 2026-03-15T15:51:08.930Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -44,14 +44,8 @@ msgstr "Select {{name}}"
 msgid "Export Preview CSV"
 msgstr "Export Preview CSV"
 
-msgid "Old Name"
-msgstr "Old Name"
-
-msgid "New Name"
-msgstr "New Name"
-
-msgid "Parent"
-msgstr "Parent"
+msgid "Mode"
+msgstr "Mode"
 
 msgid "Find & Replace"
 msgstr "Find & Replace"
@@ -65,41 +59,47 @@ msgstr "Add Suffix"
 msgid "Regex Replace"
 msgstr "Regex Replace"
 
-msgid "Text to find…"
-msgstr "Text to find…"
+msgid "Pattern (regex)"
+msgstr "Pattern (regex)"
 
-msgid "Prefix to add…"
-msgstr "Prefix to add…"
-
-msgid "Suffix to add…"
-msgstr "Suffix to add…"
-
-msgid "Regular expression…"
-msgstr "Regular expression…"
-
-msgid "Mode"
-msgstr "Mode"
-
-msgid "Prefix"
-msgstr "Prefix"
-
-msgid "Suffix"
-msgstr "Suffix"
-
-msgid "Find"
-msgstr "Find"
+msgid "Find text"
+msgstr "Find text"
 
 msgid "Replace with"
 msgstr "Replace with"
 
-msgid "Replacement text…"
-msgstr "Replacement text…"
+msgid "Prefix to add"
+msgstr "Prefix to add"
+
+msgid "Suffix to add"
+msgstr "Suffix to add"
 
 msgid "Preview Rename"
 msgstr "Preview Rename"
 
-msgid "No org units match — nothing to rename."
-msgstr "No org units match — nothing to rename."
+msgid "Filter org units by name…"
+msgstr "Filter org units by name…"
+
+msgid "{{n}} org units loaded"
+msgstr "{{n}} org units loaded"
+
+msgid "{{changed}} of {{total}} names will change"
+msgstr "{{changed}} of {{total}} names will change"
+
+msgid "Export CSV"
+msgstr "Export CSV"
+
+msgid "No org units match the current filter."
+msgstr "No org units match the current filter."
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Current Name"
+msgstr "Current Name"
+
+msgid "New Name"
+msgstr "New Name"
 
 msgid "Collapse"
 msgstr "Collapse"
@@ -130,6 +130,9 @@ msgstr "Name"
 
 msgid "Lvl"
 msgstr "Lvl"
+
+msgid "Parent"
+msgstr "Parent"
 
 msgid "No org units match the filter."
 msgstr "No org units match the filter."
@@ -223,9 +226,6 @@ msgstr "Something went wrong"
 
 msgid "No duplicates found — system is clean"
 msgstr "No duplicates found — system is clean"
-
-msgid "Export CSV"
-msgstr "Export CSV"
 
 msgid "Actions"
 msgstr "Actions"
@@ -403,20 +403,23 @@ msgid "Bulk Rename"
 msgstr "Bulk Rename"
 
 msgid ""
-"Find and replace, add prefix/suffix, or apply a regex to rename org units "
-"in bulk."
+"Apply find-replace, prefix, suffix, or regex rules to rename org units in "
+"bulk."
 msgstr ""
-"Find and replace, add prefix/suffix, or apply a regex to rename org units "
-"in bulk."
+"Apply find-replace, prefix, suffix, or regex rules to rename org units in "
+"bulk."
 
 msgid "Loading org units…"
 msgstr "Loading org units…"
 
+msgid "Failed to load org units. {{message}}"
+msgstr "Failed to load org units. {{message}}"
+
 msgid "New Operation"
 msgstr "New Operation"
 
-msgid "Rename failed. {{n}} errors encountered."
-msgstr "Rename failed. {{n}} errors encountered."
+msgid "Operation failed. {{n}} renames rolled back."
+msgstr "Operation failed. {{n}} renames rolled back."
 
 msgid "Try Again"
 msgstr "Try Again"

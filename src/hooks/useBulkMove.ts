@@ -1,3 +1,4 @@
+// src/hooks/useBulkMove.ts
 import { useState, useCallback } from 'react'
 import { useDataEngine } from '@dhis2/app-runtime'
 import type { OrgUnitListItem } from '../types/orgUnit'
@@ -19,17 +20,48 @@ export interface BulkMoveState {
   errors: string[]
 }
 
+const INITIAL: BulkMoveState = {
+  status: 'idle',
+  progress: 0,
+  completed: 0,
+  total: 0,
+  rolledBack: 0,
+  errors: [],
+}
+
 export function useBulkMove() {
+  const [state, setState] = useState<BulkMoveState>(INITIAL)
   const engine = useDataEngine()
 
-  const [state, setState] = useState<BulkMoveState>({
-    status: 'idle',
-    progress: 0,
-    completed: 0,
-    total: 0,
-    rolledBack: 0,
-    errors: [],
-  })
+  const moveOrgUnit = useCallback(
+    async (orgUnitId: string, parentId: string) => {
+      // Step 1: fetch all owned fields (same as DHIS2 Maintenance)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const result = await (engine as any).query({
+        ou: {
+          resource: `organisationUnits/${orgUnitId}`,
+          params: { fields: ':owner' },
+        },
+      })
+
+      const ou = result?.ou
+      if (!ou) throw new Error(`Org unit ${orgUnitId} not found`)
+
+      // Step 2: PUT with mergeMode=REPLACE — exactly what DHIS2 Maintenance does
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      await (engine as any).mutate({
+        resource: 'organisationUnits',
+        type: 'update',
+        id: orgUnitId,
+        params: { mergeMode: 'REPLACE' },
+        data: {
+          ...ou,
+          parent: { id: parentId },
+        },
+      })
+    },
+    [engine]
+  )
 
   const requestConfirm = useCallback((ops: MoveOperation[]) => {
     setState((s) => ({ ...s, status: 'confirming', total: ops.length }))
@@ -41,14 +73,15 @@ export function useBulkMove() {
 
   const execute = useCallback(
     async (ops: MoveOperation[]) => {
-      setState({
+      setState((s) => ({
+        ...s,
         status: 'running',
-        progress: 0,
         completed: 0,
-        total: ops.length,
-        rolledBack: 0,
+        progress: 0,
         errors: [],
-      })
+        rolledBack: 0,
+        total: ops.length,
+      }))
 
       const completed: MoveOperation[] = []
       const errors: string[] = []
@@ -56,22 +89,17 @@ export function useBulkMove() {
       for (let i = 0; i < ops.length; i++) {
         const op = ops[i]
         try {
-          await engine.mutate({
-            resource: 'organisationUnits',
-            type: 'update',
-            id: op.orgUnit.id,
-            data: { parent: { id: op.newParentId } },
-          })
+          await moveOrgUnit(op.orgUnit.id, op.newParentId)
           completed.push(op)
         } catch (err: unknown) {
           const msg = err instanceof Error ? err.message : String(err)
           errors.push(`${op.orgUnit.name}: ${msg}`)
+          break
         }
         setState((s) => ({
           ...s,
           completed: i + 1,
           progress: Math.round(((i + 1) / ops.length) * 100),
-          errors: [...errors],
         }))
       }
 
@@ -80,37 +108,26 @@ export function useBulkMove() {
         return
       }
 
-      // Partial failure – best-effort rollback of completed moves
+      // Rollback: restore original parents
       let rolledBack = 0
       for (const op of completed) {
         try {
-          await engine.mutate({
-            resource: 'organisationUnits',
-            type: 'update',
-            id: op.orgUnit.id,
-            data: { parent: { id: op.orgUnit.parent?.id ?? '' } },
-          })
-          rolledBack++
+          const originalParentId = op.orgUnit.parent?.id
+          if (originalParentId) {
+            await moveOrgUnit(op.orgUnit.id, originalParentId)
+            rolledBack++
+          }
         } catch {
-          // ignore rollback errors
+          // ignore rollback failures
         }
       }
 
-      setState((s) => ({ ...s, status: 'error', rolledBack, errors }))
+      setState((s) => ({ ...s, status: 'error', errors, rolledBack }))
     },
-    [engine]
+    [moveOrgUnit]
   )
 
-  const reset = useCallback(() => {
-    setState({
-      status: 'idle',
-      progress: 0,
-      completed: 0,
-      total: 0,
-      rolledBack: 0,
-      errors: [],
-    })
-  }, [])
+  const reset = useCallback(() => setState(INITIAL), [])
 
   return { state, requestConfirm, cancelConfirm, execute, reset }
 }
