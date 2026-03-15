@@ -9,6 +9,7 @@ export interface NavItem {
 export type NavSection =
   | 'org-units'
   | 'data-integrity'
+  | 'bulk-operations'
   | 'users'
   | 'governance'
   | 'analytics'
@@ -57,6 +58,22 @@ export const NAV_ITEMS: NavItem[] = [
     icon: 'map',
     section: 'data-integrity',
   },
+  // ─── Phase 3 – Bulk Operations ─────────────────────────────────────────────
+  {
+    id: 'bulk-reorganise',
+    label: 'Bulk Reorganise',
+    path: '/bulk/reorganise',
+    icon: 'move_down',
+    section: 'bulk-operations',
+  },
+  {
+    id: 'bulk-rename',
+    label: 'Bulk Rename',
+    path: '/bulk/rename',
+    icon: 'drive_file_rename_outline',
+    section: 'bulk-operations',
+  },
+  // ───────────────────────────────────────────────────────────────────────────
   {
     id: 'user-management',
     label: 'User Management',
@@ -125,6 +142,7 @@ export const NAV_ITEMS: NavItem[] = [
 export const NAV_SECTIONS: Record<NavSection, string> = {
   'org-units': 'Organisation Units',
   'data-integrity': 'Data Integrity',
+  'bulk-operations': 'Bulk Operations',
   users: 'Users & Access',
   governance: 'Governance',
   analytics: 'Analytics',

@@ -18,6 +18,9 @@ const Notifications = lazy(() => import('../pages/Notifications'))
 const DuplicateDetector = lazy(() => import('../pages/DuplicateDetector'))
 const HierarchyValidator = lazy(() => import('../pages/HierarchyValidator'))
 const GeoConsistency = lazy(() => import('../pages/GeoConsistency'))
+// Phase 3 – Bulk Operations
+const BulkReorganise = lazy(() => import('../pages/BulkReorganise'))
+const BulkRename = lazy(() => import('../pages/BulkRename'))
 
 export const AppRoutes: React.FC = () => (
   <Layout>
@@ -29,6 +32,9 @@ export const AppRoutes: React.FC = () => (
       <Route path="/integrity/duplicates" element={<DuplicateDetector />} />
       <Route path="/integrity/hierarchy" element={<HierarchyValidator />} />
       <Route path="/integrity/geo" element={<GeoConsistency />} />
+      {/* Phase 3 – Bulk Operations */}
+      <Route path="/bulk/reorganise" element={<BulkReorganise />} />
+      <Route path="/bulk/rename" element={<BulkRename />} />
       <Route path="/users" element={<UserManagement />} />
       <Route path="/users/roles" element={<RolesAuthorities />} />
       <Route path="/users/groups" element={<UserGroups />} />

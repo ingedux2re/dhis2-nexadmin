@@ -5,11 +5,113 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-15T00:57:55.608Z\n"
-"PO-Revision-Date: 2026-03-15T00:57:55.608Z\n"
+"POT-Creation-Date: 2026-03-15T05:41:17.516Z\n"
+"PO-Revision-Date: 2026-03-15T05:41:17.516Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
+
+msgid "Org Unit"
+msgstr "Org Unit"
+
+msgid "Current Parent"
+msgstr "Current Parent"
+
+msgid "New Parent"
+msgstr "New Parent"
+
+msgid "Level"
+msgstr "Level"
+
+msgid "New Parent ID"
+msgstr "New Parent ID"
+
+msgid "Paste DHIS2 org unit ID…"
+msgstr "Paste DHIS2 org unit ID…"
+
+msgid "New Parent Name"
+msgstr "New Parent Name"
+
+msgid "Display name…"
+msgstr "Display name…"
+
+msgid "Select all"
+msgstr "Select all"
+
+msgid "Select {{name}}"
+msgstr "Select {{name}}"
+
+msgid "Export Preview CSV"
+msgstr "Export Preview CSV"
+
+msgid "Old Name"
+msgstr "Old Name"
+
+msgid "New Name"
+msgstr "New Name"
+
+msgid "Parent"
+msgstr "Parent"
+
+msgid "Find & Replace"
+msgstr "Find & Replace"
+
+msgid "Add Prefix"
+msgstr "Add Prefix"
+
+msgid "Add Suffix"
+msgstr "Add Suffix"
+
+msgid "Regex Replace"
+msgstr "Regex Replace"
+
+msgid "Text to find…"
+msgstr "Text to find…"
+
+msgid "Prefix to add…"
+msgstr "Prefix to add…"
+
+msgid "Suffix to add…"
+msgstr "Suffix to add…"
+
+msgid "Regular expression…"
+msgstr "Regular expression…"
+
+msgid "Mode"
+msgstr "Mode"
+
+msgid "Prefix"
+msgstr "Prefix"
+
+msgid "Suffix"
+msgstr "Suffix"
+
+msgid "Find"
+msgstr "Find"
+
+msgid "Replace with"
+msgstr "Replace with"
+
+msgid "Replacement text…"
+msgstr "Replacement text…"
+
+msgid "Preview Rename"
+msgstr "Preview Rename"
+
+msgid "No org units match — nothing to rename."
+msgstr "No org units match — nothing to rename."
+
+msgid "Cancel"
+msgstr "Cancel"
+
+msgid "Confirm"
+msgstr "Confirm"
+
+msgid "Processing…"
+msgstr "Processing…"
+
+msgid "{{completed}} / {{total}}"
+msgstr "{{completed}} / {{total}}"
 
 msgid "Exact Match"
 msgstr "Exact Match"
@@ -28,9 +130,6 @@ msgstr "Org Unit B"
 
 msgid "Parent B"
 msgstr "Parent B"
-
-msgid "Level"
-msgstr "Level"
 
 msgid "Match Type"
 msgstr "Match Type"
@@ -73,9 +172,6 @@ msgstr "Outside Boundary"
 
 msgid "Low Precision"
 msgstr "Low Precision"
-
-msgid "Org Unit"
-msgstr "Org Unit"
 
 msgid "Issue Type"
 msgstr "Issue Type"
@@ -146,9 +242,6 @@ msgstr "Are you sure you want to delete {{name}}? This action cannot be undone."
 
 msgid "Close"
 msgstr "Close"
-
-msgid "Cancel"
-msgstr "Cancel"
 
 msgid "Deleting…"
 msgstr "Deleting…"
@@ -239,6 +332,43 @@ msgstr "This module is under construction."
 
 msgid "Audit Log"
 msgstr "Audit Log"
+
+msgid "Bulk Rename"
+msgstr "Bulk Rename"
+
+msgid ""
+"Find and replace, add prefix/suffix, or apply a regex to rename org units "
+"in bulk."
+msgstr ""
+"Find and replace, add prefix/suffix, or apply a regex to rename org units "
+"in bulk."
+
+msgid "Loading org units…"
+msgstr "Loading org units…"
+
+msgid "New Operation"
+msgstr "New Operation"
+
+msgid "Rename failed. {{n}} errors encountered."
+msgstr "Rename failed. {{n}} errors encountered."
+
+msgid "Try Again"
+msgstr "Try Again"
+
+msgid "Confirm Bulk Rename"
+msgstr "Confirm Bulk Rename"
+
+msgid "Bulk Reorganise"
+msgstr "Bulk Reorganise"
+
+msgid "Select org units and assign them a new parent to move them in bulk."
+msgstr "Select org units and assign them a new parent to move them in bulk."
+
+msgid "Operation failed. {{n}} moves rolled back."
+msgstr "Operation failed. {{n}} moves rolled back."
+
+msgid "Confirm Bulk Move"
+msgstr "Confirm Bulk Move"
 
 msgid "Data Quality"
 msgstr "Data Quality"

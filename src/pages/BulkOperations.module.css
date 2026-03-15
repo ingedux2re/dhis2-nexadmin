@@ -1,0 +1,106 @@
+.page {
+  padding: 2rem;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin: 0;
+}
+
+.description {
+  font-size: 0.95rem;
+  color: #555;
+  margin: 0;
+}
+
+.loading,
+.error {
+  font-size: 0.9rem;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+}
+
+.loading {
+  background: #e3f2fd;
+  color: #1565c0;
+}
+.error {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.actionBar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.moveBtn {
+  padding: 0.6rem 1.5rem;
+  background: #d32f2f;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+.moveBtn:hover {
+  background: #b71c1c;
+}
+
+.successBanner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #e8f5e9;
+  border: 1px solid #a5d6a7;
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  color: #2e7d32;
+  font-size: 0.9rem;
+}
+
+.errorBanner {
+  background: #ffebee;
+  border: 1px solid #ef9a9a;
+  border-radius: 6px;
+  padding: 1rem 1.25rem;
+  color: #c62828;
+  font-size: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.errorItem {
+  font-size: 0.82rem;
+  color: #b71c1c;
+  margin: 0;
+}
+
+.resetBtn {
+  padding: 0.4rem 1rem;
+  background: transparent;
+  border: 1px solid currentColor;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: inherit;
+  white-space: nowrap;
+}
+.resetBtn:hover {
+  background: rgba(0, 0, 0, 0.06);
+}
