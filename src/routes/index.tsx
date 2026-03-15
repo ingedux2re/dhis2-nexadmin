@@ -15,6 +15,9 @@ const UsageStatistics = lazy(() => import('../pages/UsageStatistics'))
 const DataQuality = lazy(() => import('../pages/DataQuality'))
 const SystemSettings = lazy(() => import('../pages/SystemSettings'))
 const Notifications = lazy(() => import('../pages/Notifications'))
+const DuplicateDetector = lazy(() => import('../pages/DuplicateDetector'))
+const HierarchyValidator = lazy(() => import('../pages/HierarchyValidator'))
+const GeoConsistency = lazy(() => import('../pages/GeoConsistency'))
 
 export const AppRoutes: React.FC = () => (
   <Layout>
@@ -23,6 +26,9 @@ export const AppRoutes: React.FC = () => (
       <Route path="/org-units" element={<OrgUnitManagement />} />
       <Route path="/org-units/hierarchy" element={<HierarchyViewer />} />
       <Route path="/org-units/groups" element={<OrgUnitGroups />} />
+      <Route path="/integrity/duplicates" element={<DuplicateDetector />} />
+      <Route path="/integrity/hierarchy" element={<HierarchyValidator />} />
+      <Route path="/integrity/geo" element={<GeoConsistency />} />
       <Route path="/users" element={<UserManagement />} />
       <Route path="/users/roles" element={<RolesAuthorities />} />
       <Route path="/users/groups" element={<UserGroups />} />

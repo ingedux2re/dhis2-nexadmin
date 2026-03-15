@@ -719,6 +719,30 @@ msgstr "Limite attendue"
 msgid "View on Map"
 msgstr "Voir sur la carte"
 
+# — f3 —
+msgid "Org Unit A"
+msgstr "Unité org. A"
+
+# — f3 —
+msgid "Org Unit B"
+msgstr "Unité org. B"
+
+# — common —
+msgid "Org Unit"
+msgstr "Unité organisationnelle"
+
+# — nav —
+msgid "Data Integrity"
+msgstr "Intégrité des données"
+
+# — f6 —
+msgid "Issue Type"
+msgstr "Type de problème"
+
+# — f6 —
+msgid "Low Precision"
+msgstr "Faible précision"
+
 # ══════════════════════════════════════════════════════════════
 # PHASE 3 — Bulk Operations (F1 Bulk Reorg, F4 Bulk Rename)
 # ══════════════════════════════════════════════════════════════

@@ -1,5 +1,10 @@
 export type FeatureType = 'NONE' | 'MULTI_POLYGON' | 'POLYGON' | 'POINT' | 'SYMBOL'
 
+export interface GeoJsonGeometry {
+  type: string
+  coordinates: unknown
+}
+
 export interface OrgUnitRef {
   id: string
   name: string
@@ -34,9 +39,22 @@ export interface OrgUnitListItem {
   level: number
   path: string
   parent?: OrgUnitRef
+  featureType?: FeatureType
+  geometry?: GeoJsonGeometry
   openingDate?: string
   closedDate?: string
   lastUpdated?: string
+}
+
+export interface OrgUnitIntegrityItem {
+  id: string
+  name: string
+  shortName: string
+  level: number
+  path: string
+  parent?: OrgUnitRef
+  featureType?: FeatureType
+  geometry?: GeoJsonGeometry
 }
 
 export interface Pager {
@@ -74,9 +92,4 @@ export interface OrgUnitsQueryParams {
   withinUserHierarchy?: boolean
   order?: string
   filter?: string[]
-}
-
-interface GeoJsonGeometry {
-  type: string
-  coordinates: unknown
 }
