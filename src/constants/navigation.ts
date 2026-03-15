@@ -6,7 +6,13 @@ export interface NavItem {
   section: NavSection
 }
 
-export type NavSection = 'org-units' | 'users' | 'governance' | 'analytics' | 'system'
+export type NavSection =
+  | 'org-units'
+  | 'data-integrity'
+  | 'users'
+  | 'governance'
+  | 'analytics'
+  | 'system'
 
 export const NAV_ITEMS: NavItem[] = [
   {
@@ -29,6 +35,27 @@ export const NAV_ITEMS: NavItem[] = [
     path: '/org-units/groups',
     icon: 'folder_special',
     section: 'org-units',
+  },
+  {
+    id: 'duplicate-detector',
+    label: 'Duplicate Detector',
+    path: '/integrity/duplicates',
+    icon: 'content_copy',
+    section: 'data-integrity',
+  },
+  {
+    id: 'hierarchy-validator',
+    label: 'Hierarchy Validator',
+    path: '/integrity/hierarchy',
+    icon: 'rule',
+    section: 'data-integrity',
+  },
+  {
+    id: 'geo-consistency',
+    label: 'Geo Consistency',
+    path: '/integrity/geo',
+    icon: 'map',
+    section: 'data-integrity',
   },
   {
     id: 'user-management',
@@ -97,6 +124,7 @@ export const NAV_ITEMS: NavItem[] = [
 
 export const NAV_SECTIONS: Record<NavSection, string> = {
   'org-units': 'Organisation Units',
+  'data-integrity': 'Data Integrity',
   users: 'Users & Access',
   governance: 'Governance',
   analytics: 'Analytics',

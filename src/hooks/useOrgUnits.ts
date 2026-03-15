@@ -13,6 +13,8 @@ const ORG_UNITS_QUERY = {
         'level',
         'path',
         'parent[id,name]',
+        'featureType',
+        'geometry',
         'openingDate',
         'closedDate',
         'lastUpdated',
