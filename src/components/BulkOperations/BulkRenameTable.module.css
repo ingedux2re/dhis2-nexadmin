@@ -4,6 +4,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  /* Allow the sticky rename panel to be positioned relative to
+     the scrolling main area, not the whole page */
+  position: relative;
 }
 
 /* ── Filter bar ──────────────────────────────────────────────── */
@@ -302,15 +305,31 @@
 
 /* ── Sticky rename action panel ──────────────────────────────── */
 .renamePanel {
+  /* Stick to the bottom of the viewport scroll area so it is
+     always visible without requiring the user to scroll down */
+  position: sticky;
+  bottom: 0;
+  z-index: var(--z-sticky);
+
   background: var(--surface-card);
+  /* Slightly more opaque backdrop so it doesn't look transparent over the table */
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
   border: 1px solid var(--border-subtle);
   border-top: 3px solid var(--brand-500);
   border-radius: var(--radius-lg);
+  /* Extra shadow upward to visually separate from table rows below */
+  box-shadow:
+    0 -4px 16px rgba(0, 0, 0, 0.08),
+    var(--shadow-lg);
   padding: var(--space-5);
-  box-shadow: var(--shadow-lg);
   display: flex;
   flex-direction: column;
   gap: var(--space-4);
+  /* Pull the panel up slightly so it overlaps the last table row's border */
+  margin-top: calc(var(--space-4) * -1);
 }
 
 .renamePanelHeader {

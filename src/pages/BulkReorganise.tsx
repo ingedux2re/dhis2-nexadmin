@@ -50,7 +50,7 @@ export default function BulkReorganise() {
   const isError = state.status === 'error'
 
   return (
-    <div className={styles.page}>
+    <div className={styles.pageFull}>
       <PageHeader
         icon="low_priority"
         title={i18n.t('Bulk Reorganise')}

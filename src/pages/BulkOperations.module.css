@@ -8,6 +8,39 @@
   gap: var(--space-6);
 }
 
+/*
+ * .pageFull — used by BulkReorganise so the three-panel board fills
+ * the viewport without creating a page-level vertical scrollbar.
+ * The board's own panels scroll internally.
+ */
+.pageFull {
+  padding: var(--page-padding);
+  /* No max-width: board needs all horizontal space */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Prevent the outer main area from growing taller than the viewport */
+  height: calc(100vh - var(--topbar-height));
+  overflow: hidden;
+}
+
+/*
+ * .pageScroll — used by BulkRename so the rename action panel
+ * (position:sticky;bottom:0 in BulkRenameTable.module.css) works
+ * correctly: sticky positioning requires a scroll container ancestor.
+ * The .main element in Layout already provides overflow-y:auto,
+ * so .pageScroll just limits width and adds padding like .page does.
+ */
+.pageScroll {
+  padding: var(--page-padding);
+  max-width: var(--content-max);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+  /* Pad the bottom so the sticky panel doesn't cover the last row */
+  padding-bottom: 0;
+}
+
 /* ── Loading / error inline ──────────────────────────────────── */
 .loading {
   display: flex;
