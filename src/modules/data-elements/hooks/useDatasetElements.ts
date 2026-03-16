@@ -3,6 +3,11 @@
 //
 // Lazy-loads data elements for a selected dataset.
 // Re-fetches whenever a new dataset id is supplied.
+//
+// FIX: The id field must be a function — (vars) => vars.dataSetId — so that
+// @dhis2/app-runtime resolves it as a dynamic GET path.
+// Using a literal string like 'dataSetId' causes the runtime to send a POST
+// to dataSets/dataSetId, which the server rejects with 405 Method Not Allowed.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useCallback } from 'react'
@@ -10,14 +15,22 @@ import { useDataQuery } from '@dhis2/app-runtime'
 import { extractDataElements } from '../services/metadataService'
 import type { DataElement } from '../types'
 
+// ── Query variables type ───────────────────────────────────────────────────────
+
+interface DataSetQueryVars {
+  dataSetId: string
+}
+
 // ── Query ─────────────────────────────────────────────────────────────────────
-// The id field uses a dynamic variable string — refetch({ dataSetId: '...' })
-// injects the real value at call time.
+// id is a function so the runtime resolves it as:
+//   GET /api/dataSets/<dataSetId>?fields=...
+// This matches the DHIS2 app-runtime convention for dynamic resource IDs
+// (same pattern used by useOrgUnits with params: (vars) => ({...})).
 
 const DATASET_ELEMENTS_QUERY = {
   dataSet: {
     resource: 'dataSets',
-    id: 'dataSetId' as unknown as string,
+    id: ({ dataSetId }: DataSetQueryVars) => dataSetId,
     params: {
       fields: [
         'id',
@@ -47,7 +60,8 @@ export interface UseDatasetElementsResult {
 
 export function useDatasetElements(): UseDatasetElementsResult {
   const { data, loading, error, refetch } = useDataQuery<DataSetQueryResult>(
-    DATASET_ELEMENTS_QUERY,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    DATASET_ELEMENTS_QUERY as any,
     { lazy: true }
   )
 
