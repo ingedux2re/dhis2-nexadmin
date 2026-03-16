@@ -3,25 +3,22 @@
 //
 // State machine for Tab 2 — Rename Data Elements in Dataset.
 //
-// API strategy: fetch full object with fields=:owner, then PUT with
-// mergeMode=REPLACE — exactly how the DHIS2 Maintenance App works.
-// ─────────────────────────────────────────────────────────────────────────────
+// API strategy: PUT /api/dataElements/{id}?mergeMode=REPLACE with the minimum
+// required fields that satisfy DHIS2 server-side validation:
+//   { id, name, shortName, valueType, domainType, aggregationType }
 //
-// HOW DHIS2 MAINTENANCE APP RENAMES A DATA ELEMENT:
-// ─────────────────────────────────────────────────────────────────────────────
-//  1. GET  /api/dataElements?filter=name:eq:<name>&fields=:all   (check unique)
-//  2. GET  /api/schemas/dataElement                              (validation)
-//  3. PUT  /api/dataElements/{id}?mergeMode=REPLACE              (full object)
+// All of these are already available from the dataset-elements query
+// (useDatasetElements), so no extra GET-per-element is needed.
 //
-// The key is step 3: the body contains the FULL object (all fields returned
-// by fields=:owner), with only name/shortName changed. Using mergeMode=REPLACE
-// with the complete owned payload is safe and correct.
+// WHY NOT FETCH FIRST?
+// ────────────────────
+// The DHIS2 Maintenance App fetches fields=:owner then PUTs the full object.
+// For bulk operations over many elements this is wasteful (N extra GETs) and
+// error-prone (nested objects in the full payload may cause validation issues).
 //
-// WHY fields=:owner (not fields=:all)?
-// ─────────────────────────────────────────────────────────────────────────────
-// ':owner' returns only fields that the current user owns and can write back.
-// ':all' includes computed/read-only fields that would cause a validation error
-// if included in the PUT payload. This matches the Maintenance App behaviour.
+// Instead, we include the three truly required scalar fields — valueType,
+// domainType, aggregationType — in the DataElementRenamePreview so the hook
+// has everything it needs without any additional requests.
 //
 // State machine:
 //   idle  ──(requestConfirm)──► confirming
@@ -97,6 +94,8 @@ function buildPreviews(
         newShortName,
         code: el.code,
         valueType: el.valueType,
+        domainType: el.domainType,
+        aggregationType: el.aggregationType,
         changed: newName !== el.name,
       }
     })
@@ -196,12 +195,19 @@ export function useBulkRenameElements() {
   }, [])
 
   /**
-   * Execute renames one element at a time using the DHIS2 Maintenance App pattern:
-   *   Step 1: GET /api/dataElements/{id}?fields=:owner   — fetch the full owned object
-   *   Step 2: PUT /api/dataElements/{id}?mergeMode=REPLACE — send it back with new name/shortName
+   * Execute renames using the minimal-but-complete PUT payload pattern.
    *
-   * This is exactly how the Maintenance App renames data elements and is guaranteed
-   * to work because the full payload satisfies all server-side validation requirements.
+   * DHIS2 PUT /api/dataElements/{id}?mergeMode=REPLACE requires all mandatory
+   * fields: name, shortName, valueType, domainType, aggregationType.
+   * We already have every one of these from the dataset-elements query, so we
+   * can skip the extra GET-per-element entirely.
+   *
+   * Payload sent per element:
+   *   { id, name, shortName, valueType, domainType, aggregationType }
+   *   + mergeMode=REPLACE as a query param
+   *
+   * This is the same validated approach as useBulkRename.ts (org units) —
+   * send the required fields only, let DHIS2 leave everything else unchanged.
    */
   const execute = useCallback(
     async (previews: DataElementRenamePreview[]) => {
@@ -221,19 +227,9 @@ export function useBulkRenameElements() {
       for (let i = 0; i < previews.length; i++) {
         const p = previews[i]
         try {
-          // ── Step 1: Fetch full owned object (same as Maintenance App) ────────
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const fetchResult = await (engine as any).query({
-            de: {
-              resource: `dataElements/${p.id}`,
-              params: { fields: ':owner' },
-            },
-          })
-
-          const fullDe = fetchResult?.de
-          if (!fullDe) throw new Error(`Data element ${p.id} not found`)
-
-          // ── Step 2: PUT full object with only name/shortName changed ─────────
+          // PUT with the minimum set of required fields.
+          // mergeMode=REPLACE tells DHIS2 to apply exactly what we send;
+          // because we include all required fields this does NOT wipe other fields.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
             resource: 'dataElements',
@@ -241,9 +237,12 @@ export function useBulkRenameElements() {
             id: p.id,
             params: { mergeMode: 'REPLACE' },
             data: {
-              ...fullDe,
+              id: p.id,
               name: p.newName,
               shortName: p.newShortName,
+              valueType: p.valueType,
+              domainType: p.domainType,
+              aggregationType: p.aggregationType,
             },
           })
 
@@ -275,17 +274,6 @@ export function useBulkRenameElements() {
       let rolledBack = 0
       for (const p of succeeded) {
         try {
-          // Fetch the current state (already renamed) and restore original name
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const fetchResult = await (engine as any).query({
-            de: {
-              resource: `dataElements/${p.id}`,
-              params: { fields: ':owner' },
-            },
-          })
-          const fullDe = fetchResult?.de
-          if (!fullDe) continue
-
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
             resource: 'dataElements',
@@ -293,9 +281,12 @@ export function useBulkRenameElements() {
             id: p.id,
             params: { mergeMode: 'REPLACE' },
             data: {
-              ...fullDe,
+              id: p.id,
               name: p.oldName,
               shortName: p.oldShortName,
+              valueType: p.valueType,
+              domainType: p.domainType,
+              aggregationType: p.aggregationType,
             },
           })
           rolledBack++

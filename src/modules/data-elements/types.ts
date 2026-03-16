@@ -209,6 +209,12 @@ export interface DataElementRenamePreview {
   newShortName: string
   code?: string
   valueType: ValueType
+  /**
+   * Required by DHIS2 PUT /api/dataElements/{id} — must be sent in every PUT
+   * payload to satisfy server-side validation (REPLACE mode).
+   */
+  domainType: DomainType
+  aggregationType: AggregationType
   changed: boolean
 }
 
