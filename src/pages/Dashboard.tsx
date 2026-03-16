@@ -76,6 +76,16 @@ export default function Dashboard() {
             color="brand"
           />
           <QuickActionCard
+            icon="data_object"
+            title={i18n.t('Data Element Engineering')}
+            description={i18n.t(
+              'Bulk create data elements and rename them in datasets — hours of work in minutes.'
+            )}
+            to="/data-elements"
+            color="success"
+            badge={i18n.t('New')}
+          />
+          <QuickActionCard
             icon="drive_file_rename_outline"
             title={i18n.t('Bulk Rename')}
             description={i18n.t('Rename hundreds of org units at once using patterns and rules.')}
