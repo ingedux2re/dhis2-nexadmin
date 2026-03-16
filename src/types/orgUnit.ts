@@ -1,10 +1,9 @@
-
 // Re-export and locally import the canonical GeoJsonGeometry from the central
 // types module. The weak `{ type: string; coordinates: unknown }` duplicate has
 // been removed so that all geometry code benefits from the precise union types.
 import type { GeoJsonGeometry } from './index'
+export type { GeoJsonGeometry } from './index'
 // src/types/orgUnit.ts
-
 
 export type FeatureType = 'NONE' | 'MULTI_POLYGON' | 'POLYGON' | 'POINT' | 'SYMBOL'
 
