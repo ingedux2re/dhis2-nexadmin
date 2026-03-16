@@ -13,7 +13,7 @@ import {
 } from '@dhis2/ui'
 import type { OrgUnitListItem } from '../../types/orgUnit'
 import styles from './OrgUnitList.module.css'
-import i18n from '../../i18n'
+import i18n from '@dhis2/d2-i18n'
 
 interface Props {
   orgUnits: OrgUnitListItem[]

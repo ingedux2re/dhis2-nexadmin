@@ -103,3 +103,15 @@
 .resetBtn:hover {
   background: rgba(0, 0, 0, 0.06);
 }
+
+/* Rollback partial-failure warning — distinct from forward-pass errors */
+.rollbackWarning {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #e65100;
+  background: #fff3e0;
+  border-left: 3px solid #ff6d00;
+  border-radius: 3px;
+  padding: 0.4rem 0.75rem;
+  margin: 0.25rem 0;
+}

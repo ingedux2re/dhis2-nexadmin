@@ -1,6 +1,6 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // src/store/__tests__/store.test.ts
-// Unit tests for Zustand store — Phase 0
+// Unit tests for Zustand store
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { act, renderHook } from '@testing-library/react'
@@ -12,7 +12,6 @@ beforeEach(() => {
     currentLocale: 'en',
     globalLoading: false,
     sidebarOpen: false,
-    activePage: 'dashboard',
   })
 })
 
@@ -22,7 +21,6 @@ describe('useAppStore', () => {
     expect(result.current.currentLocale).toBe('en')
     expect(result.current.globalLoading).toBe(false)
     expect(result.current.sidebarOpen).toBe(false)
-    expect(result.current.activePage).toBe('dashboard')
   })
 
   it('setLocale updates currentLocale', () => {
@@ -43,11 +41,5 @@ describe('useAppStore', () => {
     const { result } = renderHook(() => useAppStore())
     act(() => result.current.setSidebarOpen(true))
     expect(result.current.sidebarOpen).toBe(true)
-  })
-
-  it('setActivePage changes the active page', () => {
-    const { result } = renderHook(() => useAppStore())
-    act(() => result.current.setActivePage('f3-duplicate-detector'))
-    expect(result.current.activePage).toBe('f3-duplicate-detector')
   })
 })

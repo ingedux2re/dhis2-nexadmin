@@ -96,6 +96,21 @@ export default function BulkReorganise() {
               {e}
             </p>
           ))}
+          {state.rollbackErrors.length > 0 && (
+            <>
+              <p className={styles.rollbackWarning}>
+                {i18n.t(
+                  '⚠ {{n}} unit(s) could not be rolled back and may be in an inconsistent state. Review manually.',
+                  { n: state.rollbackErrors.length }
+                )}
+              </p>
+              {state.rollbackErrors.map((e, idx) => (
+                <p key={`rb-${idx}`} className={styles.errorItem}>
+                  {e}
+                </p>
+              ))}
+            </>
+          )}
           <button className={styles.resetBtn} onClick={reset}>
             {i18n.t('Try Again')}
           </button>

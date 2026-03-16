@@ -3,11 +3,28 @@ import { useState, useCallback } from 'react'
 import { useDataEngine } from '@dhis2/app-runtime'
 import type { RenamePreview } from '../components/BulkOperations/BulkRenameTable'
 
+// DHIS2 shortName field limit — enforced by the API
+export const SHORT_NAME_MAX_LENGTH = 50
+
 export type BulkRenameStatus = 'idle' | 'confirming' | 'running' | 'done' | 'error'
+
+export interface LongNameWarning {
+  id: string
+  name: string
+  /** Length of the new name (> SHORT_NAME_MAX_LENGTH) */
+  newNameLength: number
+  /** The truncated shortName that will be written */
+  truncatedShortName: string
+}
 
 export interface BulkRenameState {
   status: BulkRenameStatus
   previews: RenamePreview[]
+  /**
+   * Names that will be silently truncated to 50 chars in shortName.
+   * Populated by requestConfirm so the UI can warn the user before they confirm.
+   */
+  longNameWarnings: LongNameWarning[]
   progress: number
   completed: number
   total: number
@@ -18,6 +35,7 @@ export interface BulkRenameState {
 const INITIAL: BulkRenameState = {
   status: 'idle',
   previews: [],
+  longNameWarnings: [],
   progress: 0,
   completed: 0,
   total: 0,
@@ -25,13 +43,40 @@ const INITIAL: BulkRenameState = {
   errors: [],
 }
 
+/** Derive shortName: if newName fits within 50 chars use it, otherwise truncate. */
+function deriveShortName(newName: string): string {
+  return newName.slice(0, SHORT_NAME_MAX_LENGTH)
+}
+
+/** Build the list of previews whose newName exceeds the shortName limit. */
+function buildLongNameWarnings(previews: RenamePreview[]): LongNameWarning[] {
+  return previews
+    .filter((p) => p.newName.length > SHORT_NAME_MAX_LENGTH)
+    .map((p) => ({
+      id: p.id,
+      name: p.newName,
+      newNameLength: p.newName.length,
+      truncatedShortName: deriveShortName(p.newName),
+    }))
+}
+
 export function useBulkRename() {
   const engine = useDataEngine()
   const [state, setState] = useState<BulkRenameState>(INITIAL)
 
-  // ← previews param added; stored in state for confirm dialog
+  /**
+   * Transition to confirming state.
+   * Also computes longNameWarnings so the ConfirmDialog can display them.
+   */
   const requestConfirm = useCallback((previews: RenamePreview[]) => {
-    setState((s) => ({ ...s, status: 'confirming', previews, total: previews.length }))
+    const longNameWarnings = buildLongNameWarnings(previews)
+    setState((s) => ({
+      ...s,
+      status: 'confirming',
+      previews,
+      longNameWarnings,
+      total: previews.length,
+    }))
   }, [])
 
   const cancelConfirm = useCallback(() => {
@@ -55,7 +100,8 @@ export function useBulkRename() {
 
       for (let i = 0; i < previews.length; i++) {
         const p = previews[i]
-        const shortName = p.newName.slice(0, 50)
+        // Derive shortName — truncate only when necessary, never silently hide the fact
+        const shortName = deriveShortName(p.newName)
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
@@ -82,7 +128,7 @@ export function useBulkRename() {
         return
       }
 
-      // Rollback: restore original names
+      // Rollback: restore original names for all successfully renamed units
       let rolledBack = 0
       for (const p of completed) {
         try {
@@ -91,7 +137,7 @@ export function useBulkRename() {
             resource: 'organisationUnits',
             type: 'update',
             id: p.id,
-            data: { name: p.oldName, shortName: p.oldName.slice(0, 50) },
+            data: { name: p.oldName, shortName: deriveShortName(p.oldName) },
           })
           rolledBack++
         } catch {

@@ -77,3 +77,24 @@
 .destructiveBtn:hover {
   background: #b71c1c;
 }
+
+/* ── Warning notices (non-blocking, shown above action buttons) ── */
+
+.warnings {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.warningItem {
+  background: #fff8e1;
+  border-left: 3px solid #f9a825;
+  border-radius: 4px;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.875rem;
+  color: #5d4037;
+  line-height: 1.45;
+}

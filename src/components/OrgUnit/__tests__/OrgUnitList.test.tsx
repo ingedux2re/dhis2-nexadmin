@@ -1,184 +1,240 @@
-// src/components/OrgUnit/__tests__/OrgUnitForm.test.tsx
+// src/components/OrgUnit/__tests__/OrgUnitList.test.tsx
 import type { ReactNode } from 'react'
 import { render, screen, fireEvent } from '@testing-library/react'
-import { OrgUnitForm } from '../OrgUnitForm'
+import { OrgUnitList } from '../OrgUnitList'
 import type { OrgUnitListItem } from '../../../types/orgUnit'
 
-// Mock minimal — aucun React requis, aucun ReactFinalForm
+// ── Minimal @dhis2/ui mock ────────────────────────────────────────────────────
 jest.mock('@dhis2/ui', () => ({
-  Modal: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
-  ModalTitle: ({ children }: { children?: ReactNode }) => <h2>{children}</h2>,
-  ModalContent: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
-  ModalActions: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
-  ButtonStrip: ({ children }: { children?: ReactNode }) => <div>{children}</div>,
+  DataTable: ({ children }: { children?: ReactNode }) => (
+    <table data-testid="data-table">{children}</table>
+  ),
+  DataTableHead: ({ children }: { children?: ReactNode }) => <thead>{children}</thead>,
+  DataTableBody: ({ children }: { children?: ReactNode }) => <tbody>{children}</tbody>,
+  DataTableRow: ({ children }: { children?: ReactNode }) => <tr>{children}</tr>,
+  DataTableColumnHeader: ({ children }: { children?: ReactNode }) => <th>{children}</th>,
+  DataTableCell: ({ children }: { children?: ReactNode }) => <td>{children}</td>,
   Button: ({
     children,
     onClick,
     dataTest,
-    disabled,
-    type,
   }: {
     children?: ReactNode
     onClick?: () => void
     dataTest?: string
-    disabled?: boolean
-    type?: string
   }) => (
-    <button
-      onClick={onClick}
-      data-testid={dataTest}
-      disabled={disabled}
-      type={(type as 'button' | 'submit' | 'reset') ?? 'button'}
-    >
+    <button onClick={onClick} data-testid={dataTest}>
       {children}
     </button>
   ),
-  InputField: ({
-    label,
-    value,
-    onChange,
-    dataTest,
-    validationText,
+  CircularLoader: () => <span data-testid="circular-loader" />,
+  NoticeBox: ({
+    children,
+    title,
+    error,
   }: {
-    label?: string
-    value?: string
-    dataTest?: string
-    validationText?: string
-    onChange?: (p: { value: string }) => void
+    children?: ReactNode
+    title?: string
+    error?: boolean
   }) => (
-    <div>
-      {label && <label>{label}</label>}
-      <input
-        data-testid={dataTest}
-        value={value ?? ''}
-        onChange={(e) => onChange?.({ value: e.target.value })}
-      />
-      {validationText && <span>{validationText}</span>}
-    </div>
-  ),
-  TextAreaField: ({
-    label,
-    value,
-    onChange,
-    dataTest,
-  }: {
-    label?: string
-    value?: string
-    dataTest?: string
-    onChange?: (p: { value: string }) => void
-  }) => (
-    <div>
-      {label && <label>{label}</label>}
-      <textarea
-        data-testid={dataTest}
-        value={value ?? ''}
-        onChange={(e) => onChange?.({ value: e.target.value })}
-      />
-    </div>
-  ),
-  NoticeBox: ({ children, title }: { children?: ReactNode; title?: string }) => (
-    <div data-testid="form-error">
+    <div data-testid={error ? 'error-notice' : 'notice-box'}>
       <strong>{title}</strong>
       {children}
     </div>
   ),
-  CircularLoader: () => <span />,
+  Tag: ({
+    children,
+    positive,
+    negative,
+  }: {
+    children?: ReactNode
+    positive?: boolean
+    negative?: boolean
+  }) => (
+    <span data-testid={positive ? 'tag-positive' : negative ? 'tag-negative' : 'tag'}>
+      {children}
+    </span>
+  ),
 }))
 
-const noop = async () => {}
+// ── Fixtures ──────────────────────────────────────────────────────────────────
 
-const makeEditTarget = (): OrgUnitListItem => ({
-  id: 'xyz789',
-  name: 'District Clinic',
-  shortName: 'DC',
-  code: 'DC001',
+const makeUnit = (overrides: Partial<OrgUnitListItem> = {}): OrgUnitListItem => ({
+  id: 'ou001',
+  name: 'Freetown CHC',
+  shortName: 'FCHC',
+  code: 'SL001',
   level: 3,
-  path: '/root/parent/xyz789',
-  parent: { id: 'parentId', name: 'Province' },
-  openingDate: '2000-06-15',
+  path: '/root/region/ou001',
+  parent: { id: 'region01', name: 'Western Area' },
+  openingDate: '2010-01-15',
   closedDate: undefined,
+  lastUpdated: '2024-06-01',
+  ...overrides,
 })
 
-describe('OrgUnitForm', () => {
-  it('renders create title', () => {
-    render(<OrgUnitForm saving={false} error={undefined} onSave={noop} onClose={noop} />)
-    expect(screen.getByText('Create organisation unit')).toBeTruthy()
+const makeClosedUnit = (): OrgUnitListItem =>
+  makeUnit({ id: 'ou002', name: 'Old Clinic', closedDate: '2022-12-31' })
+
+// ── Tests ─────────────────────────────────────────────────────────────────────
+
+describe('OrgUnitList', () => {
+  const noop = jest.fn()
+
+  beforeEach(() => jest.clearAllMocks())
+
+  // ── Loading state ─────────────────────────────────────────────────────────
+
+  it('shows a spinner when loading', () => {
+    render(<OrgUnitList orgUnits={[]} loading={true} error={null} onEdit={noop} onDelete={noop} />)
+    expect(screen.getByTestId('circular-loader')).toBeTruthy()
+    expect(screen.queryByTestId('data-table')).toBeNull()
   })
 
-  it('shows validation errors on empty save', () => {
-    render(<OrgUnitForm saving={false} error={undefined} onSave={noop} onClose={noop} />)
-    fireEvent.click(screen.getByTestId('orgunit-form-save'))
-    expect(screen.getByText('Name is required')).toBeTruthy()
-    expect(screen.getByText('Short name is required')).toBeTruthy()
-    expect(screen.getByText('Opening date is required')).toBeTruthy()
-    expect(screen.getByText('Parent org unit is required')).toBeTruthy()
+  // ── Error state ───────────────────────────────────────────────────────────
+
+  it('shows an error notice when error is provided', () => {
+    const err = new Error('Network timeout')
+    render(<OrgUnitList orgUnits={[]} loading={false} error={err} onEdit={noop} onDelete={noop} />)
+    expect(screen.getByTestId('error-notice')).toBeTruthy()
+    expect(screen.getByText('Network timeout')).toBeTruthy()
   })
 
-  it('calls onSave with correct payload', async () => {
-    const onSave = jest.fn().mockResolvedValue(undefined)
-    render(<OrgUnitForm saving={false} error={undefined} onSave={onSave} onClose={noop} />)
-    fireEvent.change(screen.getByTestId('orgunit-form-name'), { target: { value: 'New Clinic' } })
-    fireEvent.change(screen.getByTestId('orgunit-form-shortname'), { target: { value: 'NC' } })
-    fireEvent.change(screen.getByTestId('orgunit-form-opening-date'), {
-      target: { value: '2024-01-01' },
-    })
-    fireEvent.change(screen.getByTestId('orgunit-form-parent'), { target: { value: 'parentUid' } })
-    fireEvent.click(screen.getByTestId('orgunit-form-save'))
-    expect(onSave).toHaveBeenCalledWith(
-      expect.objectContaining({
-        name: 'New Clinic',
-        shortName: 'NC',
-        openingDate: '2024-01-01',
-        parent: { id: 'parentUid' },
-      })
-    )
+  // ── Empty state ───────────────────────────────────────────────────────────
+
+  it('shows empty-state notice when org units list is empty', () => {
+    render(<OrgUnitList orgUnits={[]} loading={false} error={null} onEdit={noop} onDelete={noop} />)
+    expect(screen.getByText('No organisation units found')).toBeTruthy()
+    expect(screen.queryByTestId('data-table')).toBeNull()
   })
 
-  it('calls onClose on cancel', () => {
-    const onClose = jest.fn()
-    render(<OrgUnitForm saving={false} error={undefined} onSave={noop} onClose={onClose} />)
-    fireEvent.click(screen.getByTestId('orgunit-form-cancel'))
-    expect(onClose).toHaveBeenCalled()
-  })
+  // ── Table rendering ───────────────────────────────────────────────────────
 
-  it('renders edit title', () => {
+  it('renders a table with one row per org unit', () => {
+    const units = [makeUnit(), makeUnit({ id: 'ou002', name: 'Bo CHC' })]
     render(
-      <OrgUnitForm
-        unit={makeEditTarget()}
-        saving={false}
-        error={undefined}
-        onSave={noop}
-        onClose={noop}
+      <OrgUnitList orgUnits={units} loading={false} error={null} onEdit={noop} onDelete={noop} />
+    )
+    expect(screen.getByTestId('data-table')).toBeTruthy()
+    expect(screen.getByText('Freetown CHC')).toBeTruthy()
+    expect(screen.getByText('Bo CHC')).toBeTruthy()
+  })
+
+  it('renders correct column headers', () => {
+    render(
+      <OrgUnitList
+        orgUnits={[makeUnit()]}
+        loading={false}
+        error={null}
+        onEdit={noop}
+        onDelete={noop}
       />
     )
-    expect(screen.getByText('Edit organisation unit')).toBeTruthy()
+    expect(screen.getByText('Name')).toBeTruthy()
+    expect(screen.getByText('Short name')).toBeTruthy()
+    expect(screen.getByText('Code')).toBeTruthy()
+    expect(screen.getByText('Level')).toBeTruthy()
+    expect(screen.getByText('Opening date')).toBeTruthy()
+    expect(screen.getByText('Status')).toBeTruthy()
+    expect(screen.getByText('Actions')).toBeTruthy()
   })
 
-  it('pre-populates name field', () => {
+  it('renders — for missing code', () => {
     render(
-      <OrgUnitForm
-        unit={makeEditTarget()}
-        saving={false}
-        error={undefined}
-        onSave={noop}
-        onClose={noop}
+      <OrgUnitList
+        orgUnits={[makeUnit({ code: undefined })]}
+        loading={false}
+        error={null}
+        onEdit={noop}
+        onDelete={noop}
       />
     )
-    expect((screen.getByTestId('orgunit-form-name') as HTMLInputElement).value).toBe(
-      'District Clinic'
-    )
+    expect(screen.getByText('—')).toBeTruthy()
   })
 
-  it('shows error notice on save failure', () => {
+  it('renders — for missing opening date', () => {
     render(
-      <OrgUnitForm
-        unit={makeEditTarget()}
-        saving={false}
-        error="Conflict"
-        onSave={noop}
-        onClose={noop}
+      <OrgUnitList
+        orgUnits={[makeUnit({ openingDate: undefined })]}
+        loading={false}
+        error={null}
+        onEdit={noop}
+        onDelete={noop}
       />
     )
-    expect(screen.getByTestId('form-error')).toBeTruthy()
+    // Two dashes expected: one for code-less, one for date-less — just check at least one
+    expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(1)
+  })
+
+  // ── Status tags ───────────────────────────────────────────────────────────
+
+  it('shows Open tag for an active org unit', () => {
+    render(
+      <OrgUnitList
+        orgUnits={[makeUnit()]}
+        loading={false}
+        error={null}
+        onEdit={noop}
+        onDelete={noop}
+      />
+    )
+    expect(screen.getByTestId('tag-positive')).toBeTruthy()
+    expect(screen.getByText('Open')).toBeTruthy()
+  })
+
+  it('shows Closed tag for a closed org unit', () => {
+    render(
+      <OrgUnitList
+        orgUnits={[makeClosedUnit()]}
+        loading={false}
+        error={null}
+        onEdit={noop}
+        onDelete={noop}
+      />
+    )
+    expect(screen.getByTestId('tag-negative')).toBeTruthy()
+    expect(screen.getByText('Closed')).toBeTruthy()
+  })
+
+  // ── Action callbacks ──────────────────────────────────────────────────────
+
+  it('calls onEdit with the correct org unit when Edit is clicked', () => {
+    const onEdit = jest.fn()
+    const unit = makeUnit()
+    render(
+      <OrgUnitList orgUnits={[unit]} loading={false} error={null} onEdit={onEdit} onDelete={noop} />
+    )
+    fireEvent.click(screen.getByText('Edit'))
+    expect(onEdit).toHaveBeenCalledTimes(1)
+    expect(onEdit).toHaveBeenCalledWith(unit)
+  })
+
+  it('calls onDelete with the correct org unit when Delete is clicked', () => {
+    const onDelete = jest.fn()
+    const unit = makeUnit()
+    render(
+      <OrgUnitList
+        orgUnits={[unit]}
+        loading={false}
+        error={null}
+        onEdit={noop}
+        onDelete={onDelete}
+      />
+    )
+    fireEvent.click(screen.getByText('Delete'))
+    expect(onDelete).toHaveBeenCalledTimes(1)
+    expect(onDelete).toHaveBeenCalledWith(unit)
+  })
+
+  it('renders Edit and Delete buttons for each row in a multi-row list', () => {
+    const units = [
+      makeUnit({ id: 'ou001', name: 'Clinic A' }),
+      makeUnit({ id: 'ou002', name: 'Clinic B' }),
+    ]
+    render(
+      <OrgUnitList orgUnits={units} loading={false} error={null} onEdit={noop} onDelete={noop} />
+    )
+    expect(screen.getAllByText('Edit')).toHaveLength(2)
+    expect(screen.getAllByText('Delete')).toHaveLength(2)
   })
 })
