@@ -20,6 +20,7 @@ export const Sidebar: FC = () => {
       data-testid="sidebar"
     >
       <button
+        type="button"
         className={styles.toggleButton}
         onClick={() => setSidebarOpen(!sidebarOpen)}
         aria-label={sidebarOpen ? i18n.t('Collapse sidebar') : i18n.t('Expand sidebar')}

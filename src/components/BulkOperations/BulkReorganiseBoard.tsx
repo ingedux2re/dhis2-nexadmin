@@ -61,6 +61,7 @@ function TreeNode({ node, expanded, onToggle, onSelect, search, disabled }: Tree
     <div className={styles.treeNode}>
       <div className={styles.treeRow}>
         <button
+          type="button"
           className={styles.treeToggle}
           onClick={() => hasChildren && onToggle(node.id)}
           disabled={!hasChildren}
@@ -70,6 +71,7 @@ function TreeNode({ node, expanded, onToggle, onSelect, search, disabled }: Tree
           {hasChildren ? (isExpanded ? '▾' : '▸') : '·'}
         </button>
         <button
+          type="button"
           className={`${styles.treeLabel} ${disabled ? styles.treeLabelDisabled : ''}`}
           onClick={() => {
             if (!disabled) onSelect(node.id, node.name)
@@ -331,6 +333,7 @@ export function BulkReorganiseBoard({ orgUnits, onRequestExecute }: BulkReorgani
 
         <div className={styles.panelFooter}>
           <button
+            type="button"
             className={styles.primaryBtn}
             onClick={addToBoard}
             disabled={sourceSelectedIds.size === 0}
@@ -400,6 +403,7 @@ export function BulkReorganiseBoard({ orgUnits, onRequestExecute }: BulkReorgani
                   </td>
                   <td>
                     <button
+                      type="button"
                       className={styles.removeBtn}
                       onClick={(e) => {
                         e.stopPropagation()
@@ -432,13 +436,19 @@ export function BulkReorganiseBoard({ orgUnits, onRequestExecute }: BulkReorgani
           </span>
           <div className={styles.footerActions}>
             <button
+              type="button"
               className={styles.ghostBtn}
               onClick={clearBoard}
               disabled={boardRows.length === 0}
             >
               {i18n.t('Clear')}
             </button>
-            <button className={styles.executeBtn} onClick={handleExecute} disabled={!canExecute}>
+            <button
+              type="button"
+              className={styles.executeBtn}
+              onClick={handleExecute}
+              disabled={!canExecute}
+            >
               {i18n.t('Execute {{count}} Moves', { count: boardRows.length })}
             </button>
           </div>

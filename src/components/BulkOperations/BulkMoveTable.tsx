@@ -84,6 +84,7 @@ export function BulkMoveTable({ orgUnits, onOperationsChange }: BulkMoveTablePro
           />
         </div>
         <button
+          type="button"
           className={styles.previewBtn}
           onClick={buildOps}
           disabled={!newParentId.trim() || selectedIds.size === 0}
@@ -139,7 +140,7 @@ export function BulkMoveTable({ orgUnits, onOperationsChange }: BulkMoveTablePro
       {operations.length > 0 && (
         <div className={styles.footer}>
           <span>{i18n.t('{{count}} moves staged', { count: operations.length })}</span>
-          <button className={styles.exportBtn} onClick={handleExport}>
+          <button type="button" className={styles.exportBtn} onClick={handleExport}>
             {i18n.t('Export Preview CSV')}
           </button>
         </div>

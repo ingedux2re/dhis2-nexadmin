@@ -90,7 +90,7 @@ export default function BulkReorganise() {
           <span>
             {i18n.t('All {{count}} org units moved successfully.', { count: state.total })}
           </span>
-          <button className={styles.resetBtn} onClick={reset}>
+          <button type="button" className={styles.resetBtn} onClick={reset}>
             {i18n.t('New Operation')}
           </button>
         </div>
@@ -119,7 +119,7 @@ export default function BulkReorganise() {
               ))}
             </>
           )}
-          <button className={styles.resetBtn} onClick={reset}>
+          <button type="button" className={styles.resetBtn} onClick={reset}>
             {i18n.t('Try Again')}
           </button>
         </div>

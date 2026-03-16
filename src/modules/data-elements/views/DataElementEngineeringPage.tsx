@@ -110,6 +110,7 @@ export default function DataElementEngineeringPage() {
       {/* ── Tab switcher ─────────────────────────────────────────── */}
       <div className={styles.tabBar} role="tablist">
         <button
+          type="button"
           role="tab"
           aria-selected={activeTab === 'create'}
           className={`${styles.tab} ${activeTab === 'create' ? styles.tabActive : ''}`}
@@ -127,6 +128,7 @@ export default function DataElementEngineeringPage() {
         </button>
 
         <button
+          type="button"
           role="tab"
           aria-selected={activeTab === 'rename'}
           className={`${styles.tab} ${activeTab === 'rename' ? styles.tabActive : ''}`}
@@ -174,6 +176,7 @@ export default function DataElementEngineeringPage() {
                 )}
               </div>
               <button
+                type="button"
                 className={`nx-btn nx-btn-secondary nx-btn-sm`}
                 onClick={create.reset}
                 style={{ marginLeft: 'auto' }}
@@ -201,6 +204,7 @@ export default function DataElementEngineeringPage() {
                 )}
               </div>
               <button
+                type="button"
                 className={`nx-btn nx-btn-secondary nx-btn-sm`}
                 onClick={create.reset}
                 style={{ marginLeft: 'auto' }}
@@ -234,6 +238,7 @@ export default function DataElementEngineeringPage() {
                   )}
                 </span>
                 <button
+                  type="button"
                   className={`nx-btn nx-btn-primary`}
                   onClick={create.validateAndConfirm}
                   disabled={isCreating || create.state.rows.every((r) => !r.name)}
@@ -280,6 +285,7 @@ export default function DataElementEngineeringPage() {
                 </strong>
               </div>
               <button
+                type="button"
                 className={`nx-btn nx-btn-secondary nx-btn-sm`}
                 onClick={renameEl.continueRenaming}
                 style={{ marginLeft: 'auto' }}
@@ -307,6 +313,7 @@ export default function DataElementEngineeringPage() {
                 ))}
               </div>
               <button
+                type="button"
                 className={`nx-btn nx-btn-secondary nx-btn-sm`}
                 onClick={renameEl.reset}
                 style={{ marginLeft: 'auto' }}

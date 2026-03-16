@@ -332,6 +332,7 @@ export const BulkCreateGrid: FC<BulkCreateGridProps> = ({
           )}
         </div>
         <button
+          type="button"
           className={`nx-btn nx-btn-secondary nx-btn-sm`}
           onClick={onAdd}
           disabled={disabled}
@@ -409,6 +410,7 @@ export const BulkCreateGrid: FC<BulkCreateGridProps> = ({
                 <td className={styles.actionsCell}>
                   <div className={styles.rowActions}>
                     <button
+                      type="button"
                       className={styles.iconBtn}
                       onClick={() => onDuplicate(row._id)}
                       disabled={disabled}
@@ -418,6 +420,7 @@ export const BulkCreateGrid: FC<BulkCreateGridProps> = ({
                       <span className="material-icons-round">content_copy</span>
                     </button>
                     <button
+                      type="button"
                       className={`${styles.iconBtn} ${styles.deleteBtn}`}
                       onClick={() => onDelete(row._id)}
                       disabled={disabled || rows.length === 1}

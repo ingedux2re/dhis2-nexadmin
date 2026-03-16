@@ -11,6 +11,7 @@ export const LanguageSwitcher = () => {
     <div className={styles.wrapper} role="group" aria-label={i18n.t('Language')}>
       {SUPPORTED_LOCALES.map((locale) => (
         <button
+          type="button"
           key={locale.code}
           className={`${styles.btn} ${currentLocale === locale.code ? styles.active : ''}`}
           onClick={() => void switchLocale(locale.code)}
