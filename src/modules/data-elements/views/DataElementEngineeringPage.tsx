@@ -18,7 +18,7 @@ import { useSupportingMetadata } from '../hooks/useSupportingMetadata'
 import { useBulkCreateElements } from '../hooks/useBulkCreateElements'
 import { useDatasetElements } from '../hooks/useDatasetElements'
 import { useBulkRenameElements } from '../hooks/useBulkRenameElements'
-import type { DataElement, RenameRule } from '../types'
+import type { DataElementRenamePreview } from '../types'
 import { collectImportErrors } from '../services/metadataService'
 import styles from './DataElementEngineeringPage.module.css'
 
@@ -61,8 +61,8 @@ export default function DataElementEngineeringPage() {
   const renameEl = useBulkRenameElements()
 
   const handleRequestRenameConfirm = useCallback(
-    (elements: DataElement[], selectedIds: Set<string>, rules: RenameRule[]) => {
-      renameEl.requestConfirm(elements, selectedIds, rules)
+    (previews: DataElementRenamePreview[]) => {
+      renameEl.requestConfirmWithPreviews(previews)
     },
     [renameEl]
   )

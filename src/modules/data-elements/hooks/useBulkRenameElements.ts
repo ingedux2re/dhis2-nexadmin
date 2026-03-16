@@ -100,6 +100,23 @@ export function useBulkRenameElements() {
   const [state, setState] = useState<BulkRenameElementsState>(INITIAL)
 
   /**
+   * Accept pre-built previews (from the table component, which has already
+   * applied inline overrides). Skips the buildPreviews step entirely.
+   */
+  const requestConfirmWithPreviews = useCallback((previews: DataElementRenamePreview[]) => {
+    const filtered = previews.filter((p) => p.changed)
+    if (filtered.length === 0) return
+    const shortNameWarnings = buildShortNameWarnings(filtered)
+    setState((s) => ({
+      ...s,
+      status: 'confirming',
+      previews: filtered,
+      shortNameWarnings,
+      total: filtered.length,
+    }))
+  }, [])
+
+  /**
    * Build previews from the current selection + rule chain,
    * then move to the confirming state to show the dialog.
    */
@@ -207,6 +224,7 @@ export function useBulkRenameElements() {
   return {
     state,
     requestConfirm,
+    requestConfirmWithPreviews,
     cancelConfirm,
     execute,
     continueRenaming,
