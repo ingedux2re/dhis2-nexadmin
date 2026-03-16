@@ -3,12 +3,16 @@
 // DHIS2 NexAdmin — Zustand global store (UI state only — no server data)
 //
 // Server data lives in @dhis2/app-runtime query cache.
-// This store holds: locale, sidebar, navigation, loading overlay.
+// This store holds: locale, sidebar open state, global loading overlay.
+//
+// NOTE: "activePage" was removed — the active route is already derived
+// from react-router's useLocation() in the Sidebar, keeping a single
+// source of truth and avoiding router/store drift.
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
-import type { AppState, PageId } from '../types'
+import type { AppState } from '../types'
 
 export const useAppStore = create<AppState>()(
   devtools(
@@ -25,10 +29,6 @@ export const useAppStore = create<AppState>()(
       // ── Sidebar (mobile toggle) ─────────────────────────────────────────────
       sidebarOpen: true,
       setSidebarOpen: (open: boolean) => set({ sidebarOpen: open }, false, 'setSidebarOpen'),
-
-      // ── Active page (router) ────────────────────────────────────────────────
-      activePage: 'dashboard' as PageId,
-      setActivePage: (page: PageId) => set({ activePage: page }, false, 'setActivePage'),
     }),
     {
       name: 'nexadmin-store', // appears in Redux DevTools
@@ -40,5 +40,4 @@ export const useAppStore = create<AppState>()(
 // ── Selector hooks (memoized for performance) ─────────────────────────────────
 
 export const useLocaleStore = () => useAppStore((s) => s.currentLocale)
-export const useActivePageStore = () => useAppStore((s) => s.activePage)
 export const useSidebarStore = () => useAppStore((s) => s.sidebarOpen)

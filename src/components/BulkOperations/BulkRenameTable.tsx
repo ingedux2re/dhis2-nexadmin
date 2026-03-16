@@ -1,7 +1,9 @@
 // src/components/BulkOperations/BulkRenameTable.tsx
+import type React from 'react'
 import { useState, useMemo } from 'react'
 import i18n from '@dhis2/d2-i18n'
 import type { OrgUnitListItem } from '../../types/orgUnit'
+import { exportCsv } from '../../utils/exportCsv'
 import styles from './BulkRenameTable.module.css'
 
 export type RenameMode = 'find-replace' | 'prefix' | 'suffix' | 'regex'
@@ -66,18 +68,9 @@ export const BulkRenameTable: React.FC<Props> = ({ orgUnits, onConfirm, disabled
   const changedCount = previews.filter((p) => p.changed).length
 
   const handleExportCsv = () => {
-    const rows = [
-      ['ID', 'Old Name', 'New Name'],
-      ...previews.filter((p) => p.changed).map((p) => [p.id, p.oldName, p.newName]),
-    ]
-    const csv = rows.map((r) => r.map((c) => `"${c}"`).join(',')).join('\n')
-    const blob = new Blob([csv], { type: 'text/csv' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = 'bulk-rename-preview.csv'
-    a.click()
-    URL.revokeObjectURL(url)
+    const headers = [i18n.t('ID'), i18n.t('Current Name'), i18n.t('New Name')]
+    const rows = previews.filter((p) => p.changed).map((p) => [p.id, p.oldName, p.newName])
+    exportCsv('bulk-rename-preview.csv', headers, rows)
   }
 
   return (

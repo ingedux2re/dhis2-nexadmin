@@ -1,6 +1,12 @@
+// src/hooks/useGeoConsistency.ts
 import { useMemo } from 'react'
 import type { OrgUnitIntegrityItem, GeoJsonGeometry } from '../types/orgUnit'
 import type { Severity } from './useDuplicateDetector'
+import {
+  GEO_BOUNDING_BOX,
+  MAX_LEVEL_REQUIRING_GEOMETRY,
+  MIN_COORDINATE_DECIMAL_PLACES,
+} from '../constants/geoConfig'
 
 export type GeoIssueType = 'missing-geometry' | 'outside-boundary' | 'low-precision'
 
@@ -16,17 +22,6 @@ export interface GeoIssue {
   lng?: number
 }
 
-// Sierra Leone bounding box
-const SL_BBOX = {
-  minLng: -13.5,
-  maxLng: -10.2,
-  minLat: 6.9,
-  maxLat: 10.0,
-}
-
-// Levels ≤ 4 must have geometry (country, region, district, chiefdom)
-const MAX_LEVEL_REQUIRING_GEOMETRY = 4
-
 function extractPoint(geometry: GeoJsonGeometry): [number, number] | null {
   if (geometry.type === 'Point') {
     const coords = geometry.coordinates as number[]
@@ -35,12 +30,12 @@ function extractPoint(geometry: GeoJsonGeometry): [number, number] | null {
     }
   }
   if (geometry.type === 'Polygon' || geometry.type === 'MultiPolygon') {
-    // Use the first coordinate of the outer ring as a representative point
+    // Use the centroid of the first outer ring as a representative point
     let ring: number[][]
     if (geometry.type === 'Polygon') {
       ring = (geometry.coordinates as number[][][])[0]
     } else {
-      ring = (geometry.coordinates as number[][][][])[0][0]
+      ring = (geometry.coordinates as unknown as number[][][][])[0][0]
     }
     if (Array.isArray(ring) && ring.length > 0) {
       const lng = ring.reduce((sum, c) => sum + c[0], 0) / ring.length
@@ -64,7 +59,7 @@ export function useGeoConsistency(orgUnits: OrgUnitIntegrityItem[]): GeoIssue[] 
     const issues: GeoIssue[] = []
 
     for (const ou of orgUnits) {
-      // Only check units at levels requiring geometry
+      // Only check units at levels requiring geometry (configurable via geoConfig.ts)
       if (ou.level > MAX_LEVEL_REQUIRING_GEOMETRY) continue
 
       // Missing geometry
@@ -85,12 +80,12 @@ export function useGeoConsistency(orgUnits: OrgUnitIntegrityItem[]): GeoIssue[] 
       if (!point) continue
       const [lng, lat] = point
 
-      // Outside Sierra Leone bounding box
+      // Outside configured bounding box
       if (
-        lng < SL_BBOX.minLng ||
-        lng > SL_BBOX.maxLng ||
-        lat < SL_BBOX.minLat ||
-        lat > SL_BBOX.maxLat
+        lng < GEO_BOUNDING_BOX.minLng ||
+        lng > GEO_BOUNDING_BOX.maxLng ||
+        lat < GEO_BOUNDING_BOX.minLat ||
+        lat > GEO_BOUNDING_BOX.maxLat
       ) {
         issues.push({
           id: `outside-bbox-${ou.id}`,
@@ -98,7 +93,7 @@ export function useGeoConsistency(orgUnits: OrgUnitIntegrityItem[]): GeoIssue[] 
           orgUnitName: ou.name,
           level: ou.level,
           issueType: 'outside-boundary',
-          details: `Coordinates (${lat.toFixed(4)}, ${lng.toFixed(4)}) are outside Sierra Leone`,
+          details: `Coordinates (${lat.toFixed(4)}, ${lng.toFixed(4)}) are outside ${GEO_BOUNDING_BOX.label}`,
           severity: 'error',
           lat,
           lng,
@@ -106,18 +101,19 @@ export function useGeoConsistency(orgUnits: OrgUnitIntegrityItem[]): GeoIssue[] 
         continue
       }
 
-      // Low precision: fewer than 4 decimal places (Point only — polygons vary by source)
+      // Low precision: fewer than MIN_COORDINATE_DECIMAL_PLACES decimal places
+      // (Point only — polygon coordinate precision varies by data source)
       if (ou.geometry.type === 'Point') {
         const lngDec = countDecimalPlaces(lng)
         const latDec = countDecimalPlaces(lat)
-        if (lngDec < 4 || latDec < 4) {
+        if (lngDec < MIN_COORDINATE_DECIMAL_PLACES || latDec < MIN_COORDINATE_DECIMAL_PLACES) {
           issues.push({
             id: `low-precision-${ou.id}`,
             orgUnitId: ou.id,
             orgUnitName: ou.name,
             level: ou.level,
             issueType: 'low-precision',
-            details: `Coordinates have insufficient precision (${latDec}/${lngDec} decimal places)`,
+            details: `Coordinates have insufficient precision (${latDec}/${lngDec} decimal places, minimum ${MIN_COORDINATE_DECIMAL_PLACES} required)`,
             severity: 'info',
             lat,
             lng,

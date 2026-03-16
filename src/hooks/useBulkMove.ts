@@ -16,8 +16,15 @@ export interface BulkMoveState {
   progress: number
   completed: number
   total: number
+  /** Number of successful moves that were successfully reverted on rollback */
   rolledBack: number
+  /** Forward-pass errors (one entry per failed move) */
   errors: string[]
+  /**
+   * Rollback errors — moves that succeeded but could NOT be reverted.
+   * An empty array means rollback was fully successful (or no rollback was needed).
+   */
+  rollbackErrors: string[]
 }
 
 const INITIAL: BulkMoveState = {
@@ -27,6 +34,7 @@ const INITIAL: BulkMoveState = {
   total: 0,
   rolledBack: 0,
   errors: [],
+  rollbackErrors: [],
 }
 
 export function useBulkMove() {
@@ -35,7 +43,7 @@ export function useBulkMove() {
 
   const moveOrgUnit = useCallback(
     async (orgUnitId: string, parentId: string) => {
-      // Step 1: fetch all owned fields (same as DHIS2 Maintenance)
+      // Step 1: fetch all owned fields (same pattern as DHIS2 Maintenance App)
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const result = await (engine as any).query({
         ou: {
@@ -47,7 +55,7 @@ export function useBulkMove() {
       const ou = result?.ou
       if (!ou) throw new Error(`Org unit ${orgUnitId} not found`)
 
-      // Step 2: PUT with mergeMode=REPLACE — exactly what DHIS2 Maintenance does
+      // Step 2: PUT with mergeMode=REPLACE — preserves all other fields
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       await (engine as any).mutate({
         resource: 'organisationUnits',
@@ -79,6 +87,7 @@ export function useBulkMove() {
         completed: 0,
         progress: 0,
         errors: [],
+        rollbackErrors: [],
         rolledBack: 0,
         total: ops.length,
       }))
@@ -94,6 +103,7 @@ export function useBulkMove() {
         } catch (err: unknown) {
           const msg = err instanceof Error ? err.message : String(err)
           errors.push(`${op.orgUnit.name}: ${msg}`)
+          // Stop on first failure and proceed to rollback
           break
         }
         setState((s) => ({
@@ -108,21 +118,27 @@ export function useBulkMove() {
         return
       }
 
-      // Rollback: restore original parents
+      // ── Rollback: restore original parents ─────────────────────────────────
       let rolledBack = 0
+      const rollbackErrors: string[] = []
+
       for (const op of completed) {
+        const originalParentId = op.orgUnit.parent?.id
+        if (!originalParentId) {
+          // Cannot restore without original parent — record as a rollback failure
+          rollbackErrors.push(`${op.orgUnit.name}: original parent ID unknown — rollback skipped`)
+          continue
+        }
         try {
-          const originalParentId = op.orgUnit.parent?.id
-          if (originalParentId) {
-            await moveOrgUnit(op.orgUnit.id, originalParentId)
-            rolledBack++
-          }
-        } catch {
-          // ignore rollback failures
+          await moveOrgUnit(op.orgUnit.id, originalParentId)
+          rolledBack++
+        } catch (rbErr: unknown) {
+          const rbMsg = rbErr instanceof Error ? rbErr.message : String(rbErr)
+          rollbackErrors.push(`${op.orgUnit.name}: rollback failed — ${rbMsg}`)
         }
       }
 
-      setState((s) => ({ ...s, status: 'error', errors, rolledBack }))
+      setState((s) => ({ ...s, status: 'error', errors, rolledBack, rollbackErrors }))
     },
     [moveOrgUnit]
   )

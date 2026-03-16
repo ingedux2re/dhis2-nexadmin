@@ -116,6 +116,19 @@ export default function BulkRename() {
             'This will rename {{count}} org units. This cannot be undone without a snapshot.',
             { count: state.previews.length }
           )}
+          warnings={
+            state.longNameWarnings.length > 0
+              ? [
+                  i18n.t(
+                    '{{n}} org unit name(s) exceed 50 characters. Their shortName will be automatically truncated: {{names}}',
+                    {
+                      n: state.longNameWarnings.length,
+                      names: state.longNameWarnings.map((w) => w.name).join(', '),
+                    }
+                  ),
+                ]
+              : undefined
+          }
           onConfirm={handleConfirm}
           onCancel={cancelConfirm}
           destructive

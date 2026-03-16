@@ -128,27 +128,7 @@ export interface AppState {
   /** Sidebar open state (mobile) */
   sidebarOpen: boolean
   setSidebarOpen: (open: boolean) => void
-
-  /** Currently active page id */
-  activePage: PageId
-  setActivePage: (page: PageId) => void
 }
-
-export type PageId =
-  | 'dashboard'
-  | 'f1-bulk-reorg'
-  | 'f2-impact-analyzer'
-  | 'f3-duplicate-detector'
-  | 'f4-bulk-rename'
-  | 'f5-hierarchy-validator'
-  | 'f6-geo-consistency'
-  | 'f7-audit-log'
-  | 'f8-snapshots'
-  | 'f9-simulator'
-  | 'f10-wizard'
-  | 'f11-workflow'
-  | 'f12-user-provisioning'
-  | 'settings'
 
 // ── Dashboard KPI types ───────────────────────────────────────────────────────
 

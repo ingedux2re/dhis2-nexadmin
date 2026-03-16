@@ -1,9 +1,10 @@
-export type FeatureType = 'NONE' | 'MULTI_POLYGON' | 'POLYGON' | 'POINT' | 'SYMBOL'
+// Re-export and locally import the canonical GeoJsonGeometry from the central
+// types module. The weak `{ type: string; coordinates: unknown }` duplicate has
+// been removed so that all geometry code benefits from the precise union types.
+import type { GeoJsonGeometry } from './index'
+export type { GeoJsonGeometry } from './index'
 
-export interface GeoJsonGeometry {
-  type: string
-  coordinates: unknown
-}
+export type FeatureType = 'NONE' | 'MULTI_POLYGON' | 'POLYGON' | 'POINT' | 'SYMBOL'
 
 export interface OrgUnitRef {
   id: string
