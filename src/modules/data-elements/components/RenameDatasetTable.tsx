@@ -288,6 +288,10 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
           newShortName,
           code: el.code,
           valueType: el.valueType,
+          // Required fields for the DHIS2 PUT payload — must travel with the preview
+          // so the hook can send a valid payload without an extra GET per element.
+          domainType: el.domainType,
+          aggregationType: el.aggregationType,
           changed: newName !== el.name,
         }
       })
