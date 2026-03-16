@@ -29,6 +29,7 @@ export interface BulkRenameState {
   completed: number
   total: number
   rolledBack: number
+  totalRenamed: number // cumulative across multiple batches
   errors: string[]
 }
 
@@ -40,6 +41,7 @@ const INITIAL: BulkRenameState = {
   completed: 0,
   total: 0,
   rolledBack: 0,
+  totalRenamed: 0,
   errors: [],
 }
 
@@ -64,10 +66,7 @@ export function useBulkRename() {
   const engine = useDataEngine()
   const [state, setState] = useState<BulkRenameState>(INITIAL)
 
-  /**
-   * Transition to confirming state.
-   * Also computes longNameWarnings so the ConfirmDialog can display them.
-   */
+  // ← previews param added; stored in state for confirm dialog
   const requestConfirm = useCallback((previews: RenamePreview[]) => {
     const longNameWarnings = buildLongNameWarnings(previews)
     setState((s) => ({
@@ -100,15 +99,15 @@ export function useBulkRename() {
 
       for (let i = 0; i < previews.length; i++) {
         const p = previews[i]
-        // Derive shortName — truncate only when necessary, never silently hide the fact
-        const shortName = deriveShortName(p.newName)
+        const shortName = p.newName.slice(0, 50)
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
             resource: 'organisationUnits',
             type: 'update',
             id: p.id,
-            data: { name: p.newName, shortName },
+            params: { mergeMode: 'REPLACE' },
+            data: { ...ou, name: p.newName, shortName: p.newName.slice(0, 50) },
           })
           completed.push(p)
         } catch (err: unknown) {
@@ -116,6 +115,7 @@ export function useBulkRename() {
           errors.push(`${p.oldName}: ${msg}`)
           break
         }
+
         setState((s) => ({
           ...s,
           completed: i + 1,
@@ -124,11 +124,16 @@ export function useBulkRename() {
       }
 
       if (errors.length === 0) {
-        setState((s) => ({ ...s, status: 'done', progress: 100 }))
+        setState((s) => ({
+          ...s,
+          status: 'done',
+          progress: 100,
+          totalRenamed: s.totalRenamed + completed.length,
+        }))
         return
       }
 
-      // Rollback: restore original names for all successfully renamed units
+      // Rollback: restore original names
       let rolledBack = 0
       for (const p of completed) {
         try {
@@ -137,20 +142,28 @@ export function useBulkRename() {
             resource: 'organisationUnits',
             type: 'update',
             id: p.id,
-            data: { name: p.oldName, shortName: deriveShortName(p.oldName) },
+            data: { name: p.oldName, shortName: p.oldName.slice(0, 50) },
           })
           rolledBack++
         } catch {
           // ignore rollback failures
         }
       }
-
       setState((s) => ({ ...s, status: 'error', errors, rolledBack }))
     },
     [engine]
   )
 
+  /**
+   * After a successful batch, return to idle so the user can
+   * select more rows and rename again — totalRenamed is preserved.
+   */
+  const continueRenaming = useCallback(() => {
+    setState((s) => ({ ...s, status: 'idle', previews: [], errors: [] }))
+  }, [])
+
+  /** Full reset — clears everything including the session counter */
   const reset = useCallback(() => setState(INITIAL), [])
 
-  return { state, requestConfirm, cancelConfirm, execute, reset }
+  return { state, requestConfirm, cancelConfirm, execute, continueRenaming, reset }
 }

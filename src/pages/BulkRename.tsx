@@ -14,7 +14,7 @@ const ORG_UNITS_QUERY = {
   orgUnits: {
     resource: 'organisationUnits',
     params: {
-      fields: ['id', 'name', 'shortName', 'level', 'path', 'parent[id,name]'],
+      fields: ['id', 'name', 'shortName', 'level', 'path', 'parent[id,name]', 'ancestors[id,name]'],
       paging: true,
       pageSize: 10000,
     },
@@ -27,27 +27,22 @@ interface QueryResult {
 
 export default function BulkRename() {
   const { data, loading, error } = useDataQuery<QueryResult>(ORG_UNITS_QUERY)
-  const { state, requestConfirm, cancelConfirm, execute, reset } = useBulkRename()
+  const { state, requestConfirm, cancelConfirm, execute, continueRenaming, reset } = useBulkRename()
 
   const orgUnits: OrgUnitListItem[] = data?.orgUnits?.organisationUnits ?? []
 
   const handleConfirmPreviews = useCallback(
-    (previews: RenamePreview[]) => {
-      requestConfirm(previews)
-    },
+    (previews: RenamePreview[]) => requestConfirm(previews),
     [requestConfirm]
   )
 
   const handleConfirm = useCallback(() => {
-    if (state.previews.length > 0) {
-      execute(state.previews)
-    }
+    if (state.previews.length > 0) execute(state.previews)
   }, [state.previews, execute])
 
   const isRunning = state.status === 'running'
   const isDone = state.status === 'done'
   const isError = state.status === 'error'
-  const isDisabled = isRunning || isDone
 
   return (
     <div className={styles.page}>
@@ -55,7 +50,7 @@ export default function BulkRename() {
         <h1 className={styles.title}>{i18n.t('Bulk Rename')}</h1>
         <p className={styles.description}>
           {i18n.t(
-            'Apply find-replace, prefix, suffix, or regex rules to rename org units in bulk.'
+            'Select org units, apply a rename rule to the selection, then repeat for other groups.'
           )}
         </p>
       </div>
@@ -67,14 +62,7 @@ export default function BulkRename() {
         </p>
       )}
 
-      {!loading && !error && (
-        <BulkRenameTable
-          orgUnits={orgUnits}
-          onConfirm={handleConfirmPreviews}
-          disabled={isDisabled}
-        />
-      )}
-
+      {/* ✅ Moved above the table so they're visible without scrolling */}
       {isRunning && (
         <ProgressBar
           percent={state.progress}
@@ -87,10 +75,15 @@ export default function BulkRename() {
       {isDone && (
         <div className={styles.successBanner}>
           <span>
-            {i18n.t('All {{count}} org units renamed successfully.', { count: state.total })}
+            {i18n.t('{{count}} org units renamed this session.', {
+              count: state.totalRenamed,
+            })}
           </span>
+          <button className={styles.resetBtn} onClick={continueRenaming}>
+            {i18n.t('Continue Renaming')}
+          </button>
           <button className={styles.resetBtn} onClick={reset}>
-            {i18n.t('New Operation')}
+            {i18n.t('New Session')}
           </button>
         </div>
       )}
@@ -109,9 +102,18 @@ export default function BulkRename() {
         </div>
       )}
 
+      {!loading && !error && (
+        <BulkRenameTable
+          orgUnits={orgUnits}
+          onConfirm={handleConfirmPreviews}
+          disabled={isRunning}
+          completedCount={state.totalRenamed}
+        />
+      )}
+
       {state.status === 'confirming' && (
         <ConfirmDialog
-          title={i18n.t('Confirm Bulk Rename')}
+          title={i18n.t('Confirm Rename')}
           message={i18n.t(
             'This will rename {{count}} org units. This cannot be undone without a snapshot.',
             { count: state.previews.length }

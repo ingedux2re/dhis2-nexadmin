@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-15T15:51:08.930Z\n"
-"PO-Revision-Date: 2026-03-15T15:51:08.930Z\n"
+"POT-Creation-Date: 2026-03-15T21:39:27.246Z\n"
+"PO-Revision-Date: 2026-03-15T21:39:27.247Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -44,8 +44,65 @@ msgstr "Select {{name}}"
 msgid "Export Preview CSV"
 msgstr "Export Preview CSV"
 
-msgid "Mode"
-msgstr "Mode"
+msgid "New name…"
+msgstr "New name…"
+
+msgid "Search by name…"
+msgstr "Search by name…"
+
+msgid "All levels"
+msgstr "All levels"
+
+msgid "Level {{n}}"
+msgstr "Level {{n}}"
+
+msgid "{{n}} org units"
+msgstr "{{n}} org units"
+
+msgid "{{n}} selected"
+msgstr "{{n}} selected"
+
+msgid "+{{n}} from other searches"
+msgstr "+{{n}} from other searches"
+
+msgid "Clear selection"
+msgstr "Clear selection"
+
+msgid "Select page"
+msgstr "Select page"
+
+msgid "Name"
+msgstr "Name"
+
+msgid "New Name"
+msgstr "New Name"
+
+msgid "Selected from other searches ({{n}})"
+msgstr "Selected from other searches ({{n}})"
+
+msgid "No org units match the filter."
+msgstr "No org units match the filter."
+
+msgid "First page"
+msgstr "First page"
+
+msgid "Previous page"
+msgstr "Previous page"
+
+msgid "{{page}} / {{total}}"
+msgstr "{{page}} / {{total}}"
+
+msgid "Next page"
+msgstr "Next page"
+
+msgid "Last page"
+msgstr "Last page"
+
+msgid "Rename {{n}} selected org units"
+msgstr "Rename {{n}} selected org units"
+
+msgid "{{changed}} of {{total}} names will change"
+msgstr "{{changed}} of {{total}} names will change"
 
 msgid "Find & Replace"
 msgstr "Find & Replace"
@@ -65,41 +122,23 @@ msgstr "Pattern (regex)"
 msgid "Find text"
 msgstr "Find text"
 
-msgid "Replace with"
-msgstr "Replace with"
+msgid "Replace with (empty = delete)"
+msgstr "Replace with (empty = delete)"
 
-msgid "Prefix to add"
-msgstr "Prefix to add"
+msgid "Prefix  (e.g. \"DR \" — space included)"
+msgstr "Prefix  (e.g. \"DR \" — space included)"
 
-msgid "Suffix to add"
-msgstr "Suffix to add"
+msgid "Suffix  (e.g. \" CHP\" — space included)"
+msgstr "Suffix  (e.g. \" CHP\" — space included)"
 
-msgid "Preview Rename"
-msgstr "Preview Rename"
+msgid "Apply {{n}} renames"
+msgstr "Apply {{n}} renames"
 
-msgid "Filter org units by name…"
-msgstr "Filter org units by name…"
-
-msgid "{{n}} org units loaded"
-msgstr "{{n}} org units loaded"
-
-msgid "{{changed}} of {{total}} names will change"
-msgstr "{{changed}} of {{total}} names will change"
+msgid "Apply renames"
+msgstr "Apply renames"
 
 msgid "Export CSV"
 msgstr "Export CSV"
-
-msgid "No org units match the current filter."
-msgstr "No org units match the current filter."
-
-msgid "ID"
-msgstr "ID"
-
-msgid "Current Name"
-msgstr "Current Name"
-
-msgid "New Name"
-msgstr "New Name"
 
 msgid "Collapse"
 msgstr "Collapse"
@@ -119,23 +158,11 @@ msgstr "Source Org Units"
 msgid "Search…"
 msgstr "Search…"
 
-msgid "All levels"
-msgstr "All levels"
-
-msgid "Level {{n}}"
-msgstr "Level {{n}}"
-
-msgid "Name"
-msgstr "Name"
-
 msgid "Lvl"
 msgstr "Lvl"
 
 msgid "Parent"
 msgstr "Parent"
-
-msgid "No org units match the filter."
-msgstr "No org units match the filter."
 
 msgid "Pending Moves"
 msgstr "Pending Moves"
@@ -403,11 +430,11 @@ msgid "Bulk Rename"
 msgstr "Bulk Rename"
 
 msgid ""
-"Apply find-replace, prefix, suffix, or regex rules to rename org units in "
-"bulk."
+"Select org units, apply a rename rule to the selection, then repeat for "
+"other groups."
 msgstr ""
-"Apply find-replace, prefix, suffix, or regex rules to rename org units in "
-"bulk."
+"Select org units, apply a rename rule to the selection, then repeat for "
+"other groups."
 
 msgid "Loading org units…"
 msgstr "Loading org units…"
@@ -415,8 +442,11 @@ msgstr "Loading org units…"
 msgid "Failed to load org units. {{message}}"
 msgstr "Failed to load org units. {{message}}"
 
-msgid "New Operation"
-msgstr "New Operation"
+msgid "Continue Renaming"
+msgstr "Continue Renaming"
+
+msgid "New Session"
+msgstr "New Session"
 
 msgid "Operation failed. {{n}} renames rolled back."
 msgstr "Operation failed. {{n}} renames rolled back."
@@ -424,14 +454,17 @@ msgstr "Operation failed. {{n}} renames rolled back."
 msgid "Try Again"
 msgstr "Try Again"
 
-msgid "Confirm Bulk Rename"
-msgstr "Confirm Bulk Rename"
+msgid "Confirm Rename"
+msgstr "Confirm Rename"
 
 msgid "Bulk Reorganise"
 msgstr "Bulk Reorganise"
 
 msgid "Select org units and assign them a new parent to move them in bulk."
 msgstr "Select org units and assign them a new parent to move them in bulk."
+
+msgid "New Operation"
+msgstr "New Operation"
 
 msgid "Operation failed. {{n}} moves rolled back."
 msgstr "Operation failed. {{n}} moves rolled back."
