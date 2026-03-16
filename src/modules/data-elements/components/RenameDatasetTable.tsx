@@ -12,8 +12,8 @@
 // real-time before committing.
 // ─────────────────────────────────────────────────────────────────────────────
 
-import type { FC } from 'react'
-import { useState, useMemo, useCallback, useEffect } from 'react'
+import type { FC, KeyboardEvent } from 'react'
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
 import i18n from '@dhis2/d2-i18n'
 import { exportCsv } from '../../../utils/exportCsv'
 import { nanoid } from '../../../utils/nanoid'
@@ -38,7 +38,11 @@ interface RenameDatasetTableProps {
   loadingElements: boolean
   errorElements: Error | undefined
   onSelectDataset: (id: string) => void
-  onRequestConfirm: (elements: DataElement[], selectedIds: Set<string>, rules: RenameRule[]) => void
+  /**
+   * Called with the fully-resolved preview list (inline overrides already
+   * applied). The parent hook uses these previews directly without rebuilding.
+   */
+  onRequestConfirm: (previews: DataElementRenamePreview[]) => void
   disabled?: boolean
   completedCount?: number
 }
@@ -104,11 +108,20 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
   // ── Rule chain ───────────────────────────────────────────────────────────
   const [rules, setRules] = useState<RenameRule[]>([makeRule('find-replace')])
 
+  // ── Inline direct edits: map of elementId → new name typed by the user ───
+  // These take priority over rule-generated previews for the affected rows.
+  const [inlineEdits, setInlineEdits] = useState<Map<string, string>>(new Map())
+  // Which cell is currently being edited (null = none)
+  const [editingId, setEditingId] = useState<string | null>(null)
+  const inlineInputRef = useRef<HTMLInputElement>(null)
+
   // ── Reset selection + rules after each successful batch ─────────────────
   useEffect(() => {
     if (completedCount === 0) return
     setSelectedIds(new Set())
     setRules([makeRule('find-replace')])
+    setInlineEdits(new Map())
+    setEditingId(null)
   }, [completedCount])
 
   // ── Dataset change ────────────────────────────────────────────────────────
@@ -165,6 +178,58 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
 
   const clearSelection = useCallback(() => setSelectedIds(new Set()), [])
 
+  // ── Inline edit helpers ───────────────────────────────────────────────────
+  const startInlineEdit = useCallback(
+    (el: DataElement) => {
+      if (disabled) return
+      // Auto-select the row when user clicks the new-name cell
+      setSelectedIds((prev) => {
+        if (prev.has(el.id)) return prev
+        const next = new Set(prev)
+        next.add(el.id)
+        return next
+      })
+      setEditingId(el.id)
+      // Pre-fill with existing inline override → rule result → original name
+      if (!inlineEdits.has(el.id)) {
+        const ruleResult = applyRuleChain(el.name, rules)
+        setInlineEdits((prev) =>
+          new Map(prev).set(el.id, ruleResult !== el.name ? ruleResult : el.name)
+        )
+      }
+      // Focus the input after React renders it
+      setTimeout(() => inlineInputRef.current?.focus(), 0)
+    },
+    [disabled, inlineEdits, rules]
+  )
+
+  const commitInlineEdit = useCallback((id: string, value: string) => {
+    const trimmed = value.trim()
+    setEditingId(null)
+    if (!trimmed) {
+      // Empty → remove the override (row reverts to rule result / unchanged)
+      setInlineEdits((prev) => {
+        const next = new Map(prev)
+        next.delete(id)
+        return next
+      })
+      return
+    }
+    setInlineEdits((prev) => new Map(prev).set(id, trimmed))
+  }, [])
+
+  const cancelInlineEdit = useCallback(() => {
+    setEditingId(null)
+  }, [])
+
+  const clearInlineEdit = useCallback((id: string) => {
+    setInlineEdits((prev) => {
+      const next = new Map(prev)
+      next.delete(id)
+      return next
+    })
+  }, [])
+
   // ── Rule chain management ─────────────────────────────────────────────────
   const addRule = useCallback(() => {
     setRules((prev) => [...prev, makeRule('find-replace')])
@@ -205,12 +270,15 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
   }, [])
 
   // ── Live previews ─────────────────────────────────────────────────────────
+  // Priority: inline direct edit > rule chain > original name (= no change)
   const previews = useMemo<DataElementRenamePreview[]>(() => {
     if (selectedIds.size === 0) return []
     return elements
       .filter((el) => selectedIds.has(el.id))
       .map((el) => {
-        const newName = applyRuleChain(el.name, rules)
+        const inlineOverride = inlineEdits.get(el.id)
+        const newName =
+          inlineOverride !== undefined ? inlineOverride : applyRuleChain(el.name, rules)
         const newShortName = newName.slice(0, 50)
         return {
           id: el.id,
@@ -223,25 +291,39 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
           changed: newName !== el.name,
         }
       })
-  }, [elements, selectedIds, rules])
+  }, [elements, selectedIds, rules, inlineEdits])
 
   const changedCount = previews.filter((p) => p.changed).length
   const previewMap = useMemo(() => new Map(previews.map((p) => [p.id, p])), [previews])
 
   // ── Apply handler ─────────────────────────────────────────────────────────
+  // Pass fully-resolved previews (inline overrides already applied) to parent.
   const handleApply = useCallback(() => {
-    if (changedCount === 0) return
-    onRequestConfirm(elements, selectedIds, rules)
-  }, [changedCount, onRequestConfirm, elements, selectedIds, rules])
+    const changed = previews.filter((p) => p.changed)
+    if (changed.length === 0) return
+    onRequestConfirm(changed)
+  }, [previews, onRequestConfirm])
 
   // ── Export preview CSV ────────────────────────────────────────────────────
   const handleExportCsv = useCallback(() => {
-    const headers = [i18n.t('ID'), i18n.t('Current Name'), i18n.t('New Name'), i18n.t('Value Type')]
+    const headers = [
+      i18n.t('ID'),
+      i18n.t('Current Name'),
+      i18n.t('New Name'),
+      i18n.t('Value Type'),
+      i18n.t('Edit Mode'),
+    ]
     const rows = previews
       .filter((p) => p.changed)
-      .map((p) => [p.id, p.oldName, p.newName, p.valueType])
+      .map((p) => [
+        p.id,
+        p.oldName,
+        p.newName,
+        p.valueType,
+        inlineEdits.has(p.id) ? 'direct' : 'rule',
+      ])
     exportCsv('de-rename-preview.csv', headers, rows)
-  }, [previews])
+  }, [previews, inlineEdits])
 
   // ── Page-level checkbox state ─────────────────────────────────────────────
   const pageAllChecked = paginated.length > 0 && paginated.every((el) => selectedIds.has(el.id))
@@ -468,13 +550,60 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                             {el.valueType}
                           </span>
                         </td>
-                        <td className={styles.newNameCol}>
-                          {preview?.changed ? (
-                            <span className={styles.newName}>{preview.newName}</span>
-                          ) : isSelected && hasActiveRules ? (
-                            <span className={styles.unchanged}>{i18n.t('(no change)')}</span>
+                        <td
+                          className={styles.newNameCol}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            startInlineEdit(el)
+                          }}
+                        >
+                          {editingId === el.id ? (
+                            // ── Active inline editor ────────────────────────
+                            <div className={styles.inlineEditWrap}>
+                              <input
+                                ref={inlineInputRef}
+                                className={styles.inlineInput}
+                                defaultValue={inlineEdits.get(el.id) ?? el.name}
+                                placeholder={el.name}
+                                onClick={(e) => e.stopPropagation()}
+                                onBlur={(e) => commitInlineEdit(el.id, e.target.value)}
+                                onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+                                  if (e.key === 'Enter') {
+                                    commitInlineEdit(el.id, e.currentTarget.value)
+                                  } else if (e.key === 'Escape') {
+                                    cancelInlineEdit()
+                                  }
+                                }}
+                                aria-label={i18n.t('New name for {{name}}', { name: el.name })}
+                              />
+                            </div>
+                          ) : preview?.changed ? (
+                            // ── Preview shows a change ──────────────────────
+                            <div className={styles.newNameCell}>
+                              <span className={styles.newName}>{preview.newName}</span>
+                              {inlineEdits.has(el.id) && (
+                                <button
+                                  className={styles.clearInlineBtn}
+                                  title={i18n.t('Clear direct edit — revert to rule result')}
+                                  onClick={(e) => {
+                                    e.stopPropagation()
+                                    clearInlineEdit(el.id)
+                                  }}
+                                >
+                                  <span className="material-icons-round">close</span>
+                                </button>
+                              )}
+                            </div>
                           ) : (
-                            <span className={styles.unchanged}>—</span>
+                            // ── No change yet — show click-to-edit prompt ───
+                            <span className={styles.editPrompt}>
+                              <span className="material-icons-round" style={{ fontSize: 14 }}>
+                                edit
+                              </span>
+                              {isSelected && hasActiveRules
+                                ? i18n.t('(no change)')
+                                : i18n.t('Click to rename')}
+                            </span>
                           )}
                         </td>
                       </tr>
