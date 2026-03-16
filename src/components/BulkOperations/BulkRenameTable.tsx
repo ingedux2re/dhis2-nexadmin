@@ -286,165 +286,169 @@ export const BulkRenameTable: FC<Props> = ({
 
   return (
     <div className={styles.container}>
-      {/* ── Filter bar ──────────────────────────────────── */}
-      <div className={styles.filterBar}>
-        <input
-          className={styles.searchInput}
-          placeholder={i18n.t('Search by name…')}
-          value={filter}
-          onChange={(e) => {
-            setFilter(e.target.value)
-            setPage(1)
-          }}
-          disabled={disabled}
-        />
-        <select
-          className={styles.levelSelect}
-          value={levelFilter}
-          onChange={(e) => {
-            setLevelFilter(e.target.value === '' ? '' : Number(e.target.value))
-            setPage(1)
-          }}
-          disabled={disabled}
-        >
-          <option value="">{i18n.t('All levels')}</option>
-          {levels.map((l) => (
-            <option key={l} value={l}>
-              {i18n.t('Level {{n}}', { n: l })}
-            </option>
-          ))}
-        </select>
-
-        <span className={styles.countBadge}>
-          {i18n.t('{{n}} org units', { n: filtered.length })}
-        </span>
-
-        {selectedIds.size > 0 && (
-          <span className={styles.selectionBadge}>
-            {i18n.t('{{n}} selected', { n: selectedIds.size })}
-            {hiddenSelectedCount > 0 && (
-              <span className={styles.hiddenBadge}>
-                {i18n.t('+{{n}} from other searches', { n: hiddenSelectedCount })}
-              </span>
-            )}
-          </span>
-        )}
-
-        {selectedIds.size > 0 && (
-          <button className={styles.clearSelBtn} onClick={clearSelection} disabled={disabled}>
-            {i18n.t('Clear selection')}
-          </button>
-        )}
-      </div>
-
-      {/* ── Main table ──────────────────────────────────── */}
-      <div className={styles.tableWrap}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th className={styles.checkCell}>
-                <input
-                  type="checkbox"
-                  checked={pageAllChecked}
-                  ref={(el) => {
-                    if (el) el.indeterminate = pageIndeterminate
-                  }}
-                  onChange={togglePageAll}
-                  aria-label={i18n.t('Select page')}
-                />
-              </th>
-              <th>{i18n.t('Name')}</th>
-              <th>{i18n.t('Level')}</th>
-              <th className={styles.newNameHeader}>{i18n.t('New Name')}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* ── Pinned rows: selected from a previous search ── */}
-            {pinnedRows.length > 0 && (
-              <>
-                <tr>
-                  <td colSpan={4} className={styles.pinnedDivider}>
-                    {i18n.t('Selected from other searches ({{n}})', { n: pinnedRows.length })}
-                  </td>
-                </tr>
-                {pinnedRows.map((ou) => renderRow(ou, true))}
-              </>
-            )}
-
-            {/* ── Current page rows ── */}
-            {paginated.map((ou) => renderRow(ou, false))}
-
-            {/* ── Empty state ── */}
-            {paginated.length === 0 && pinnedRows.length === 0 && (
-              <tr>
-                <td colSpan={4} className={styles.emptyCell}>
-                  {i18n.t('No org units match the filter.')}
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-
-      {/* ── Pagination ──────────────────────────────────── */}
-      <div className={styles.pagination}>
-        <div className={styles.pageSizeRow}>
-          <label className={styles.pageSizeLabel}>{i18n.t('Rows per page:')}</label>
-          <select
-            className={styles.pageSizeSelect}
-            value={pageSize}
+      {/* ── Scrollable body (filter bar + table + pagination) ── */}
+      <div className={styles.scrollBody}>
+        {/* ── Filter bar ──────────────────────────────────── */}
+        <div className={styles.filterBar}>
+          <input
+            className={styles.searchInput}
+            placeholder={i18n.t('Search by name…')}
+            value={filter}
             onChange={(e) => {
-              setPageSize(Number(e.target.value))
+              setFilter(e.target.value)
               setPage(1)
             }}
+            disabled={disabled}
+          />
+          <select
+            className={styles.levelSelect}
+            value={levelFilter}
+            onChange={(e) => {
+              setLevelFilter(e.target.value === '' ? '' : Number(e.target.value))
+              setPage(1)
+            }}
+            disabled={disabled}
           >
-            {PAGE_SIZE_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s}
+            <option value="">{i18n.t('All levels')}</option>
+            {levels.map((l) => (
+              <option key={l} value={l}>
+                {i18n.t('Level {{n}}', { n: l })}
               </option>
             ))}
           </select>
-        </div>
-        <div className={styles.pageNav}>
-          <button
-            className={styles.pageBtn}
-            onClick={() => setPage(1)}
-            disabled={page === 1}
-            aria-label={i18n.t('First page')}
-          >
-            «
-          </button>
-          <button
-            className={styles.pageBtn}
-            onClick={() => setPage((p) => Math.max(1, p - 1))}
-            disabled={page === 1}
-            aria-label={i18n.t('Previous page')}
-          >
-            ‹
-          </button>
-          <span className={styles.pageInfo}>
-            {i18n.t('{{page}} / {{total}}', { page, total: totalPages })}
+
+          <span className={styles.countBadge}>
+            {i18n.t('{{n}} org units', { n: filtered.length })}
           </span>
-          <button
-            className={styles.pageBtn}
-            onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-            disabled={page === totalPages}
-            aria-label={i18n.t('Next page')}
-          >
-            ›
-          </button>
-          <button
-            className={styles.pageBtn}
-            onClick={() => setPage(totalPages)}
-            disabled={page === totalPages}
-            aria-label={i18n.t('Last page')}
-          >
-            »
-          </button>
+
+          {selectedIds.size > 0 && (
+            <span className={styles.selectionBadge}>
+              {i18n.t('{{n}} selected', { n: selectedIds.size })}
+              {hiddenSelectedCount > 0 && (
+                <span className={styles.hiddenBadge}>
+                  {i18n.t('+{{n}} from other searches', { n: hiddenSelectedCount })}
+                </span>
+              )}
+            </span>
+          )}
+
+          {selectedIds.size > 0 && (
+            <button className={styles.clearSelBtn} onClick={clearSelection} disabled={disabled}>
+              {i18n.t('Clear selection')}
+            </button>
+          )}
+        </div>
+
+        {/* ── Main table ──────────────────────────────────── */}
+        <div className={styles.tableWrap}>
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th className={styles.checkCell}>
+                  <input
+                    type="checkbox"
+                    checked={pageAllChecked}
+                    ref={(el) => {
+                      if (el) el.indeterminate = pageIndeterminate
+                    }}
+                    onChange={togglePageAll}
+                    aria-label={i18n.t('Select page')}
+                  />
+                </th>
+                <th>{i18n.t('Name')}</th>
+                <th>{i18n.t('Level')}</th>
+                <th className={styles.newNameHeader}>{i18n.t('New Name')}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {/* ── Pinned rows: selected from a previous search ── */}
+              {pinnedRows.length > 0 && (
+                <>
+                  <tr>
+                    <td colSpan={4} className={styles.pinnedDivider}>
+                      {i18n.t('Selected from other searches ({{n}})', { n: pinnedRows.length })}
+                    </td>
+                  </tr>
+                  {pinnedRows.map((ou) => renderRow(ou, true))}
+                </>
+              )}
+
+              {/* ── Current page rows ── */}
+              {paginated.map((ou) => renderRow(ou, false))}
+
+              {/* ── Empty state ── */}
+              {paginated.length === 0 && pinnedRows.length === 0 && (
+                <tr>
+                  <td colSpan={4} className={styles.emptyCell}>
+                    {i18n.t('No org units match the filter.')}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        {/* ── Pagination ──────────────────────────────────── */}
+        <div className={styles.pagination} style={{ marginBottom: 0 }}>
+          <div className={styles.pageSizeRow}>
+            <label className={styles.pageSizeLabel}>{i18n.t('Rows per page:')}</label>
+            <select
+              className={styles.pageSizeSelect}
+              value={pageSize}
+              onChange={(e) => {
+                setPageSize(Number(e.target.value))
+                setPage(1)
+              }}
+            >
+              {PAGE_SIZE_OPTIONS.map((s) => (
+                <option key={s} value={s}>
+                  {s}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className={styles.pageNav}>
+            <button
+              className={styles.pageBtn}
+              onClick={() => setPage(1)}
+              disabled={page === 1}
+              aria-label={i18n.t('First page')}
+            >
+              «
+            </button>
+            <button
+              className={styles.pageBtn}
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              aria-label={i18n.t('Previous page')}
+            >
+              ‹
+            </button>
+            <span className={styles.pageInfo}>
+              {i18n.t('{{page}} / {{total}}', { page, total: totalPages })}
+            </span>
+            <button
+              className={styles.pageBtn}
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page === totalPages}
+              aria-label={i18n.t('Next page')}
+            >
+              ›
+            </button>
+            <button
+              className={styles.pageBtn}
+              onClick={() => setPage(totalPages)}
+              disabled={page === totalPages}
+              aria-label={i18n.t('Last page')}
+            >
+              »
+            </button>
+          </div>
         </div>
       </div>
+      {/* end scrollBody */}
 
-      {/* ── Sticky rename action bar ─────────────────────── */}
+      {/* ── Rename action panel — pinned to bottom, never scrolls ── */}
       {selectedIds.size > 0 && (
         <div className={styles.renamePanel}>
           {/* ── Header ── */}
