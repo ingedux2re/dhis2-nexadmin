@@ -46,7 +46,7 @@ export default function BulkRename() {
   const isError = state.status === 'error'
 
   return (
-    <div className={styles.page}>
+    <div className={styles.pageScroll}>
       <PageHeader
         icon="drive_file_rename_outline"
         title={i18n.t('Bulk Rename')}

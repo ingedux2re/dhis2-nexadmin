@@ -4,8 +4,17 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: var(--space-4);
-  height: calc(100vh - 220px);
-  min-height: 480px;
+  /*
+   * flex: 1 + min-height: 0 lets the board fill all remaining
+   * vertical space inside the .pageFull flex container.
+   * The panel footers (Add to Board / Execute Moves / Select rows…)
+   * are always visible without any page-level scrolling.
+   *
+   * The explicit height fallback handles standalone / narrow contexts.
+   */
+  flex: 1;
+  min-height: 0;
+  height: calc(100vh - 260px);
 }
 
 /* ── Panel shell ─────────────────────────────────────────────── */
