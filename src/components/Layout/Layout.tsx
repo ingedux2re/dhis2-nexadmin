@@ -1,4 +1,4 @@
-import type React from 'react'
+import type { ReactNode, FC } from 'react'
 import { Suspense } from 'react'
 import { CircularLoader } from '@dhis2/ui'
 import i18n from '@dhis2/d2-i18n'
@@ -7,14 +7,23 @@ import { LanguageSwitcher } from '../LanguageSwitcher/LanguageSwitcher'
 import styles from './Layout.module.css'
 
 interface LayoutProps {
-  children: React.ReactNode
+  children: ReactNode
 }
 
-export const Layout: React.FC<LayoutProps> = ({ children }) => (
+export const Layout: FC<LayoutProps> = ({ children }) => (
   <div className={styles.shell} data-testid="app-shell">
     <header className={styles.topBar}>
-      <span className={styles.appName}>{i18n.t('DHIS2 NexAdmin')}</span>
-      <LanguageSwitcher />
+      <div className={styles.topBarLeft}>
+        <div className={styles.logoMark} aria-hidden="true">
+          <span>{i18n.t('NX')}</span>
+        </div>
+        <span className={styles.appName}>
+          {i18n.t('DHIS2')} <em>{i18n.t('NexAdmin')}</em>
+        </span>
+      </div>
+      <div className={styles.topBarRight}>
+        <LanguageSwitcher />
+      </div>
     </header>
     <div className={styles.body}>
       <Sidebar />

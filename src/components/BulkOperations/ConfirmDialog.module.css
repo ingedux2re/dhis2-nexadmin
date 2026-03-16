@@ -1,100 +1,142 @@
+/* ── ConfirmDialog ────────────────────────────────────────────── */
+
 .overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: var(--surface-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 1000;
+  z-index: var(--z-modal);
+  backdrop-filter: blur(4px);
+  animation: overlayIn var(--transition-base) ease;
+}
+
+@keyframes overlayIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .dialog {
-  background: #fff;
-  border-radius: 8px;
-  padding: 2rem;
+  background: var(--surface-card);
+  border-radius: var(--radius-xl);
+  padding: var(--space-8);
   max-width: 480px;
-  width: 90%;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  width: calc(100% - var(--space-8));
+  box-shadow: var(--shadow-2xl);
+  border: 1px solid var(--border-subtle);
+  animation: dialogIn var(--transition-spring) ease;
+  position: relative;
+}
+
+@keyframes dialogIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* destructive left accent */
+.dialog[data-destructive="true"] {
+  border-left: 4px solid var(--color-danger-solid);
 }
 
 .title {
-  font-size: 1.2rem;
-  font-weight: 600;
-  margin: 0 0 0.75rem;
-  color: #1a1a1a;
+  font-size: var(--text-xl);
+  font-weight: var(--weight-bold);
+  color: var(--text-primary);
+  margin-bottom: var(--space-3);
+  letter-spacing: -0.2px;
 }
 
 .message {
-  font-size: 0.95rem;
-  color: #444;
-  margin: 0 0 1.5rem;
-  line-height: 1.5;
+  font-size: var(--text-base);
+  color: var(--text-secondary);
+  line-height: var(--leading-relaxed);
+  margin-bottom: var(--space-6);
 }
 
 .actions {
   display: flex;
-  gap: 0.75rem;
+  gap: var(--space-3);
   justify-content: flex-end;
 }
 
 .cancelBtn {
-  padding: 0.5rem 1.25rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  background: #fff;
+  padding: 8px 18px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--grey-0);
+  color: var(--text-secondary);
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  transition: all var(--transition-fast);
 }
-
 .cancelBtn:hover {
-  background: #f5f5f5;
+  background: var(--grey-50);
+  border-color: var(--border-strong);
+  color: var(--text-primary);
 }
 
 .confirmBtn {
-  padding: 0.5rem 1.25rem;
+  padding: 8px 18px;
   border: none;
-  border-radius: 4px;
-  background: #2064d0;
+  border-radius: var(--radius-md);
+  background: var(--brand-600);
   color: #fff;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
-
 .confirmBtn:hover {
-  background: #1752b5;
+  background: var(--brand-700);
+  box-shadow: var(--shadow-md);
 }
 
 .destructiveBtn {
-  padding: 0.5rem 1.25rem;
+  padding: 8px 18px;
   border: none;
-  border-radius: 4px;
-  background: #d32f2f;
+  border-radius: var(--radius-md);
+  background: var(--color-danger-solid);
   color: #fff;
   cursor: pointer;
-  font-size: 0.9rem;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  transition: all var(--transition-fast);
+  box-shadow: var(--shadow-sm);
 }
-
 .destructiveBtn:hover {
-  background: #b71c1c;
+  background: #dc2626;
+  box-shadow: var(--shadow-md);
 }
 
-/* ── Warning notices (non-blocking, shown above action buttons) ── */
-
+/* ── Warning list ────────────────────────────────────────────── */
 .warnings {
   list-style: none;
-  margin: 0 0 1.25rem;
+  margin: 0 0 var(--space-5);
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
 }
 
 .warningItem {
-  background: #fff8e1;
-  border-left: 3px solid #f9a825;
-  border-radius: 4px;
-  padding: 0.5rem 0.75rem;
-  font-size: 0.875rem;
-  color: #5d4037;
-  line-height: 1.45;
+  background: var(--color-warning-bg);
+  border-left: 3px solid var(--color-warning-solid);
+  border-radius: var(--radius-sm);
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--color-warning-text);
+  line-height: var(--leading-relaxed);
 }

@@ -1,0 +1,156 @@
+/* ============================================================
+   DHIS2 NexAdmin — Design Token System
+   All CSS custom properties consumed by every module in the app.
+   ============================================================ */
+
+:root {
+  /* ── Brand palette ──────────────────────────────────────── */
+  --brand-50: #e8eaf6;
+  --brand-100: #c5cae9;
+  --brand-200: #9fa8da;
+  --brand-300: #7986cb;
+  --brand-400: #5c6bc0;
+  --brand-500: #3949ab;
+  --brand-600: #303f9f;
+  --brand-700: #283593;
+  --brand-800: #1a237e;
+  --brand-900: #0d1757;
+
+  --accent-400: #26c6da;
+  --accent-500: #00bcd4;
+  --accent-600: #00acc1;
+
+  /* ── Neutral palette ────────────────────────────────────── */
+  --grey-0: #ffffff;
+  --grey-50: #f8fafc;
+  --grey-100: #f1f5f9;
+  --grey-150: #eaeff4;
+  --grey-200: #e2e8f0;
+  --grey-300: #cbd5e1;
+  --grey-400: #94a3b8;
+  --grey-500: #64748b;
+  --grey-600: #475569;
+  --grey-700: #334155;
+  --grey-800: #1e293b;
+  --grey-900: #0f172a;
+
+  /* ── Semantic colours ───────────────────────────────────── */
+  --color-success-bg: #f0fdf4;
+  --color-success-border: #86efac;
+  --color-success-text: #15803d;
+  --color-success-solid: #22c55e;
+
+  --color-warning-bg: #fffbeb;
+  --color-warning-border: #fcd34d;
+  --color-warning-text: #92400e;
+  --color-warning-solid: #f59e0b;
+
+  --color-danger-bg: #fef2f2;
+  --color-danger-border: #fca5a5;
+  --color-danger-text: #b91c1c;
+  --color-danger-solid: #ef4444;
+
+  --color-info-bg: #eff6ff;
+  --color-info-border: #93c5fd;
+  --color-info-text: #1d4ed8;
+  --color-info-solid: #3b82f6;
+
+  /* ── Surfaces ───────────────────────────────────────────── */
+  --surface-page: #f0f2f5;
+  --surface-card: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-overlay: rgba(15, 23, 42, 0.55);
+  --surface-sidebar: #1e293b;
+  --surface-topbar: #1e293b;
+
+  /* ── Text ───────────────────────────────────────────────── */
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --text-tertiary: #94a3b8;
+  --text-inverted: #f8fafc;
+  --text-brand: #3949ab;
+  --text-link: #2563eb;
+
+  /* ── Borders ────────────────────────────────────────────── */
+  --border-subtle: #e2e8f0;
+  --border-default: #cbd5e1;
+  --border-strong: #94a3b8;
+  --border-brand: #3949ab;
+  --border-focus: #6366f1;
+
+  /* ── Radius ─────────────────────────────────────────────── */
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* ── Spacing scale ──────────────────────────────────────── */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* ── Typography ─────────────────────────────────────────── */
+  --font-sans: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", "Cascadia Code", monospace;
+
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 14px;
+  --text-md: 15px;
+  --text-lg: 17px;
+  --text-xl: 20px;
+  --text-2xl: 24px;
+  --text-3xl: 30px;
+
+  --leading-tight: 1.25;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.65;
+
+  --weight-normal: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* ── Shadows ────────────────────────────────────────────── */
+  --shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08), 0 4px 6px rgba(0, 0, 0, 0.05);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1), 0 8px 10px rgba(0, 0, 0, 0.06);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.2);
+  --shadow-brand: 0 0 0 3px rgba(57, 73, 171, 0.25);
+  --shadow-inset: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+
+  /* ── Transitions ────────────────────────────────────────── */
+  --transition-fast: 0.12s ease;
+  --transition-base: 0.18s ease;
+  --transition-slow: 0.3s ease;
+  --transition-spring: 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Z-index stack ──────────────────────────────────────── */
+  --z-base: 1;
+  --z-raised: 10;
+  --z-sticky: 100;
+  --z-topbar: 200;
+  --z-sidebar: 150;
+  --z-overlay: 400;
+  --z-modal: 500;
+  --z-toast: 600;
+
+  /* ── Layout dimensions ──────────────────────────────────── */
+  --sidebar-width: 240px;
+  --sidebar-collapsed: 56px;
+  --topbar-height: 56px;
+  --content-max: 1320px;
+  --page-padding: 28px;
+}
