@@ -292,6 +292,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
           // so the hook can send a valid payload without an extra GET per element.
           domainType: el.domainType,
           aggregationType: el.aggregationType,
+          categoryComboId: el.categoryCombo?.id,
           changed: newName !== el.name,
         }
       })
