@@ -7,6 +7,7 @@ import type { RenamePreview } from '../components/BulkOperations/BulkRenameTable
 import { ConfirmDialog } from '../components/BulkOperations/ConfirmDialog'
 import { ProgressBar } from '../components/BulkOperations/ProgressBar'
 import { useBulkRename } from '../hooks/useBulkRename'
+import { PageHeader } from '../components/shared/PageHeader'
 import type { OrgUnitListItem } from '../types/orgUnit'
 import styles from './BulkOperations.module.css'
 
@@ -46,14 +47,21 @@ export default function BulkRename() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{i18n.t('Bulk Rename')}</h1>
-        <p className={styles.description}>
-          {i18n.t(
-            'Select org units, apply a rename rule to the selection, then repeat for other groups.'
-          )}
-        </p>
-      </div>
+      <PageHeader
+        icon="drive_file_rename_outline"
+        title={i18n.t('Bulk Rename')}
+        description={i18n.t(
+          'Select org units, apply a rename rule to the selection, then repeat for other groups.'
+        )}
+        accentColor="accent"
+        badge={
+          isDone && state.totalRenamed > 0 ? (
+            <span className="nx-chip nx-chip-success">
+              {state.totalRenamed} {i18n.t('renamed')}
+            </span>
+          ) : undefined
+        }
+      />
 
       {loading && <p className={styles.loading}>{i18n.t('Loading org units…')}</p>}
       {error && (

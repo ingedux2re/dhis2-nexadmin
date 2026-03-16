@@ -7,6 +7,7 @@ export interface NavItem {
 }
 
 export type NavSection =
+  | 'overview'
   | 'org-units'
   | 'data-integrity'
   | 'bulk-operations'
@@ -16,6 +17,13 @@ export type NavSection =
   | 'system'
 
 export const NAV_ITEMS: NavItem[] = [
+  {
+    id: 'dashboard',
+    label: 'Dashboard',
+    path: '/',
+    icon: 'dashboard',
+    section: 'overview',
+  },
   {
     id: 'ou-management',
     label: 'Org Unit Management',
@@ -140,6 +148,7 @@ export const NAV_ITEMS: NavItem[] = [
 ]
 
 export const NAV_SECTIONS: Record<NavSection, string> = {
+  overview: 'Overview',
   'org-units': 'Organisation Units',
   'data-integrity': 'Data Integrity',
   'bulk-operations': 'Bulk Operations',

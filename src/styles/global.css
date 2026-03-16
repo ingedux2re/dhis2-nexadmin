@@ -139,6 +139,11 @@ pre {
   color: var(--color-info-text);
   border-color: var(--color-info-border);
 }
+.nx-chip-brand {
+  background: var(--brand-50);
+  color: var(--brand-700);
+  border-color: var(--brand-100);
+}
 .nx-chip-neutral {
   background: var(--grey-100);
   color: var(--grey-600);

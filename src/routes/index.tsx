@@ -3,6 +3,7 @@ import { lazy } from 'react'
 import { Routes, Route, Navigate } from 'react-router-dom'
 import { Layout } from '../components/Layout/Layout'
 
+const Dashboard = lazy(() => import('../pages/Dashboard'))
 const OrgUnitManagement = lazy(() => import('../pages/OrgUnitManagement'))
 const HierarchyViewer = lazy(() => import('../pages/HierarchyViewer'))
 const OrgUnitGroups = lazy(() => import('../pages/OrgUnitGroups'))
@@ -25,7 +26,7 @@ const BulkRename = lazy(() => import('../pages/BulkRename'))
 export const AppRoutes: React.FC = () => (
   <Layout>
     <Routes>
-      <Route path="/" element={<Navigate to="/org-units" replace />} />
+      <Route path="/" element={<Dashboard />} />
       <Route path="/org-units" element={<OrgUnitManagement />} />
       <Route path="/org-units/hierarchy" element={<HierarchyViewer />} />
       <Route path="/org-units/groups" element={<OrgUnitGroups />} />
@@ -44,7 +45,7 @@ export const AppRoutes: React.FC = () => (
       <Route path="/analytics/quality" element={<DataQuality />} />
       <Route path="/system/settings" element={<SystemSettings />} />
       <Route path="/system/notifications" element={<Notifications />} />
-      <Route path="*" element={<Navigate to="/org-units" replace />} />
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   </Layout>
 )

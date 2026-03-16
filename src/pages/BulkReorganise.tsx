@@ -6,6 +6,7 @@ import { BulkReorganiseBoard } from '../components/BulkOperations/BulkReorganise
 import { ConfirmDialog } from '../components/BulkOperations/ConfirmDialog'
 import { ProgressBar } from '../components/BulkOperations/ProgressBar'
 import { useBulkMove } from '../hooks/useBulkMove'
+import { PageHeader } from '../components/shared/PageHeader'
 import type { OrgUnitListItem } from '../types/orgUnit'
 import type { MoveOperation } from '../hooks/useBulkMove'
 import styles from './BulkOperations.module.css'
@@ -50,12 +51,19 @@ export default function BulkReorganise() {
 
   return (
     <div className={styles.page}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>{i18n.t('Bulk Reorganise')}</h1>
-        <p className={styles.description}>
-          {i18n.t('Select org units and assign them a new parent to move them in bulk.')}
-        </p>
-      </div>
+      <PageHeader
+        icon="low_priority"
+        title={i18n.t('Bulk Reorganise')}
+        description={i18n.t('Select org units and assign them a new parent to move them in bulk.')}
+        accentColor="accent"
+        badge={
+          isDone && state.total > 0 ? (
+            <span className="nx-chip nx-chip-success">
+              {state.total} {i18n.t('moved')}
+            </span>
+          ) : undefined
+        }
+      />
 
       {loading && <p className={styles.loading}>{i18n.t('Loading org units…')}</p>}
       {error && (
