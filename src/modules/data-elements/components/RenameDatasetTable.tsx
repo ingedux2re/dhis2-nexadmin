@@ -51,6 +51,33 @@ function makeRule(mode: RenameMode = 'find-replace'): RenameRule {
   return { _id: nanoid(), mode, find: '', replace: '' }
 }
 
+/**
+ * Convert a raw API error into a short, actionable message for the user.
+ * Hides internal HTTP codes and suggests a concrete remedy.
+ */
+function friendlyLoadError(err: Error): string {
+  const msg = err.message ?? ''
+  if (msg.includes('401') || msg.toLowerCase().includes('unauthorized')) {
+    return i18n.t('Session expired — please refresh the page and log in again.')
+  }
+  if (msg.includes('403') || msg.toLowerCase().includes('forbidden')) {
+    return i18n.t('You do not have permission to read this dataset.')
+  }
+  if (msg.includes('404') || msg.toLowerCase().includes('not found')) {
+    return i18n.t('Dataset not found — it may have been deleted. Try selecting another.')
+  }
+  if (msg.includes('405')) {
+    return i18n.t(
+      'Could not load dataset elements (API error). Please reload the page; if the problem persists contact your system administrator.'
+    )
+  }
+  if (msg.toLowerCase().includes('network') || msg.toLowerCase().includes('fetch')) {
+    return i18n.t('Network error — check your connection and try again.')
+  }
+  // Fallback: show a trimmed version of the raw message, capped at 120 chars
+  return msg.length > 120 ? `${msg.slice(0, 120)}…` : msg
+}
+
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
@@ -354,7 +381,20 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
         {selectedDataSetId && errorElements && !loadingElements && (
           <div className={styles.errorBanner}>
             <span className="material-icons-round">error_outline</span>
-            {i18n.t('Failed to load elements: {{msg}}', { msg: errorElements.message })}
+            <div className={styles.errorText}>
+              <strong>{i18n.t('Could not load data elements')}</strong>
+              <div>{friendlyLoadError(errorElements)}</div>
+            </div>
+            <button
+              className="nx-btn nx-btn-secondary"
+              style={{ marginLeft: 'auto', flexShrink: 0 }}
+              onClick={() => onSelectDataset(selectedDataSetId)}
+            >
+              <span className="material-icons-round" style={{ fontSize: 16 }}>
+                refresh
+              </span>
+              {i18n.t('Retry')}
+            </button>
           </div>
         )}
 
