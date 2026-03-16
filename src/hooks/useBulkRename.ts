@@ -99,7 +99,6 @@ export function useBulkRename() {
 
       for (let i = 0; i < previews.length; i++) {
         const p = previews[i]
-        const shortName = p.newName.slice(0, 50)
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
@@ -107,7 +106,7 @@ export function useBulkRename() {
             type: 'update',
             id: p.id,
             params: { mergeMode: 'REPLACE' },
-            data: { ...ou, name: p.newName, shortName: p.newName.slice(0, 50) },
+            data: { name: p.newName, shortName: deriveShortName(p.newName) },
           })
           completed.push(p)
         } catch (err: unknown) {

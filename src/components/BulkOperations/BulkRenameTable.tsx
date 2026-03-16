@@ -1,7 +1,8 @@
 // src/components/BulkOperations/BulkRenameTable.tsx
-import { useState, useMemo, useEffect,useCallback } from 'react'
+import type { FC } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import i18n from '@dhis2/d2-i18n'
-import type { OrgUnitListItem } from '../../types/orgUnit'
+import type { OrgUnitListItem, OrgUnitRef } from '../../types/orgUnit'
 import { exportCsv } from '../../utils/exportCsv'
 import styles from './BulkRenameTable.module.css'
 
@@ -95,9 +96,13 @@ export const BulkRenameTable: FC<Props> = ({
   // ── Derived ──────────────────────────────────────────────
   const levels = useMemo(
     () =>
-      [...new Set(orgUnits.map((u) => u.level).filter((l): l is number => l != null))].sort(
-        (a, b) => a - b
-      ),
+      (
+        [
+          ...new Set(
+            orgUnits.map((u: OrgUnitListItem) => u.level).filter((l): l is number => l != null)
+          ),
+        ] as number[]
+      ).sort((a: number, b: number) => a - b),
     [orgUnits]
   )
 
@@ -221,7 +226,7 @@ export const BulkRenameTable: FC<Props> = ({
   const renderRow = (ou: OrgUnitListItem, isPinned = false) => {
     const preview = previewMap.get(ou.id)
     const isSelected = selectedIds.has(ou.id)
-    const breadcrumb = ou.ancestors?.map((a) => a.name).join(' › ')
+    const breadcrumb = ou.ancestors?.map((a: OrgUnitRef) => a.name).join(' › ')
 
     // Value shown in the inline input:
     // manual override → pattern result → empty string (placeholder shown)
