@@ -9,6 +9,7 @@ export interface NavItem {
 export type NavSection =
   | 'overview'
   | 'org-units'
+  | 'data-elements'
   | 'data-integrity'
   | 'bulk-operations'
   | 'users'
@@ -65,6 +66,14 @@ export const NAV_ITEMS: NavItem[] = [
     path: '/integrity/geo',
     icon: 'map',
     section: 'data-integrity',
+  },
+  // ─── Data Element Engineering ────────────────────────────────────────────────
+  {
+    id: 'data-element-engineering',
+    label: 'Data Element Engineering',
+    path: '/data-elements',
+    icon: 'data_object',
+    section: 'data-elements',
   },
   // ─── Phase 3 – Bulk Operations ─────────────────────────────────────────────
   {
@@ -150,6 +159,7 @@ export const NAV_ITEMS: NavItem[] = [
 export const NAV_SECTIONS: Record<NavSection, string> = {
   overview: 'Overview',
   'org-units': 'Organisation Units',
+  'data-elements': 'Data Elements',
   'data-integrity': 'Data Integrity',
   'bulk-operations': 'Bulk Operations',
   users: 'Users & Access',

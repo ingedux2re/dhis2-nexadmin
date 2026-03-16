@@ -22,6 +22,10 @@ const GeoConsistency = lazy(() => import('../pages/GeoConsistency'))
 // Phase 3 – Bulk Operations
 const BulkReorganise = lazy(() => import('../pages/BulkReorganise'))
 const BulkRename = lazy(() => import('../pages/BulkRename'))
+// Data Element Engineering
+const DataElementEngineering = lazy(
+  () => import('../modules/data-elements/views/DataElementEngineeringPage')
+)
 
 export const AppRoutes: React.FC = () => (
   <Layout>
@@ -36,6 +40,8 @@ export const AppRoutes: React.FC = () => (
       {/* Phase 3 – Bulk Operations */}
       <Route path="/bulk/reorganise" element={<BulkReorganise />} />
       <Route path="/bulk/rename" element={<BulkRename />} />
+      {/* Data Element Engineering */}
+      <Route path="/data-elements" element={<DataElementEngineering />} />
       <Route path="/users" element={<UserManagement />} />
       <Route path="/users/roles" element={<RolesAuthorities />} />
       <Route path="/users/groups" element={<UserGroups />} />

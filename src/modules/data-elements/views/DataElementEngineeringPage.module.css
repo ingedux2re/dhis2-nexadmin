@@ -1,0 +1,157 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   DataElementEngineeringPage.module.css
+   Page shell, tab bar, banners, submit bar.
+───────────────────────────────────────────────────────────────────────────── */
+
+/* ── Page container ────────────────────────────────────────────── */
+.page {
+  padding: var(--page-padding);
+  max-width: var(--content-max);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  /* Fill the viewport height minus the top-bar so tabs can use remaining space */
+  height: calc(100dvh - var(--topbar-height));
+  overflow: hidden;
+}
+
+/* ── Tab bar ───────────────────────────────────────────────────── */
+.tabBar {
+  display: flex;
+  gap: 2px;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-1);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 8px 20px;
+  border: none;
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  cursor: pointer;
+  transition:
+    background var(--transition-fast),
+    color var(--transition-fast),
+    box-shadow var(--transition-fast);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.tab:hover {
+  background: var(--grey-100);
+  color: var(--text-primary);
+}
+
+.tabActive {
+  background: var(--brand-600);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  font-weight: var(--weight-semibold);
+}
+
+.tabActive:hover {
+  background: var(--brand-700);
+  color: #fff;
+}
+
+/* ── Tab content panels ────────────────────────────────────────── */
+
+/* Bulk Create — flex column with scrollable grid in middle */
+.tabContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* Rename in Dataset — fills remaining height for the three-zone layout */
+.tabContentFull {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* ── Submit bar (Bulk Create tab bottom) ───────────────────────── */
+.submitBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding: var(--space-3) var(--space-4);
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  flex-shrink: 0;
+}
+
+.submitHint {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  max-width: 480px;
+  line-height: var(--leading-relaxed);
+}
+
+/* ── Result banners ────────────────────────────────────────────── */
+.successBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  background: var(--color-success-bg);
+  border: 1px solid var(--color-success-border);
+  border-left: 4px solid var(--color-success-solid);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-success-text);
+  flex-shrink: 0;
+}
+
+.successBanner .material-icons-round {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.errorBanner {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  background: var(--color-danger-bg);
+  border: 1px solid var(--color-danger-border);
+  border-left: 4px solid var(--color-danger-solid);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4);
+  font-size: var(--text-sm);
+  color: var(--color-danger-text);
+  flex-shrink: 0;
+}
+
+.errorBanner .material-icons-round {
+  font-size: 20px;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.bannerSub {
+  font-size: var(--text-xs);
+  margin-top: var(--space-1);
+  opacity: 0.85;
+  line-height: var(--leading-relaxed);
+}
