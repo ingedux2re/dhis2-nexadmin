@@ -23,7 +23,7 @@ jest.mock('@dhis2/ui', () => ({
     onClick?: () => void
     dataTest?: string
   }) => (
-    <button onClick={onClick} data-testid={dataTest}>
+    <button type="button" onClick={onClick} data-testid={dataTest}>
       {children}
     </button>
   ),

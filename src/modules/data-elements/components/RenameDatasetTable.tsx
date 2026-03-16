@@ -420,6 +420,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                     {i18n.t('{{n}} selected', { n: selectedIds.size })}
                   </span>
                   <button
+                    type="button"
                     className={`nx-btn nx-btn-ghost nx-btn-sm`}
                     onClick={clearSelection}
                     disabled={disabled}
@@ -429,6 +430,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                 </>
               ) : (
                 <button
+                  type="button"
                   className={`nx-btn nx-btn-secondary nx-btn-sm`}
                   onClick={selectAll}
                   disabled={disabled}
@@ -473,6 +475,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
               <div>{friendlyLoadError(errorElements)}</div>
             </div>
             <button
+              type="button"
               className="nx-btn nx-btn-secondary"
               style={{ marginLeft: 'auto', flexShrink: 0 }}
               onClick={() => onSelectDataset(selectedDataSetId)}
@@ -588,6 +591,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                               <span className={styles.newName}>{preview.newName}</span>
                               {inlineEdits.has(el.id) && (
                                 <button
+                                  type="button"
                                   className={styles.clearInlineBtn}
                                   title={i18n.t('Clear direct edit — revert to rule result')}
                                   onClick={(e) => {
@@ -647,6 +651,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
               </div>
               <div className={styles.pageNav}>
                 <button
+                  type="button"
                   className={styles.pageBtn}
                   onClick={() => setPage(1)}
                   disabled={page === 1}
@@ -655,6 +660,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                   «
                 </button>
                 <button
+                  type="button"
                   className={styles.pageBtn}
                   onClick={() => setPage((p) => p - 1)}
                   disabled={page === 1}
@@ -666,6 +672,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                   {i18n.t('{{page}} / {{total}}', { page, total: totalPages })}
                 </span>
                 <button
+                  type="button"
                   className={styles.pageBtn}
                   onClick={() => setPage((p) => p + 1)}
                   disabled={page === totalPages}
@@ -674,6 +681,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                   ›
                 </button>
                 <button
+                  type="button"
                   className={styles.pageBtn}
                   onClick={() => setPage(totalPages)}
                   disabled={page === totalPages}
@@ -715,6 +723,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
             <div className={styles.rulePanelActions}>
               {changedCount > 0 && (
                 <button
+                  type="button"
                   className={`nx-btn nx-btn-secondary nx-btn-sm`}
                   onClick={handleExportCsv}
                   disabled={disabled}
@@ -726,6 +735,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                 </button>
               )}
               <button
+                type="button"
                 className={`nx-btn nx-btn-primary`}
                 onClick={handleApply}
                 disabled={disabled || changedCount === 0 || selectedIds.size === 0}
@@ -820,6 +830,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                   {/* Reorder buttons */}
                   <div className={styles.ruleReorder}>
                     <button
+                      type="button"
                       className={styles.reorderBtn}
                       onClick={() => moveRule(rule._id, 'up')}
                       disabled={disabled || idx === 0}
@@ -828,6 +839,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
                       <span className="material-icons-round">keyboard_arrow_up</span>
                     </button>
                     <button
+                      type="button"
                       className={styles.reorderBtn}
                       onClick={() => moveRule(rule._id, 'down')}
                       disabled={disabled || idx === rules.length - 1}
@@ -839,6 +851,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
 
                   {/* Remove button */}
                   <button
+                    type="button"
                     className={styles.removeRuleBtn}
                     onClick={() => removeRule(rule._id)}
                     disabled={disabled || rules.length === 1}
@@ -855,6 +868,7 @@ export const RenameDatasetTable: FC<RenameDatasetTableProps> = ({
 
             {/* Add rule button */}
             <button
+              type="button"
               className={`nx-btn nx-btn-ghost nx-btn-sm ${styles.addRuleBtn}`}
               onClick={addRule}
               disabled={disabled}

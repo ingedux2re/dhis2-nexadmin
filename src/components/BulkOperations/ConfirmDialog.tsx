@@ -104,10 +104,11 @@ export function ConfirmDialog({
         )}
 
         <div className={styles.actions}>
-          <button className={styles.cancelBtn} onClick={onCancel}>
+          <button type="button" className={styles.cancelBtn} onClick={onCancel}>
             {i18n.t('Cancel')}
           </button>
           <button
+            type="button"
             className={destructive ? styles.destructiveBtn : styles.confirmBtn}
             onClick={onConfirm}
           >

@@ -1647,3 +1647,934 @@ msgstr "Page suivante"
 msgid "Last page"
 msgstr "Dernière page"
 
+# ══ Auto-added missing translations ══
+
+msgid "{{total}} total"
+msgstr "{{total}} au total"
+
+msgid "Current Parent"
+msgstr "Unité parente actuelle"
+
+msgid "New Parent"
+msgstr "Nouvelle unité parente"
+
+msgid "New Parent ID"
+msgstr "ID nouvelle unité parente"
+
+msgid "Paste DHIS2 org unit ID…"
+msgstr "Coller l'ID d'unité d'organisation DHIS2…"
+
+msgid "New Parent Name"
+msgstr "Nom de la nouvelle unité parente"
+
+msgid "Display name…"
+msgstr "Nom d'affichage…"
+
+msgid "Preview Move ({{count}})"
+msgstr "Aperçu déplacement ({{count}})"
+
+msgid "Preview Move ({{count}})_plural"
+msgstr "Aperçu déplacements ({{count}})"
+
+msgid "Select all"
+msgstr "Tout sélectionner"
+
+msgid "Select {{name}}"
+msgstr "Sélectionner {{name}}"
+
+msgid "{{count}} moves staged"
+msgstr "{{count}} déplacement en attente"
+
+msgid "{{count}} moves staged_plural"
+msgstr "{{count}} déplacements en attente"
+
+msgid "Export Preview CSV"
+msgstr "Exporter aperçu CSV"
+
+msgid "ID"
+msgstr "ID"
+
+msgid "Current Name"
+msgstr "Nom actuel"
+
+msgid "New name…"
+msgstr "Nouveau nom…"
+
+msgid "Search by name…"
+msgstr "Rechercher par nom…"
+
+msgid "All levels"
+msgstr "Tous les niveaux"
+
+msgid "Level {{n}}"
+msgstr "Niveau {{n}}"
+
+msgid "{{n}} org units"
+msgstr "{{n}} unités d'organisation"
+
+msgid "{{n}} selected"
+msgstr "{{n}} sélectionné(s)"
+
+msgid "+{{n}} from other searches"
+msgstr "+{{n}} d'autres recherches"
+
+msgid "Clear selection"
+msgstr "Effacer la sélection"
+
+msgid "Select page"
+msgstr "Sélectionner la page"
+
+msgid "Selected from other searches ({{n}})"
+msgstr "Sélectionnés d'autres recherches ({{n}})"
+
+msgid "No org units match the filter."
+msgstr "Aucune unité d'organisation ne correspond au filtre."
+
+msgid "{{page}} / {{total}}"
+msgstr "{{page}} / {{total}}"
+
+msgid "Rename {{n}} selected org units"
+msgstr "Renommer {{n}} unité(s) d'organisation sélectionnée(s)"
+
+msgid "{{changed}} of {{total}} names will change"
+msgstr "{{changed}} sur {{total}} noms seront modifiés"
+
+msgid "Pattern (regex)"
+msgstr "Modèle (regex)"
+
+msgid "Find text"
+msgstr "Texte à rechercher"
+
+msgid "Replace with (empty = delete)"
+msgstr "Remplacer par (vide = supprimer)"
+
+msgid "Prefix  (e.g. \"DR \" — space included)"
+msgstr "Préfixe (ex. « DR » — espace inclus)"
+
+msgid "Suffix  (e.g. \" CHP\" — space included)"
+msgstr "Suffixe (ex. « CHP » — espace inclus)"
+
+msgid "Apply {{n}} renames"
+msgstr "Appliquer {{n}} renommage(s)"
+
+msgid "Apply renames"
+msgstr "Appliquer les renommages"
+
+msgid "Collapse"
+msgstr "Réduire"
+
+msgid "Expand"
+msgstr "Développer"
+
+msgid "Select board rows first"
+msgstr "Sélectionner d'abord les lignes du tableau"
+
+msgid "Assign as destination"
+msgstr "Définir comme destination"
+
+msgid "Search…"
+msgstr "Rechercher…"
+
+msgid "Lvl"
+msgstr "Niv."
+
+msgid "Parent"
+msgstr "Parent"
+
+msgid "Add {{count}} to Board →"
+msgstr "Ajouter {{count}} au tableau →"
+
+msgid "Add {{count}} to Board →_plural"
+msgstr "Ajouter {{count}} au tableau →"
+
+msgid "Pending Moves"
+msgstr "Déplacements en attente"
+
+msgid "{{n}} selected — click a destination node →"
+msgstr "{{n}} sélectionné(s) — cliquer sur un nœud destination →"
+
+msgid "Check rows, then click a destination in the tree →"
+msgstr "Cocher des lignes, puis cliquer sur une destination dans l'arbre →"
+
+msgid "No destination"
+msgstr "Aucune destination"
+
+msgid "Remove {{name}}"
+msgstr "Supprimer {{name}}"
+
+msgid "Select org units from the source list and click Add to Board."
+msgstr "Sélectionner des unités d'organisation dans la liste source et cliquer sur Ajouter au tableau."
+
+msgid "{{ready}} / {{total}} assigned"
+msgstr "{{ready}} / {{total}} assigné(s)"
+
+msgid "Execute {{count}} Moves"
+msgstr "Exécuter {{count}} déplacement"
+
+msgid "Execute {{count}} Moves_plural"
+msgstr "Exécuter {{count}} déplacements"
+
+msgid "Destination Hierarchy"
+msgstr "Hiérarchie de destination"
+
+msgid "Search destinations…"
+msgstr "Rechercher des destinations…"
+
+msgid "Click any node to assign it as the new parent"
+msgstr "Cliquer sur un nœud pour l'assigner comme nouveau parent"
+
+msgid "Select rows in Pending Moves first"
+msgstr "Sélectionner d'abord des lignes dans les déplacements en attente"
+
+msgid "Warnings"
+msgstr "Avertissements"
+
+msgid "Processing…"
+msgstr "Traitement en cours…"
+
+msgid "{{completed}} / {{total}}"
+msgstr "{{completed}} / {{total}}"
+
+msgid "Parent A"
+msgstr "Parent A"
+
+msgid "Parent B"
+msgstr "Parent B"
+
+msgid "Switch to {{lang}}"
+msgstr "Passer en {{lang}}"
+
+msgid "NX"
+msgstr "NX"
+
+msgid "DHIS2"
+msgstr "DHIS2"
+
+msgid "NexAdmin"
+msgstr "NexAdmin"
+
+msgid "v2.42"
+msgstr "v2.42"
+
+msgid "Help"
+msgstr "Aide"
+
+msgid "User menu"
+msgstr "Menu utilisateur"
+
+msgid "Delete organisation unit"
+msgstr "Supprimer l'unité d'organisation"
+
+msgid "Cannot delete — org unit has children or associated data"
+msgstr "Impossible de supprimer — l'unité a des enfants ou des données associées"
+
+msgid "Delete failed"
+msgstr "Échec de la suppression"
+
+msgid "This organisation unit cannot be deleted because it has child units or associated data. Remove all associations first."
+msgstr "Cette unité d'organisation ne peut pas être supprimée car elle a des unités enfants ou des données associées. Supprimez d'abord toutes les associations."
+
+msgid "Are you sure you want to delete {{name}}? This action cannot be undone."
+msgstr "Êtes-vous sûr de vouloir supprimer {{name}} ? Cette action est irréversible."
+
+msgid "Deleting…"
+msgstr "Suppression en cours…"
+
+msgid "Edit organisation unit"
+msgstr "Modifier l'unité d'organisation"
+
+msgid "Create organisation unit"
+msgstr "Créer une unité d'organisation"
+
+msgid "Save failed"
+msgstr "Échec de l'enregistrement"
+
+msgid "Name *"
+msgstr "Nom *"
+
+msgid "Short name *"
+msgstr "Nom court *"
+
+msgid "Opening date *"
+msgstr "Date d'ouverture *"
+
+msgid "Closed date"
+msgstr "Date de fermeture"
+
+msgid "Parent org unit ID *"
+msgstr "ID unité parente *"
+
+msgid "Enter the ID of the parent organisation unit"
+msgstr "Saisir l'ID de l'unité d'organisation parente"
+
+msgid "Comment"
+msgstr "Commentaire"
+
+msgid "Save changes"
+msgstr "Enregistrer les modifications"
+
+msgid "Create"
+msgstr "Créer"
+
+msgid "Short name"
+msgstr "Nom court"
+
+msgid "Opening date"
+msgstr "Date d'ouverture"
+
+msgid "Closed"
+msgstr "Fermé"
+
+msgid "Open"
+msgstr "Ouvert"
+
+msgid "Search organisation units…"
+msgstr "Rechercher des unités d'organisation…"
+
+msgid "Main navigation"
+msgstr "Navigation principale"
+
+msgid "Collapse sidebar"
+msgstr "Réduire la barre latérale"
+
+msgid "Expand sidebar"
+msgstr "Développer la barre latérale"
+
+msgid "Value type for {{name}}"
+msgstr "Type de valeur pour {{name}}"
+
+msgid "Aggregation type for {{name}}"
+msgstr "Type d'agrégation pour {{name}}"
+
+msgid "Category combo for {{name}}"
+msgstr "Combinaison de catégories pour {{name}}"
+
+msgid "(default)"
+msgstr "(par défaut)"
+
+msgid "Option set for {{name}}"
+msgstr "Ensemble d'options pour {{name}}"
+
+msgid "—"
+msgstr "—"
+
+msgid "Element name…"
+msgstr "Nom de l'élément…"
+
+msgid "(set per row)"
+msgstr "(défini par ligne)"
+
+msgid "Default value type"
+msgstr "Type de valeur par défaut"
+
+msgid "Default aggregation type"
+msgstr "Type d'agrégation par défaut"
+
+msgid "Default category combo"
+msgstr "Combinaison de catégories par défaut"
+
+msgid "Default option set"
+msgstr "Ensemble d'options par défaut"
+
+msgid "{{n}} row{{s}}"
+msgstr "{{n}} ligne{{s}}"
+
+msgid "{{n}} error{{s}}"
+msgstr "{{n}} erreur{{s}}"
+
+msgid "Add row"
+msgstr "Ajouter une ligne"
+
+msgid "Data elements to create"
+msgstr "Éléments de données à créer"
+
+msgid "Row"
+msgstr "Ligne"
+
+msgid "DEFAULTS"
+msgstr "VALEURS PAR DÉFAUT"
+
+msgid "New rows inherit these values"
+msgstr "Les nouvelles lignes héritent de ces valeurs"
+
+msgid "Duplicate row"
+msgstr "Dupliquer la ligne"
+
+msgid "Duplicate row {{n}}"
+msgstr "Dupliquer la ligne {{n}}"
+
+msgid "Delete row"
+msgstr "Supprimer la ligne"
+
+msgid "Delete row {{n}}"
+msgstr "Supprimer la ligne {{n}}"
+
+msgid "Press Tab to move between cells · Tab from last cell adds a new row"
+msgstr "Appuyer sur Tab pour naviguer entre les cellules · Tab depuis la dernière cellule ajoute une nouvelle ligne"
+
+msgid "Session expired — please refresh the page and log in again."
+msgstr "Session expirée — veuillez actualiser la page et vous reconnecter."
+
+msgid "You do not have permission to read this dataset."
+msgstr "Vous n'avez pas la permission de lire cet ensemble de données."
+
+msgid "Dataset not found — it may have been deleted. Try selecting another."
+msgstr "Ensemble de données introuvable — il a peut-être été supprimé. Essayez d'en sélectionner un autre."
+
+msgid "Could not load dataset elements (API error). Please reload the page; if the problem persists contact your system administrator."
+msgstr "Impossible de charger les éléments de l'ensemble de données (erreur API). Veuillez recharger la page ; si le problème persiste, contactez votre administrateur système."
+
+msgid "Network error — check your connection and try again."
+msgstr "Erreur réseau — vérifiez votre connexion et réessayez."
+
+msgid "Value Type"
+msgstr "Type de valeur"
+
+msgid "Edit Mode"
+msgstr "Mode d'édition"
+
+msgid "Select dataset"
+msgstr "Sélectionner un ensemble de données"
+
+msgid "Loading datasets…"
+msgstr "Chargement des ensembles de données…"
+
+msgid "— Select a dataset to begin —"
+msgstr "— Sélectionnez un ensemble de données pour commencer —"
+
+msgid "{{n}} elements"
+msgstr "{{n}} élément(s)"
+
+msgid "Search by name, code…"
+msgstr "Rechercher par nom, code…"
+
+msgid "Select all {{n}}"
+msgstr "Tout sélectionner ({{n}})"
+
+msgid "No dataset selected"
+msgstr "Aucun ensemble de données sélectionné"
+
+msgid "Choose a dataset above to load its data elements."
+msgstr "Choisissez un ensemble de données ci-dessus pour charger ses éléments."
+
+msgid "Loading data elements…"
+msgstr "Chargement des éléments de données…"
+
+msgid "Could not load data elements"
+msgstr "Impossible de charger les éléments de données"
+
+msgid "No data elements found"
+msgstr "Aucun élément de données trouvé"
+
+msgid "This dataset has no data elements configured."
+msgstr "Cet ensemble de données n'a aucun élément de données configuré."
+
+msgid "Select all on this page"
+msgstr "Tout sélectionner sur cette page"
+
+msgid "Short Name"
+msgstr "Nom court"
+
+msgid "New Name (preview)"
+msgstr "Nouveau nom (aperçu)"
+
+msgid "New name for {{name}}"
+msgstr "Nouveau nom pour {{name}}"
+
+msgid "Clear direct edit — revert to rule result"
+msgstr "Effacer l'édition directe — revenir au résultat de la règle"
+
+msgid "(no change)"
+msgstr "(aucun changement)"
+
+msgid "Click to rename"
+msgstr "Cliquer pour renommer"
+
+msgid "No data elements match the filter."
+msgstr "Aucun élément de données ne correspond au filtre."
+
+msgid "Rename Rules"
+msgstr "Règles de renommage"
+
+msgid "{{n}} will change"
+msgstr "{{n}} seront modifiés"
+
+msgid "Export preview"
+msgstr "Exporter l'aperçu"
+
+msgid "Renaming a data element changes it globally in DHIS2, not only within this dataset."
+msgstr "Renommer un élément de données le modifie globalement dans DHIS2, pas seulement dans cet ensemble de données."
+
+msgid "Rule {{n}} mode"
+msgstr "Mode de la règle {{n}}"
+
+msgid "Prefix text…"
+msgstr "Texte de préfixe…"
+
+msgid "Suffix text…"
+msgstr "Texte de suffixe…"
+
+msgid "Regex pattern…"
+msgstr "Modèle regex…"
+
+msgid "Find text…"
+msgstr "Texte à rechercher…"
+
+msgid "Find for rule {{n}}"
+msgstr "Rechercher pour la règle {{n}}"
+
+msgid "Replace with (empty = delete)…"
+msgstr "Remplacer par (vide = supprimer)…"
+
+msgid "Replace for rule {{n}}"
+msgstr "Remplacer pour la règle {{n}}"
+
+msgid "All letters → UPPERCASE"
+msgstr "Toutes les lettres → MAJUSCULES"
+
+msgid "All letters → lowercase"
+msgstr "Toutes les lettres → minuscules"
+
+msgid "First Letter Capitalised In Each Word"
+msgstr "Première Lettre En Majuscule Dans Chaque Mot"
+
+msgid "Remove leading/trailing spaces; collapse double spaces"
+msgstr "Supprimer les espaces de début/fin ; réduire les doubles espaces"
+
+msgid "Move rule {{n}} up"
+msgstr "Monter la règle {{n}}"
+
+msgid "Move rule {{n}} down"
+msgstr "Descendre la règle {{n}}"
+
+msgid "Remove rule {{n}}"
+msgstr "Supprimer la règle {{n}}"
+
+msgid "Add rule"
+msgstr "Ajouter une règle"
+
+msgid "{{n}} names will change. Use \"Export preview\" to review the full list before applying."
+msgstr "{{n}} noms seront modifiés. Utilisez « Exporter l'aperçu » pour revoir la liste complète avant d'appliquer."
+
+msgid "{{n}} created"
+msgstr "{{n}} créé(s)"
+
+msgid "{{n}} renamed"
+msgstr "{{n}} renommé(s)"
+
+msgid "Data Element Engineering"
+msgstr "Ingénierie des éléments de données"
+
+msgid "Bulk create data elements and rename them within datasets — turning hours of manual work into minutes."
+msgstr "Créer en masse des éléments de données et les renommer dans les ensembles de données — transformant des heures de travail manuel en minutes."
+
+msgid "Bulk Create"
+msgstr "Création en masse"
+
+msgid "Rename in Dataset"
+msgstr "Renommer dans l'ensemble de données"
+
+msgid "Submitting data elements to DHIS2…"
+msgstr "Envoi des éléments de données à DHIS2…"
+
+msgid "{{n}} data element{{s}} created successfully"
+msgstr "{{n}} élément(s) de données créé(s) avec succès"
+
+msgid "{{n}} ignored (may already exist or have validation errors)"
+msgstr "{{n}} ignoré(s) (peuvent déjà exister ou avoir des erreurs de validation)"
+
+msgid "Create more"
+msgstr "Créer davantage"
+
+msgid "Creation failed"
+msgstr "Échec de la création"
+
+msgid "…and {{n}} more errors"
+msgstr "…et {{n}} autre(s) erreur(s)"
+
+msgid "Review all rows before submitting. Creation cannot be undone from this tool."
+msgstr "Vérifiez toutes les lignes avant de soumettre. La création ne peut pas être annulée depuis cet outil."
+
+msgid "Create {{n}} data element{{s}}"
+msgstr "Créer {{n}} élément(s) de données"
+
+msgid "Renaming data elements…"
+msgstr "Renommage des éléments de données en cours…"
+
+msgid "{{n}} data element{{s}} renamed successfully"
+msgstr "{{n}} élément(s) de données renommé(s) avec succès"
+
+msgid "Rename more"
+msgstr "Renommer davantage"
+
+msgid "Rename failed — {{n}} element{{s}} rolled back"
+msgstr "Échec du renommage — {{n}} élément(s) annulé(s)"
+
+msgid "Create {{n}} data element{{s}}?"
+msgstr "Créer {{n}} élément(s) de données ?"
+
+msgid "This will create {{n}} new data element{{s}} in DHIS2. Data elements created here will be immediately visible in the Maintenance app and any datasets you assign them to."
+msgstr "Cela créera {{n}} nouvel(s) élément(s) de données dans DHIS2. Les éléments créés ici seront immédiatement visibles dans l'application Maintenance et dans les ensembles de données auxquels vous les assignez."
+
+msgid "Rename {{n}} data element{{s}}?"
+msgstr "Renommer {{n}} élément(s) de données ?"
+
+msgid "This will rename {{n}} data element{{s}} globally across all datasets and reports in DHIS2. This action cannot be undone from this tool."
+msgstr "Cela renommera {{n}} élément(s) de données globalement dans tous les ensembles de données et rapports DHIS2. Cette action ne peut pas être annulée depuis cet outil."
+
+msgid "Access Control"
+msgstr "Contrôle d'accès"
+
+msgid "Manage sharing settings, user restrictions, and organisation-unit-level access across the system."
+msgstr "Gérer les paramètres de partage, les restrictions utilisateur et l'accès au niveau des unités d'organisation dans le système."
+
+msgid "Coming soon"
+msgstr "Bientôt disponible"
+
+msgid "A full record of system changes, including who changed what and when. Useful for compliance and troubleshooting."
+msgstr "Un enregistrement complet des modifications du système, indiquant qui a changé quoi et quand. Utile pour la conformité et le dépannage."
+
+msgid "User"
+msgstr "Utilisateur"
+
+msgid "Resource"
+msgstr "Ressource"
+
+msgid "Time"
+msgstr "Heure"
+
+msgid "Full audit trail with filtering, search, and export will be available here."
+msgstr "Le journal d'audit complet avec filtrage, recherche et export sera disponible ici."
+
+msgid "Select org units, apply a rename rule to the selection, then repeat for other groups."
+msgstr "Sélectionner des unités d'organisation, appliquer une règle de renommage à la sélection, puis répéter pour d'autres groupes."
+
+msgid "renamed"
+msgstr "renommé(s)"
+
+msgid "Loading org units…"
+msgstr "Chargement des unités d'organisation…"
+
+msgid "Failed to load org units. {{message}}"
+msgstr "Échec du chargement des unités d'organisation. {{message}}"
+
+msgid "Renaming {{count}} org units…"
+msgstr "Renommage de {{count}} unité d'organisation…"
+
+msgid "Renaming {{count}} org units…_plural"
+msgstr "Renommage de {{count}} unités d'organisation…"
+
+msgid "{{count}} org units renamed this session."
+msgstr "{{count}} unité d'organisation renommée cette session."
+
+msgid "{{count}} org units renamed this session._plural"
+msgstr "{{count}} unités d'organisation renommées cette session."
+
+msgid "Continue Renaming"
+msgstr "Continuer le renommage"
+
+msgid "New Session"
+msgstr "Nouvelle session"
+
+msgid "Operation failed. {{n}} renames rolled back."
+msgstr "Opération échouée. {{n}} renommage(s) annulé(s)."
+
+msgid "Try Again"
+msgstr "Réessayer"
+
+msgid "Confirm Rename"
+msgstr "Confirmer le renommage"
+
+msgid "This will rename {{count}} org units. This cannot be undone without a snapshot."
+msgstr "Cela renommera {{count}} unité d'organisation. Cette action ne peut pas être annulée sans sauvegarde."
+
+msgid "This will rename {{count}} org units. This cannot be undone without a snapshot._plural"
+msgstr "Cela renommera {{count}} unités d'organisation. Cette action ne peut pas être annulée sans sauvegarde."
+
+msgid "Bulk Reorganise"
+msgstr "Réorganisation en masse"
+
+msgid "Select org units and assign them a new parent to move them in bulk."
+msgstr "Sélectionner des unités d'organisation et leur assigner un nouveau parent pour les déplacer en masse."
+
+msgid "moved"
+msgstr "déplacé(s)"
+
+msgid "Moving {{count}} org units…"
+msgstr "Déplacement de {{count}} unité d'organisation…"
+
+msgid "Moving {{count}} org units…_plural"
+msgstr "Déplacement de {{count}} unités d'organisation…"
+
+msgid "All {{count}} org units moved successfully."
+msgstr "{{count}} unité d'organisation déplacée avec succès."
+
+msgid "All {{count}} org units moved successfully._plural"
+msgstr "{{count}} unités d'organisation déplacées avec succès."
+
+msgid "New Operation"
+msgstr "Nouvelle opération"
+
+msgid "⚠ {{n}} unit(s) could not be rolled back and may be in an inconsistent state. Review manually."
+msgstr "⚠ {{n}} unité(s) n'ont pas pu être annulées et peuvent être dans un état incohérent. Vérifier manuellement."
+
+msgid "Confirm Bulk Move"
+msgstr "Confirmer le déplacement en masse"
+
+msgid "This will move {{count}} org units. This cannot be undone without a snapshot."
+msgstr "Cela déplacera {{count}} unité d'organisation. Cette action ne peut pas être annulée sans sauvegarde."
+
+msgid "This will move {{count}} org units. This cannot be undone without a snapshot._plural"
+msgstr "Cela déplacera {{count}} unités d'organisation. Cette action ne peut pas être annulée sans sauvegarde."
+
+msgid "DHIS2 Administration Platform"
+msgstr "Plateforme d'administration DHIS2"
+
+msgid "Welcome to"
+msgstr "Bienvenue sur"
+
+msgid "A modern, powerful interface for managing your DHIS2 organisation hierarchy, data integrity, users, and system configuration."
+msgstr "Une interface moderne et puissante pour gérer votre hiérarchie d'organisation DHIS2, l'intégrité des données, les utilisateurs et la configuration du système."
+
+msgid "System Overview"
+msgstr "Vue d'ensemble du système"
+
+msgid "Organisation Units"
+msgstr "Unités d'organisation"
+
+msgid "System Users"
+msgstr "Utilisateurs du système"
+
+msgid "Data Integrity Issues"
+msgstr "Problèmes d'intégrité des données"
+
+msgid "Completed Bulk Ops"
+msgstr "Opérations en masse terminées"
+
+msgid "Manage Org Units"
+msgstr "Gérer les unités d'organisation"
+
+msgid "Create, edit, and organise your organisation hierarchy."
+msgstr "Créer, modifier et organiser votre hiérarchie d'organisation."
+
+msgid "Bulk create data elements and rename them in datasets — hours of work in minutes."
+msgstr "Créer en masse des éléments de données et les renommer dans les ensembles de données — des heures de travail en minutes."
+
+msgid "New"
+msgstr "Nouveau"
+
+msgid "Rename hundreds of org units at once using patterns and rules."
+msgstr "Renommer des centaines d'unités d'organisation en une fois grâce aux modèles et règles."
+
+msgid "Popular"
+msgstr "Populaire"
+
+msgid "Move org units to new parents and restructure your hierarchy."
+msgstr "Déplacer des unités d'organisation vers de nouveaux parents et restructurer votre hiérarchie."
+
+msgid "Find and resolve duplicate organisation units in your system."
+msgstr "Trouver et résoudre les doublons d'unités d'organisation dans votre système."
+
+msgid "Integrity"
+msgstr "Intégrité"
+
+msgid "Validate your org unit hierarchy for structural issues."
+msgstr "Valider votre hiérarchie d'unités d'organisation pour détecter les problèmes structurels."
+
+msgid "Check geographic data consistency and coordinate accuracy."
+msgstr "Vérifier la cohérence des données géographiques et la précision des coordonnées."
+
+msgid "User Management"
+msgstr "Gestion des utilisateurs"
+
+msgid "Manage users, roles, and access permissions."
+msgstr "Gérer les utilisateurs, les rôles et les autorisations d'accès."
+
+msgid "System Settings"
+msgstr "Paramètres système"
+
+msgid "Configure application settings and preferences."
+msgstr "Configurer les paramètres et préférences de l'application."
+
+msgid "All Modules"
+msgstr "Tous les modules"
+
+msgid "Data Quality"
+msgstr "Qualité des données"
+
+msgid "Run validation rules, detect outliers, and assess completeness and timeliness of reported data."
+msgstr "Exécuter des règles de validation, détecter les valeurs aberrantes et évaluer l'exhaustivité et la ponctualité des données déclarées."
+
+msgid "Find org units with identical or suspiciously similar names in the hierarchy."
+msgstr "Trouver des unités d'organisation avec des noms identiques ou très similaires dans la hiérarchie."
+
+msgid "pairs found"
+msgstr "paires trouvées"
+
+msgid "Scanning…"
+msgstr "Analyse en cours…"
+
+msgid "Identify org units with missing coordinates, invalid geometries, or coordinates outside their parent polygon."
+msgstr "Identifier les unités d'organisation avec des coordonnées manquantes, des géométries invalides ou des coordonnées hors du polygone parent."
+
+msgid "issues"
+msgstr "problèmes"
+
+msgid "All clean"
+msgstr "Tout est correct"
+
+msgid "Detect structural violations in the org unit hierarchy — missing parents, circular references, and level gaps."
+msgstr "Détecter les violations structurelles dans la hiérarchie des unités d'organisation — parents manquants, références circulaires et écarts de niveaux."
+
+msgid "violations"
+msgstr "violations"
+
+msgid "No violations"
+msgstr "Aucune violation"
+
+msgid "Validating…"
+msgstr "Validation en cours…"
+
+msgid "Hierarchy Viewer"
+msgstr "Visualiseur de hiérarchie"
+
+msgid "Visualise and explore the full organisation unit hierarchy in an interactive tree view."
+msgstr "Visualiser et explorer la hiérarchie complète des unités d'organisation dans une vue arborescente interactive."
+
+msgid "Interactive Hierarchy Tree"
+msgstr "Arbre hiérarchique interactif"
+
+msgid "A collapsible, searchable tree view of your entire organisation hierarchy will be available here. Click any node to view details, relationships, and assigned data sets."
+msgstr "Une vue arborescente pliable et consultable de toute votre hiérarchie d'organisation sera disponible ici. Cliquer sur un nœud pour afficher les détails, les relations et les ensembles de données assignés."
+
+msgid "Expandable tree with search"
+msgstr "Arbre extensible avec recherche"
+
+msgid "Filter by level or group"
+msgstr "Filtrer par niveau ou groupe"
+
+msgid "View geo boundaries on map"
+msgstr "Afficher les limites géographiques sur la carte"
+
+msgid "Export hierarchy as JSON or CSV"
+msgstr "Exporter la hiérarchie en JSON ou CSV"
+
+msgid "System alerts, operation results, and important messages about your DHIS2 instance."
+msgstr "Alertes système, résultats d'opérations et messages importants concernant votre instance DHIS2."
+
+msgid "4 unread"
+msgstr "4 non lus"
+
+msgid "Org Unit Groups"
+msgstr "Groupes d'unités d'organisation"
+
+msgid "Categorise organisation units into groups and group sets for analytics and access control."
+msgstr "Regrouper les unités d'organisation en groupes et ensembles de groupes pour l'analyse et le contrôle d'accès."
+
+msgid "Group Name"
+msgstr "Nom du groupe"
+
+msgid "Units"
+msgstr "Unités"
+
+msgid "Group Sets"
+msgstr "Ensembles de groupes"
+
+msgid "Create, edit, search and manage your organisation unit hierarchy."
+msgstr "Créer, modifier, rechercher et gérer votre hiérarchie d'unités d'organisation."
+
+msgid "units"
+msgstr "unités"
+
+msgid "Add organisation unit"
+msgstr "Ajouter une unité d'organisation"
+
+msgid "Error loading organisation units"
+msgstr "Erreur lors du chargement des unités d'organisation"
+
+msgid "Roles & Authorities"
+msgstr "Rôles et autorisations"
+
+msgid "Define user roles with specific authorities to control what users can see and do in DHIS2."
+msgstr "Définir des rôles utilisateur avec des autorisations spécifiques pour contrôler ce que les utilisateurs peuvent voir et faire dans DHIS2."
+
+msgid "Role Name"
+msgstr "Nom du rôle"
+
+msgid "Users"
+msgstr "Utilisateurs"
+
+msgid "Authorities"
+msgstr "Autorisations"
+
+msgid "Configure application behaviour, security policies, email notifications, and system-wide preferences."
+msgstr "Configurer le comportement de l'application, les politiques de sécurité, les notifications par email et les préférences à l'échelle du système."
+
+msgid "Usage Statistics"
+msgstr "Statistiques d'utilisation"
+
+msgid "Monitor system usage, active users, popular features, and performance metrics over time."
+msgstr "Surveiller l'utilisation du système, les utilisateurs actifs, les fonctionnalités populaires et les métriques de performance dans le temps."
+
+msgid "Active Users"
+msgstr "Utilisateurs actifs"
+
+msgid "API Requests / day"
+msgstr "Requêtes API / jour"
+
+msgid "Avg Response (ms)"
+msgstr "Réponse moy. (ms)"
+
+msgid "Error Rate"
+msgstr "Taux d'erreur"
+
+msgid "Analytics Dashboard"
+msgstr "Tableau de bord analytique"
+
+msgid "Charts, trend lines, and detailed usage reports will be available here. Track user activity, popular modules, and system performance."
+msgstr "Des graphiques, des tendances et des rapports d'utilisation détaillés seront disponibles ici. Suivez l'activité des utilisateurs, les modules populaires et les performances du système."
+
+msgid "Daily active users chart"
+msgstr "Graphique des utilisateurs actifs quotidiens"
+
+msgid "Most used features and modules"
+msgstr "Fonctionnalités et modules les plus utilisés"
+
+msgid "Performance and error rate trends"
+msgstr "Tendances des performances et du taux d'erreur"
+
+msgid "Export reports as PDF or CSV"
+msgstr "Exporter les rapports en PDF ou CSV"
+
+msgid "User Groups"
+msgstr "Groupes d'utilisateurs"
+
+msgid "Organise users into groups to simplify sharing and access control across DHIS2 objects."
+msgstr "Organiser les utilisateurs en groupes pour simplifier le partage et le contrôle d'accès sur les objets DHIS2."
+
+msgid "Members"
+msgstr "Membres"
+
+msgid "Managed"
+msgstr "Géré"
+
+msgid "Create and manage system users, assign roles, and control access to DHIS2 resources."
+msgstr "Créer et gérer les utilisateurs du système, assigner des rôles et contrôler l'accès aux ressources DHIS2."
+
+msgid "This module is under active development. User management, role assignments, and permission configuration will be available here."
+msgstr "Ce module est en cours de développement actif. La gestion des utilisateurs, les assignations de rôles et la configuration des permissions seront disponibles ici."
+
+msgid "Create and edit user accounts"
+msgstr "Créer et modifier des comptes utilisateur"
+
+msgid "Assign roles and authorities"
+msgstr "Assigner des rôles et des autorisations"
+
+msgid "Manage user groups and access"
+msgstr "Gérer les groupes d'utilisateurs et l'accès"
+
+msgid "Bulk import users from CSV"
+msgstr "Importer des utilisateurs en masse depuis CSV"
+
+msgid "…"
+msgstr "…"

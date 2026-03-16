@@ -87,10 +87,10 @@ export default function BulkRename() {
               count: state.totalRenamed,
             })}
           </span>
-          <button className={styles.resetBtn} onClick={continueRenaming}>
+          <button type="button" className={styles.resetBtn} onClick={continueRenaming}>
             {i18n.t('Continue Renaming')}
           </button>
-          <button className={styles.resetBtn} onClick={reset}>
+          <button type="button" className={styles.resetBtn} onClick={reset}>
             {i18n.t('New Session')}
           </button>
         </div>
@@ -104,7 +104,7 @@ export default function BulkRename() {
               {e}
             </p>
           ))}
-          <button className={styles.resetBtn} onClick={reset}>
+          <button type="button" className={styles.resetBtn} onClick={reset}>
             {i18n.t('Try Again')}
           </button>
         </div>

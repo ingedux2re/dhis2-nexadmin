@@ -333,7 +333,12 @@ export const BulkRenameTable: FC<Props> = ({
           )}
 
           {selectedIds.size > 0 && (
-            <button className={styles.clearSelBtn} onClick={clearSelection} disabled={disabled}>
+            <button
+              type="button"
+              className={styles.clearSelBtn}
+              onClick={clearSelection}
+              disabled={disabled}
+            >
               {i18n.t('Clear selection')}
             </button>
           )}
@@ -409,6 +414,7 @@ export const BulkRenameTable: FC<Props> = ({
           </div>
           <div className={styles.pageNav}>
             <button
+              type="button"
               className={styles.pageBtn}
               onClick={() => setPage(1)}
               disabled={page === 1}
@@ -417,6 +423,7 @@ export const BulkRenameTable: FC<Props> = ({
               «
             </button>
             <button
+              type="button"
               className={styles.pageBtn}
               onClick={() => setPage((p) => Math.max(1, p - 1))}
               disabled={page === 1}
@@ -428,6 +435,7 @@ export const BulkRenameTable: FC<Props> = ({
               {i18n.t('{{page}} / {{total}}', { page, total: totalPages })}
             </span>
             <button
+              type="button"
               className={styles.pageBtn}
               onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
               disabled={page === totalPages}
@@ -436,6 +444,7 @@ export const BulkRenameTable: FC<Props> = ({
               ›
             </button>
             <button
+              type="button"
               className={styles.pageBtn}
               onClick={() => setPage(totalPages)}
               disabled={page === totalPages}
@@ -519,6 +528,7 @@ export const BulkRenameTable: FC<Props> = ({
             )}
 
             <button
+              type="button"
               className={styles.applyBtn}
               onClick={handleApply}
               disabled={disabled || changedCount === 0}
@@ -529,7 +539,12 @@ export const BulkRenameTable: FC<Props> = ({
             </button>
 
             {changedCount > 0 && (
-              <button className={styles.exportBtn} onClick={handleExportCsv} disabled={disabled}>
+              <button
+                type="button"
+                className={styles.exportBtn}
+                onClick={handleExportCsv}
+                disabled={disabled}
+              >
                 {i18n.t('Export CSV')}
               </button>
             )}

@@ -25,13 +25,19 @@ export const Layout: FC<LayoutProps> = ({ children }) => (
       </div>
       <div className={styles.topBarRight}>
         <button
+          type="button"
           className={styles.topBarIconBtn}
           aria-label={i18n.t('Notifications')}
           title={i18n.t('Notifications')}
         >
           <span className="material-icons-round">notifications</span>
         </button>
-        <button className={styles.topBarIconBtn} aria-label={i18n.t('Help')} title={i18n.t('Help')}>
+        <button
+          type="button"
+          className={styles.topBarIconBtn}
+          aria-label={i18n.t('Help')}
+          title={i18n.t('Help')}
+        >
           <span className="material-icons-round">help_outline</span>
         </button>
         <div className={styles.topBarDivider} aria-hidden="true" />
