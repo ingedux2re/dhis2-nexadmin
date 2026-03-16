@@ -3,17 +3,21 @@
 //
 // State machine for Tab 2 — Rename Data Elements in Dataset.
 //
-// API strategy: PUT /api/dataElements/{id}?mergeMode=REPLACE
+// API strategy: POST /api/metadata?importStrategy=UPDATE&mergeMode=REPLACE
+//   Body: { dataElements: [{ id, name, shortName, valueType, domainType,
+//                            aggregationType, categoryCombo? }] }
 //
-// Payload fields sent per element:
-//   { id, name, shortName, valueType, domainType, aggregationType, categoryCombo }
+// This is the IDENTICAL approach used by useBulkCreateElements (Tab 1), which
+// is confirmed to work. The only difference is importStrategy=UPDATE instead
+// of CREATE. Sending the batch in one POST is also faster than N individual
+// PATCHes/PUTs and avoids per-element CORS pre-flights.
 //
-// All of these are already available from the dataset-elements query
-// (useDatasetElements), so no extra GET-per-element is needed.
-//
-// IMPORTANT: DHIS2 PUT /api/dataElements returns a metadata import result JSON
-// with status 'OK' or 'ERROR' — it does NOT always throw on failure.
-// We must check result.status and extract errorReports manually.
+// Why not PUT /api/dataElements/{id}?
+// ─────────────────────────────────────────────────────────────────────────────
+// type:'update' in @dhis2/app-runtime maps to PATCH (not PUT). DHIS2 rejects
+// PATCH /api/dataElements/{id} with mergeMode=REPLACE because it treats PATCH
+// as a JSON-merge-patch and ignores the mergeMode parameter.
+// The metadata batch endpoint is the documented way to update multiple objects.
 //
 // State machine:
 //   idle  ──(requestConfirm)──► confirming
@@ -69,6 +73,11 @@ const INITIAL: BulkRenameElementsState = {
   errors: [],
 }
 
+// ── Constants ─────────────────────────────────────────────────────────────────
+
+/** Max elements per metadata POST — keeps requests manageable */
+const BATCH_SIZE = 50
+
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
 function buildPreviews(
@@ -108,11 +117,40 @@ function buildShortNameWarnings(previews: DataElementRenamePreview[]): ShortName
     }))
 }
 
+/** Split an array into chunks of at most `size` items */
+function chunk<T>(arr: T[], size: number): T[][] {
+  const out: T[][] = []
+  for (let i = 0; i < arr.length; i += size) out.push(arr.slice(i, i + size))
+  return out
+}
+
 /**
- * Extract a human-readable error string from a DHIS2 import response body.
- * DHIS2 PUT /api/dataElements returns a metadata import result JSON
- * (status: 'OK' | 'WARNING' | 'ERROR') rather than throwing an HTTP error.
- * We check this explicitly after every mutate call.
+ * Build a single dataElement entry for the metadata POST body.
+ * Includes all fields required by DHIS2 server-side validation.
+ */
+function buildMetadataEntry(
+  p: DataElementRenamePreview,
+  name: string,
+  shortName: string
+): Record<string, unknown> {
+  const entry: Record<string, unknown> = {
+    id: p.id,
+    name,
+    shortName,
+    valueType: p.valueType,
+    domainType: p.domainType,
+    aggregationType: p.aggregationType,
+  }
+  if (p.categoryComboId) {
+    entry.categoryCombo = { id: p.categoryComboId }
+  }
+  return entry
+}
+
+/**
+ * Walk typeReports → objectReports → errorReports and collect messages.
+ * DHIS2 POST /api/metadata returns { status, typeReports } with HTTP 200
+ * even when the operation fails — we must inspect status explicitly.
  */
 function extractImportErrors(raw: unknown): string[] {
   const r = raw as Record<string, unknown>
@@ -132,7 +170,6 @@ function extractImportErrors(raw: unknown): string[] {
       }
     }
   }
-  // Fallback to top-level message
   if (msgs.length === 0 && typeof r.message === 'string' && r.message) {
     msgs.push(r.message)
   }
@@ -141,7 +178,7 @@ function extractImportErrors(raw: unknown): string[] {
 
 /**
  * Extract the most useful error string from a thrown exception.
- * The runtime wraps HTTP errors; .message may contain a JSON body.
+ * The @dhis2/app-runtime wraps HTTP errors; .message may contain a JSON body.
  */
 function extractErrorMessage(err: unknown): string {
   if (!(err instanceof Error)) return String(err)
@@ -151,26 +188,9 @@ function extractErrorMessage(err: unknown): string {
     if (errs.length > 0) return errs.join('; ')
     if (typeof body.message === 'string' && body.message) return body.message
   } catch {
-    // Not JSON — fall through
+    /* not JSON — fall through */
   }
   return err.message
-}
-
-/** Build the PUT data payload for a single element rename */
-function buildPutPayload(p: DataElementRenamePreview, name: string, shortName: string) {
-  const payload: Record<string, unknown> = {
-    id: p.id,
-    name,
-    shortName,
-    valueType: p.valueType,
-    domainType: p.domainType,
-    aggregationType: p.aggregationType,
-  }
-  // categoryCombo is required by most DHIS2 instances — include when known
-  if (p.categoryComboId) {
-    payload.categoryCombo = { id: p.categoryComboId }
-  }
-  return payload
 }
 
 // ── Hook ─────────────────────────────────────────────────────────────────────
@@ -221,15 +241,48 @@ export function useBulkRenameElements() {
   }, [])
 
   /**
-   * Execute renames using PUT /api/dataElements/{id}?mergeMode=REPLACE.
+   * Post a batch of previews to POST /api/metadata?importStrategy=UPDATE&mergeMode=REPLACE.
+   * Returns an error message string on failure, or null on success.
+   */
+  const postBatch = useCallback(
+    async (
+      batch: DataElementRenamePreview[],
+      nameGetter: (p: DataElementRenamePreview) => string,
+      shortNameGetter: (p: DataElementRenamePreview) => string
+    ): Promise<string | null> => {
+      const dataElements = batch.map((p) =>
+        buildMetadataEntry(p, nameGetter(p), shortNameGetter(p))
+      )
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const raw = await (engine as any).mutate({
+        resource: 'metadata',
+        type: 'create', // 'create' → POST — same as Bulk Create tab
+        params: {
+          importStrategy: 'UPDATE',
+          mergeMode: 'REPLACE',
+          atomic: 'false', // don't roll back the whole batch on one error
+        },
+        data: { dataElements },
+      })
+
+      // metadata endpoint returns { status: 'OK' | 'WARNING' | 'ERROR', ... }
+      if (raw && typeof raw === 'object') {
+        const status = (raw as Record<string, unknown>).status
+        if (status === 'ERROR') {
+          const errs = extractImportErrors(raw)
+          return errs.length > 0 ? errs.join('; ') : 'Server returned ERROR status'
+        }
+      }
+      return null
+    },
+    [engine]
+  )
+
+  /**
+   * Execute renames via POST /api/metadata with importStrategy=UPDATE.
    *
-   * The payload includes all required fields (name, shortName, valueType,
-   * domainType, aggregationType, categoryCombo) so DHIS2 accepts the request
-   * without needing to fetch the full element first.
-   *
-   * IMPORTANT: DHIS2 returns a metadata import result JSON with HTTP 200 even
-   * on validation failure. We check result.status after every call and throw
-   * manually when it is 'ERROR' so the error is surfaced to the user.
+   * Sends elements in batches of BATCH_SIZE. Progress is updated after each
+   * batch. On failure the completed batches are rolled back (best effort).
    */
   const execute = useCallback(
     async (previews: DataElementRenamePreview[]) => {
@@ -243,43 +296,33 @@ export function useBulkRenameElements() {
         rolledBack: 0,
       }))
 
-      const succeeded: DataElementRenamePreview[] = []
+      const batches = chunk(previews, BATCH_SIZE)
+      const succeededBatches: DataElementRenamePreview[][] = []
       const errors: string[] = []
+      let totalDone = 0
 
-      for (let i = 0; i < previews.length; i++) {
-        const p = previews[i]
+      for (const batch of batches) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const raw = await (engine as any).mutate({
-            resource: 'dataElements',
-            type: 'update',
-            id: p.id,
-            params: { mergeMode: 'REPLACE' },
-            data: buildPutPayload(p, p.newName, p.newShortName),
-          })
-
-          // DHIS2 returns { status: 'OK' | 'WARNING' | 'ERROR', ... } with HTTP 200
-          // A status of ERROR means validation failed — we must check it explicitly.
-          if (raw && typeof raw === 'object') {
-            const status = (raw as Record<string, unknown>).status
-            if (status === 'ERROR' || status === 'WARNING') {
-              const errs = extractImportErrors(raw)
-              throw new Error(
-                errs.length > 0 ? errs.join('; ') : `Server returned status ${String(status)}`
-              )
-            }
+          const err = await postBatch(
+            batch,
+            (p) => p.newName,
+            (p) => p.newShortName
+          )
+          if (err) {
+            errors.push(err)
+            break
           }
-
-          succeeded.push(p)
+          succeededBatches.push(batch)
+          totalDone += batch.length
         } catch (err: unknown) {
-          errors.push(`${p.oldName}: ${extractErrorMessage(err)}`)
+          errors.push(extractErrorMessage(err))
           break
         }
 
         setState((s) => ({
           ...s,
-          completed: i + 1,
-          progress: Math.round(((i + 1) / previews.length) * 100),
+          completed: totalDone,
+          progress: Math.round((totalDone / previews.length) * 100),
         }))
       }
 
@@ -289,32 +332,29 @@ export function useBulkRenameElements() {
           status: 'done',
           progress: 100,
           completed: previews.length,
-          totalRenamed: s.totalRenamed + succeeded.length,
+          totalRenamed: s.totalRenamed + previews.length,
         }))
         return
       }
 
-      // ── Partial failure: rollback already-renamed elements ────────────────
+      // ── Rollback succeeded batches (best effort) ──────────────────────────
       let rolledBack = 0
-      for (const p of succeeded) {
+      for (const batch of succeededBatches) {
         try {
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await (engine as any).mutate({
-            resource: 'dataElements',
-            type: 'update',
-            id: p.id,
-            params: { mergeMode: 'REPLACE' },
-            data: buildPutPayload(p, p.oldName, p.oldShortName),
-          })
-          rolledBack++
+          const rbErr = await postBatch(
+            batch,
+            (p) => p.oldName,
+            (p) => p.oldShortName
+          )
+          if (!rbErr) rolledBack += batch.length
         } catch {
-          // Ignore rollback failures — user is informed of the partial state
+          /* ignore rollback failures */
         }
       }
 
       setState((s) => ({ ...s, status: 'error', errors, rolledBack }))
     },
-    [engine]
+    [postBatch]
   )
 
   /** Return to idle preserving the session totalRenamed counter */
