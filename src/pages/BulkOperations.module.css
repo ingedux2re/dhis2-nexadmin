@@ -25,19 +25,20 @@
 }
 
 /*
- * .pageScroll — used by BulkRename so the rename action panel
- * (position:sticky;bottom:0 in BulkRenameTable.module.css) works
- * correctly: sticky positioning requires a scroll container ancestor.
- * The .main element in Layout already provides overflow-y:auto,
- * so .pageScroll just limits width and adds padding like .page does.
+ * .pageScroll — BulkRename page.
+ * Fills the available viewport height so BulkRenameTable can split
+ * itself into a scrolling table area (top, flex:1) and a pinned
+ * rename panel (bottom, flex-shrink:0) without any page-level scrolling.
  */
 .pageScroll {
   padding: var(--page-padding);
   max-width: var(--content-max);
+  /* Fill the .main scroll container height */
+  height: calc(100dvh - var(--topbar-height));
   display: flex;
   flex-direction: column;
-  gap: var(--space-6);
-  /* Pad the bottom so the sticky panel doesn't cover the last row */
+  gap: var(--space-4);
+  overflow: hidden;
   padding-bottom: 0;
 }
 
