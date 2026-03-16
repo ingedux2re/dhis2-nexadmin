@@ -10,10 +10,11 @@ import {
   OrgUnitForm,
   OrgUnitDeleteDialog,
 } from '../components/OrgUnit'
+import { PageHeader } from '../components/shared/PageHeader'
 import type {
   OrgUnitListItem,
   OrgUnitCreatePayload,
-  OrgUnitUpdatePayload, // [2] OrgUnitPatchPayload n'existe pas → OrgUnitUpdatePayload
+  OrgUnitUpdatePayload,
   OrgUnitsQueryParams,
 } from '../types/orgUnit'
 import i18n from '@dhis2/d2-i18n'
@@ -107,22 +108,24 @@ export default function OrgUnitManagement() {
   return (
     <div className={styles.page} data-test="orgunit-management-page">
       {/* header */}
-      <div className={styles.header}>
-        <div className={styles.headerLeft}>
-          <h1 className={styles.title}>{i18n.t('Organisation Units')}</h1>
-          {pager?.total !== undefined && (
-            <span className={styles.subtitle}>
-              {i18n.t('Managing ')}
-              <span className={styles.subtitleCount}>
-                {pager.total} {i18n.t('units')}
-              </span>
+      <PageHeader
+        icon="domain"
+        title={i18n.t('Organisation Units')}
+        description={i18n.t('Create, edit, search and manage your organisation unit hierarchy.')}
+        accentColor="brand"
+        badge={
+          pager?.total !== undefined ? (
+            <span className="nx-chip nx-chip-brand">
+              {pager.total.toLocaleString()} {i18n.t('units')}
             </span>
-          )}
-        </div>
-        <Button primary icon={<IconAdd24 />} onClick={openCreate} dataTest="create-orgunit-btn">
-          {i18n.t('Add organisation unit')}
-        </Button>
-      </div>
+          ) : undefined
+        }
+        actions={
+          <Button primary icon={<IconAdd24 />} onClick={openCreate} dataTest="create-orgunit-btn">
+            {i18n.t('Add organisation unit')}
+          </Button>
+        }
+      />
 
       {/* toolbar */}
       <div className={styles.toolbar}>
