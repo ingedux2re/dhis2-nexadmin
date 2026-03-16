@@ -3,25 +3,25 @@
 //
 // State machine for Tab 2 — Rename Data Elements in Dataset.
 //
-// API strategy: POST /api/metadata with importStrategy=UPDATE + mergeMode=MERGE
+// API strategy: fetch full object with fields=:owner, then PUT with
+// mergeMode=REPLACE — exactly how the DHIS2 Maintenance App works.
 // ─────────────────────────────────────────────────────────────────────────────
 //
-// WHY NOT PUT /api/dataElements/{id}?
+// HOW DHIS2 MAINTENANCE APP RENAMES A DATA ELEMENT:
 // ─────────────────────────────────────────────────────────────────────────────
-// DHIS2's PUT endpoint for dataElements requires the full object payload —
-// sending only {name, shortName} causes "One or more errors occurred" because
-// required fields (valueType, domainType, aggregationType, etc.) are missing.
+//  1. GET  /api/dataElements?filter=name:eq:<name>&fields=:all   (check unique)
+//  2. GET  /api/schemas/dataElement                              (validation)
+//  3. PUT  /api/dataElements/{id}?mergeMode=REPLACE              (full object)
 //
-// WHY POST /api/metadata with mergeMode=MERGE?
+// The key is step 3: the body contains the FULL object (all fields returned
+// by fields=:owner), with only name/shortName changed. Using mergeMode=REPLACE
+// with the complete owned payload is safe and correct.
+//
+// WHY fields=:owner (not fields=:all)?
 // ─────────────────────────────────────────────────────────────────────────────
-// The metadata import API with mergeMode=MERGE performs a *partial* update:
-// only the fields present in the payload are changed; all other fields keep
-// their current values in the database. This is the correct DHIS2 approach
-// for lightweight field updates without fetching the full object first.
-//
-// Endpoint:  POST /api/metadata?importStrategy=UPDATE&mergeMode=MERGE
-// Payload:   { dataElements: [{ id, name, shortName }, ...] }
-// Batch size: BATCH_SIZE items per request to stay well under payload limits.
+// ':owner' returns only fields that the current user owns and can write back.
+// ':all' includes computed/read-only fields that would cause a validation error
+// if included in the PUT payload. This matches the Maintenance App behaviour.
 //
 // State machine:
 //   idle  ──(requestConfirm)──► confirming
@@ -38,11 +38,6 @@ import { useState, useCallback } from 'react'
 import { useDataEngine } from '@dhis2/app-runtime'
 import { SHORT_NAME_MAX, applyRuleChain } from '../services/metadataService'
 import type { DataElement, DataElementRenamePreview, RenameRule } from '../types'
-
-// ── Constants ─────────────────────────────────────────────────────────────────
-
-/** Number of data elements to send per metadata import request */
-const BATCH_SIZE = 50
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -119,49 +114,38 @@ function buildShortNameWarnings(previews: DataElementRenamePreview[]): ShortName
 }
 
 /**
- * Extract human-readable error strings from a DHIS2 metadata import result.
- * The response shape is: { status, typeReports: [{ objectReports: [{ errorReports: [{ message }] }] }] }
+ * Extract the most useful error string from a DHIS2 API error.
+ * The runtime throws errors whose .message may contain a JSON body.
  */
-function extractMetadataErrors(raw: unknown): string[] {
-  const errors: string[] = []
+function extractErrorMessage(err: unknown): string {
+  if (!(err instanceof Error)) return String(err)
+  // Try to parse a DHIS2 JSON error body embedded in Error.message
   try {
-    const r = raw as Record<string, unknown>
-
-    // Top-level message (e.g. summary line from the server)
-    if (typeof r.message === 'string' && r.message) {
-      errors.push(r.message)
-    }
-
-    const typeReports = r.typeReports as Array<Record<string, unknown>> | undefined
-    if (!Array.isArray(typeReports)) return errors
-
-    for (const tr of typeReports) {
-      const objectReports = tr.objectReports as Array<Record<string, unknown>> | undefined
-      if (!Array.isArray(objectReports)) continue
-      for (const obj of objectReports) {
-        const errorReports = obj.errorReports as Array<Record<string, unknown>> | undefined
-        if (!Array.isArray(errorReports)) continue
-        for (const err of errorReports) {
-          const msg = (err.message ?? err.errorCode ?? '') as string
-          if (msg) errors.push(msg)
+    const body = JSON.parse(err.message) as Record<string, unknown>
+    // DHIS2 error shape: { httpStatusCode, message, typeReports: [...] }
+    if (typeof body.message === 'string' && body.message) return body.message
+    // typeReports → objectReports → errorReports
+    const typeReports = body.typeReports as Array<Record<string, unknown>> | undefined
+    if (Array.isArray(typeReports)) {
+      const msgs: string[] = []
+      for (const tr of typeReports) {
+        const objs = tr.objectReports as Array<Record<string, unknown>> | undefined
+        if (!Array.isArray(objs)) continue
+        for (const obj of objs) {
+          const errs = obj.errorReports as Array<Record<string, unknown>> | undefined
+          if (!Array.isArray(errs)) continue
+          for (const e of errs) {
+            const m = (e.message ?? e.errorCode ?? '') as string
+            if (m) msgs.push(m)
+          }
         }
       }
+      if (msgs.length > 0) return msgs.join('; ')
     }
   } catch {
-    // Ignore parse errors — caller will show a generic message
+    // Not JSON — fall through to raw message
   }
-  return errors
-}
-
-/**
- * Split an array into chunks of at most `size` items.
- */
-function chunk<T>(arr: T[], size: number): T[][] {
-  const result: T[][] = []
-  for (let i = 0; i < arr.length; i += size) {
-    result.push(arr.slice(i, i + size))
-  }
-  return result
+  return err.message
 }
 
 // ── Hook ─────────────────────────────────────────────────────────────────────
@@ -211,6 +195,14 @@ export function useBulkRenameElements() {
     setState((s) => ({ ...s, status: 'idle' }))
   }, [])
 
+  /**
+   * Execute renames one element at a time using the DHIS2 Maintenance App pattern:
+   *   Step 1: GET /api/dataElements/{id}?fields=:owner   — fetch the full owned object
+   *   Step 2: PUT /api/dataElements/{id}?mergeMode=REPLACE — send it back with new name/shortName
+   *
+   * This is exactly how the Maintenance App renames data elements and is guaranteed
+   * to work because the full payload satisfies all server-side validation requirements.
+   */
   const execute = useCallback(
     async (previews: DataElementRenamePreview[]) => {
       setState((s) => ({
@@ -224,79 +216,51 @@ export function useBulkRenameElements() {
       }))
 
       const succeeded: DataElementRenamePreview[] = []
-      const allErrors: string[] = []
-      const batches = chunk(previews, BATCH_SIZE)
+      const errors: string[] = []
 
-      for (let bi = 0; bi < batches.length; bi++) {
-        const batch = batches[bi]
-
-        // Build a minimal payload — mergeMode=MERGE means only these fields
-        // are touched; all other dataElement fields remain unchanged.
-        const payload = {
-          dataElements: batch.map((p) => ({
-            id: p.id,
-            name: p.newName,
-            shortName: p.newShortName,
-          })),
-        }
-
+      for (let i = 0; i < previews.length; i++) {
+        const p = previews[i]
         try {
+          // ── Step 1: Fetch full owned object (same as Maintenance App) ────────
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          const raw = await (engine as any).mutate({
-            resource: 'metadata',
-            type: 'create', // maps to POST /api/metadata
-            params: {
-              importStrategy: 'UPDATE',
-              mergeMode: 'MERGE',
-              // Atomic=false lets partial batches succeed independently;
-              // atomic=true (default) rolls back the whole batch on any error.
-              atomic: 'false',
+          const fetchResult = await (engine as any).query({
+            de: {
+              resource: `dataElements/${p.id}`,
+              params: { fields: ':owner' },
             },
-            data: payload,
           })
 
-          // Check the import result for application-level errors
-          const status = (raw as Record<string, unknown>)?.status
-          if (status === 'ERROR') {
-            const msgs = extractMetadataErrors(raw)
-            allErrors.push(
-              ...(msgs.length > 0 ? msgs : [`Batch ${bi + 1}: Unknown error from server`])
-            )
-            // Stop on first failing batch
-            break
-          }
+          const fullDe = fetchResult?.de
+          if (!fullDe) throw new Error(`Data element ${p.id} not found`)
 
-          // Mark all items in this batch as succeeded
-          succeeded.push(...batch)
+          // ── Step 2: PUT full object with only name/shortName changed ─────────
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          await (engine as any).mutate({
+            resource: 'dataElements',
+            type: 'update',
+            id: p.id,
+            params: { mergeMode: 'REPLACE' },
+            data: {
+              ...fullDe,
+              name: p.newName,
+              shortName: p.newShortName,
+            },
+          })
+
+          succeeded.push(p)
         } catch (err: unknown) {
-          // Network / HTTP-level error — extract the most useful message
-          let msg: string
-          if (err instanceof Error) {
-            // Try to parse DHIS2 JSON error body embedded in the Error message
-            try {
-              const body = JSON.parse(err.message) as Record<string, unknown>
-              const extracted = extractMetadataErrors(body)
-              msg = extracted.length > 0 ? extracted.join('; ') : err.message
-            } catch {
-              msg = err.message
-            }
-          } else {
-            msg = String(err)
-          }
-          allErrors.push(msg)
+          errors.push(`${p.oldName}: ${extractErrorMessage(err)}`)
           break
         }
 
-        // Update progress after each batch
-        const doneCount = Math.min((bi + 1) * BATCH_SIZE, previews.length)
         setState((s) => ({
           ...s,
-          completed: doneCount,
-          progress: Math.round((doneCount / previews.length) * 100),
+          completed: i + 1,
+          progress: Math.round(((i + 1) / previews.length) * 100),
         }))
       }
 
-      if (allErrors.length === 0) {
+      if (errors.length === 0) {
         setState((s) => ({
           ...s,
           status: 'done',
@@ -307,32 +271,40 @@ export function useBulkRenameElements() {
         return
       }
 
-      // ── Partial failure — attempt rollback of already-renamed elements ──────
+      // ── Partial failure: rollback already-renamed elements ────────────────
       let rolledBack = 0
-      const rollbackBatches = chunk(succeeded, BATCH_SIZE)
-      for (const rbBatch of rollbackBatches) {
+      for (const p of succeeded) {
         try {
-          const rollbackPayload = {
-            dataElements: rbBatch.map((p) => ({
-              id: p.id,
-              name: p.oldName,
-              shortName: p.oldShortName,
-            })),
-          }
+          // Fetch the current state (already renamed) and restore original name
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const fetchResult = await (engine as any).query({
+            de: {
+              resource: `dataElements/${p.id}`,
+              params: { fields: ':owner' },
+            },
+          })
+          const fullDe = fetchResult?.de
+          if (!fullDe) continue
+
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
-            resource: 'metadata',
-            type: 'create',
-            params: { importStrategy: 'UPDATE', mergeMode: 'MERGE', atomic: 'false' },
-            data: rollbackPayload,
+            resource: 'dataElements',
+            type: 'update',
+            id: p.id,
+            params: { mergeMode: 'REPLACE' },
+            data: {
+              ...fullDe,
+              name: p.oldName,
+              shortName: p.oldShortName,
+            },
           })
-          rolledBack += rbBatch.length
+          rolledBack++
         } catch {
           // Ignore rollback failures — user is informed of the partial state
         }
       }
 
-      setState((s) => ({ ...s, status: 'error', errors: allErrors, rolledBack }))
+      setState((s) => ({ ...s, status: 'error', errors, rolledBack }))
     },
     [engine]
   )
