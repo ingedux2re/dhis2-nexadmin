@@ -108,11 +108,14 @@ export default function OrgUnitManagement() {
     <div className={styles.page} data-test="orgunit-management-page">
       {/* header */}
       <div className={styles.header}>
-        <div>
+        <div className={styles.headerLeft}>
           <h1 className={styles.title}>{i18n.t('Organisation Units')}</h1>
           {pager?.total !== undefined && (
             <span className={styles.subtitle}>
-              {i18n.t('{{total}} total', { total: pager.total })}
+              {i18n.t('Managing ')}
+              <span className={styles.subtitleCount}>
+                {pager.total} {i18n.t('units')}
+              </span>
             </span>
           )}
         </div>

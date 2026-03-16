@@ -1,15 +1,17 @@
-.errorBox {
-  margin-bottom: 16px;
-}
+/* ── OrgUnitForm modal form ──────────────────────────────────── */
+
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
+  gap: var(--space-4);
+  padding: var(--space-2) 0;
 }
+
 .fullWidth {
   grid-column: 1 / -1;
 }
-@media (max-width: 600px) {
+
+@media (max-width: 560px) {
   .grid {
     grid-template-columns: 1fr;
   }

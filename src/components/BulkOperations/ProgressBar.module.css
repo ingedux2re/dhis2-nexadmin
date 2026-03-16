@@ -1,38 +1,75 @@
+/* ── ProgressBar ─────────────────────────────────────────────── */
+
 .container {
-  width: 100%;
-  margin: 1rem 0;
+  background: var(--surface-card);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-4) var(--space-5);
+  box-shadow: var(--shadow-sm);
 }
 
 .track {
   height: 8px;
-  background: #e0e0e0;
-  border-radius: 4px;
+  background: var(--grey-200);
+  border-radius: var(--radius-full);
   overflow: hidden;
 }
 
 .fill {
   height: 100%;
-  background: #2064d0;
-  border-radius: 4px;
-  transition: width 0.25s ease;
+  background: linear-gradient(90deg, var(--brand-500), var(--accent-500));
+  border-radius: var(--radius-full);
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+/* animated shimmer on fill */
+.fill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.35) 50%,
+    transparent 100%
+  );
+  animation: shimmer 1.4s infinite;
+}
+
+@keyframes shimmer {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 .meta {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: 0.4rem;
-  font-size: 0.82rem;
-  color: #555;
+  margin-top: var(--space-3);
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  gap: var(--space-3);
 }
 
 .label {
   flex: 1;
+  font-weight: var(--weight-medium);
 }
+
 .count {
-  margin: 0 0.75rem;
+  color: var(--text-tertiary);
+  font-size: var(--text-xs);
 }
+
 .percent {
-  font-weight: 600;
-  color: #2064d0;
+  font-weight: var(--weight-bold);
+  color: var(--brand-600);
+  font-size: var(--text-sm);
+  min-width: 40px;
+  text-align: right;
 }

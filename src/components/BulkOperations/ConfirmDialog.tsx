@@ -84,7 +84,7 @@ export function ConfirmDialog({
       aria-labelledby="confirm-title"
       aria-describedby="confirm-message"
     >
-      <div className={styles.dialog} ref={dialogRef}>
+      <div className={styles.dialog} ref={dialogRef} data-destructive={String(destructive)}>
         <h2 id="confirm-title" className={styles.title}>
           {title}
         </h2>
