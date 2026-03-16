@@ -215,6 +215,8 @@ export interface DataElementRenamePreview {
    */
   domainType: DomainType
   aggregationType: AggregationType
+  /** DHIS2 id of the categoryCombo — included in PUT to preserve the assignment */
+  categoryComboId?: string
   changed: boolean
 }
 

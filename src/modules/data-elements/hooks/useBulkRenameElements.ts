@@ -3,22 +3,17 @@
 //
 // State machine for Tab 2 — Rename Data Elements in Dataset.
 //
-// API strategy: PUT /api/dataElements/{id}?mergeMode=REPLACE with the minimum
-// required fields that satisfy DHIS2 server-side validation:
-//   { id, name, shortName, valueType, domainType, aggregationType }
+// API strategy: PUT /api/dataElements/{id}?mergeMode=REPLACE
+//
+// Payload fields sent per element:
+//   { id, name, shortName, valueType, domainType, aggregationType, categoryCombo }
 //
 // All of these are already available from the dataset-elements query
 // (useDatasetElements), so no extra GET-per-element is needed.
 //
-// WHY NOT FETCH FIRST?
-// ────────────────────
-// The DHIS2 Maintenance App fetches fields=:owner then PUTs the full object.
-// For bulk operations over many elements this is wasteful (N extra GETs) and
-// error-prone (nested objects in the full payload may cause validation issues).
-//
-// Instead, we include the three truly required scalar fields — valueType,
-// domainType, aggregationType — in the DataElementRenamePreview so the hook
-// has everything it needs without any additional requests.
+// IMPORTANT: DHIS2 PUT /api/dataElements returns a metadata import result JSON
+// with status 'OK' or 'ERROR' — it does NOT always throw on failure.
+// We must check result.status and extract errorReports manually.
 //
 // State machine:
 //   idle  ──(requestConfirm)──► confirming
@@ -96,6 +91,7 @@ function buildPreviews(
         valueType: el.valueType,
         domainType: el.domainType,
         aggregationType: el.aggregationType,
+        categoryComboId: el.categoryCombo?.id,
         changed: newName !== el.name,
       }
     })
@@ -113,38 +109,68 @@ function buildShortNameWarnings(previews: DataElementRenamePreview[]): ShortName
 }
 
 /**
- * Extract the most useful error string from a DHIS2 API error.
- * The runtime throws errors whose .message may contain a JSON body.
+ * Extract a human-readable error string from a DHIS2 import response body.
+ * DHIS2 PUT /api/dataElements returns a metadata import result JSON
+ * (status: 'OK' | 'WARNING' | 'ERROR') rather than throwing an HTTP error.
+ * We check this explicitly after every mutate call.
+ */
+function extractImportErrors(raw: unknown): string[] {
+  const r = raw as Record<string, unknown>
+  const msgs: string[] = []
+  const typeReports = r.typeReports as Array<Record<string, unknown>> | undefined
+  if (Array.isArray(typeReports)) {
+    for (const tr of typeReports) {
+      const objs = tr.objectReports as Array<Record<string, unknown>> | undefined
+      if (!Array.isArray(objs)) continue
+      for (const obj of objs) {
+        const errs = obj.errorReports as Array<Record<string, unknown>> | undefined
+        if (!Array.isArray(errs)) continue
+        for (const e of errs) {
+          const m = String(e.message ?? e.errorCode ?? '')
+          if (m) msgs.push(m)
+        }
+      }
+    }
+  }
+  // Fallback to top-level message
+  if (msgs.length === 0 && typeof r.message === 'string' && r.message) {
+    msgs.push(r.message)
+  }
+  return msgs
+}
+
+/**
+ * Extract the most useful error string from a thrown exception.
+ * The runtime wraps HTTP errors; .message may contain a JSON body.
  */
 function extractErrorMessage(err: unknown): string {
   if (!(err instanceof Error)) return String(err)
-  // Try to parse a DHIS2 JSON error body embedded in Error.message
   try {
     const body = JSON.parse(err.message) as Record<string, unknown>
-    // DHIS2 error shape: { httpStatusCode, message, typeReports: [...] }
+    const errs = extractImportErrors(body)
+    if (errs.length > 0) return errs.join('; ')
     if (typeof body.message === 'string' && body.message) return body.message
-    // typeReports → objectReports → errorReports
-    const typeReports = body.typeReports as Array<Record<string, unknown>> | undefined
-    if (Array.isArray(typeReports)) {
-      const msgs: string[] = []
-      for (const tr of typeReports) {
-        const objs = tr.objectReports as Array<Record<string, unknown>> | undefined
-        if (!Array.isArray(objs)) continue
-        for (const obj of objs) {
-          const errs = obj.errorReports as Array<Record<string, unknown>> | undefined
-          if (!Array.isArray(errs)) continue
-          for (const e of errs) {
-            const m = (e.message ?? e.errorCode ?? '') as string
-            if (m) msgs.push(m)
-          }
-        }
-      }
-      if (msgs.length > 0) return msgs.join('; ')
-    }
   } catch {
-    // Not JSON — fall through to raw message
+    // Not JSON — fall through
   }
   return err.message
+}
+
+/** Build the PUT data payload for a single element rename */
+function buildPutPayload(p: DataElementRenamePreview, name: string, shortName: string) {
+  const payload: Record<string, unknown> = {
+    id: p.id,
+    name,
+    shortName,
+    valueType: p.valueType,
+    domainType: p.domainType,
+    aggregationType: p.aggregationType,
+  }
+  // categoryCombo is required by most DHIS2 instances — include when known
+  if (p.categoryComboId) {
+    payload.categoryCombo = { id: p.categoryComboId }
+  }
+  return payload
 }
 
 // ── Hook ─────────────────────────────────────────────────────────────────────
@@ -195,19 +221,15 @@ export function useBulkRenameElements() {
   }, [])
 
   /**
-   * Execute renames using the minimal-but-complete PUT payload pattern.
+   * Execute renames using PUT /api/dataElements/{id}?mergeMode=REPLACE.
    *
-   * DHIS2 PUT /api/dataElements/{id}?mergeMode=REPLACE requires all mandatory
-   * fields: name, shortName, valueType, domainType, aggregationType.
-   * We already have every one of these from the dataset-elements query, so we
-   * can skip the extra GET-per-element entirely.
+   * The payload includes all required fields (name, shortName, valueType,
+   * domainType, aggregationType, categoryCombo) so DHIS2 accepts the request
+   * without needing to fetch the full element first.
    *
-   * Payload sent per element:
-   *   { id, name, shortName, valueType, domainType, aggregationType }
-   *   + mergeMode=REPLACE as a query param
-   *
-   * This is the same validated approach as useBulkRename.ts (org units) —
-   * send the required fields only, let DHIS2 leave everything else unchanged.
+   * IMPORTANT: DHIS2 returns a metadata import result JSON with HTTP 200 even
+   * on validation failure. We check result.status after every call and throw
+   * manually when it is 'ERROR' so the error is surfaced to the user.
    */
   const execute = useCallback(
     async (previews: DataElementRenamePreview[]) => {
@@ -227,24 +249,26 @@ export function useBulkRenameElements() {
       for (let i = 0; i < previews.length; i++) {
         const p = previews[i]
         try {
-          // PUT with the minimum set of required fields.
-          // mergeMode=REPLACE tells DHIS2 to apply exactly what we send;
-          // because we include all required fields this does NOT wipe other fields.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await (engine as any).mutate({
+          const raw = await (engine as any).mutate({
             resource: 'dataElements',
             type: 'update',
             id: p.id,
             params: { mergeMode: 'REPLACE' },
-            data: {
-              id: p.id,
-              name: p.newName,
-              shortName: p.newShortName,
-              valueType: p.valueType,
-              domainType: p.domainType,
-              aggregationType: p.aggregationType,
-            },
+            data: buildPutPayload(p, p.newName, p.newShortName),
           })
+
+          // DHIS2 returns { status: 'OK' | 'WARNING' | 'ERROR', ... } with HTTP 200
+          // A status of ERROR means validation failed — we must check it explicitly.
+          if (raw && typeof raw === 'object') {
+            const status = (raw as Record<string, unknown>).status
+            if (status === 'ERROR' || status === 'WARNING') {
+              const errs = extractImportErrors(raw)
+              throw new Error(
+                errs.length > 0 ? errs.join('; ') : `Server returned status ${String(status)}`
+              )
+            }
+          }
 
           succeeded.push(p)
         } catch (err: unknown) {
@@ -280,14 +304,7 @@ export function useBulkRenameElements() {
             type: 'update',
             id: p.id,
             params: { mergeMode: 'REPLACE' },
-            data: {
-              id: p.id,
-              name: p.oldName,
-              shortName: p.oldShortName,
-              valueType: p.valueType,
-              domainType: p.domainType,
-              aggregationType: p.aggregationType,
-            },
+            data: buildPutPayload(p, p.oldName, p.oldShortName),
           })
           rolledBack++
         } catch {
