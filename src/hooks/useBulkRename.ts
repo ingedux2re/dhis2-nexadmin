@@ -100,13 +100,30 @@ export function useBulkRename() {
       for (let i = 0; i < previews.length; i++) {
         const p = previews[i]
         try {
+          // Fetch full org unit first (same pattern as useBulkMove / DHIS2 Maintenance App)
+          // Required for mergeMode=REPLACE to work correctly
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const result = await (engine as any).query({
+            ou: {
+              resource: `organisationUnits/${p.id}`,
+              params: { fields: ':owner' },
+            },
+          })
+          const ou = result?.ou
+          if (!ou) throw new Error(`Org unit ${p.id} not found`)
+
+          // Update with full object + new name (preserves all other fields)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
             resource: 'organisationUnits',
             type: 'update',
             id: p.id,
             params: { mergeMode: 'REPLACE' },
-            data: { name: p.newName, shortName: deriveShortName(p.newName) },
+            data: {
+              ...ou,
+              name: p.newName,
+              shortName: deriveShortName(p.newName),
+            },
           })
           completed.push(p)
         } catch (err: unknown) {
@@ -132,18 +149,33 @@ export function useBulkRename() {
         return
       }
 
-      // Rollback: restore original names
+      // Rollback: restore original names (fetch-then-update pattern)
       let rolledBack = 0
       for (const p of completed) {
         try {
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          await (engine as any).mutate({
-            resource: 'organisationUnits',
-            type: 'update',
-            id: p.id,
-            data: { name: p.oldName, shortName: p.oldName.slice(0, 50) },
+          const result = await (engine as any).query({
+            ou: {
+              resource: `organisationUnits/${p.id}`,
+              params: { fields: ':owner' },
+            },
           })
-          rolledBack++
+          const ou = result?.ou
+          if (ou) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            await (engine as any).mutate({
+              resource: 'organisationUnits',
+              type: 'update',
+              id: p.id,
+              params: { mergeMode: 'REPLACE' },
+              data: {
+                ...ou,
+                name: p.oldName,
+                shortName: p.oldName.slice(0, 50),
+              },
+            })
+            rolledBack++
+          }
         } catch {
           // ignore rollback failures
         }

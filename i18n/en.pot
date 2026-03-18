@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-16T17:59:45.389Z\n"
-"PO-Revision-Date: 2026-03-16T17:59:45.390Z\n"
+"POT-Creation-Date: 2026-03-18T10:32:39.550Z\n"
+"PO-Revision-Date: 2026-03-18T10:32:39.551Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -35,21 +35,11 @@ msgstr "New Parent Name"
 msgid "Display name…"
 msgstr "Display name…"
 
-msgid "Preview Move ({{count}})"
-msgid_plural "Preview Move ({{count}})"
-msgstr[0] "Preview Move ({{count}})"
-msgstr[1] "Preview Move ({{count}})"
-
 msgid "Select all"
 msgstr "Select all"
 
 msgid "Select {{name}}"
 msgstr "Select {{name}}"
-
-msgid "{{count}} moves staged"
-msgid_plural "{{count}} moves staged"
-msgstr[0] "{{count}} moves staged"
-msgstr[1] "{{count}} moves staged"
 
 msgid "Export Preview CSV"
 msgstr "Export Preview CSV"
@@ -180,11 +170,6 @@ msgstr "Lvl"
 msgid "Parent"
 msgstr "Parent"
 
-msgid "Add {{count}} to Board →"
-msgid_plural "Add {{count}} to Board →"
-msgstr[0] "Add {{count}} to Board →"
-msgstr[1] "Add {{count}} to Board →"
-
 msgid "Pending Moves"
 msgstr "Pending Moves"
 
@@ -208,11 +193,6 @@ msgstr "{{ready}} / {{total}} assigned"
 
 msgid "Clear"
 msgstr "Clear"
-
-msgid "Execute {{count}} Moves"
-msgid_plural "Execute {{count}} Moves"
-msgstr[0] "Execute {{count}} Moves"
-msgstr[1] "Execute {{count}} Moves"
 
 msgid "Destination Hierarchy"
 msgstr "Destination Hierarchy"
@@ -283,11 +263,6 @@ msgstr "Something went wrong"
 msgid "No duplicates found — system is clean"
 msgstr "No duplicates found — system is clean"
 
-msgid "{{count}} duplicates found"
-msgid_plural "{{count}} duplicates found"
-msgstr[0] "{{count}} duplicates found"
-msgstr[1] "{{count}} duplicates found"
-
 msgid "Actions"
 msgstr "Actions"
 
@@ -318,11 +293,6 @@ msgstr "Longitude"
 msgid "No geo issues found"
 msgstr "No geo issues found"
 
-msgid "{{count}} geo issues found"
-msgid_plural "{{count}} geo issues found"
-msgstr[0] "{{count}} geo issues found"
-msgstr[1] "{{count}} geo issues found"
-
 msgid "All"
 msgstr "All"
 
@@ -346,11 +316,6 @@ msgstr "Violation Type"
 
 msgid "No violations found — hierarchy is valid"
 msgstr "No violations found — hierarchy is valid"
-
-msgid "{{count}} violations detected"
-msgid_plural "{{count}} violations detected"
-msgstr[0] "{{count}} violations detected"
-msgstr[1] "{{count}} violations detected"
 
 msgid "View Org Unit"
 msgstr "View Org Unit"
@@ -856,16 +821,6 @@ msgstr "Loading org units…"
 msgid "Failed to load org units. {{message}}"
 msgstr "Failed to load org units. {{message}}"
 
-msgid "Renaming {{count}} org units…"
-msgid_plural "Renaming {{count}} org units…"
-msgstr[0] "Renaming {{count}} org units…"
-msgstr[1] "Renaming {{count}} org units…"
-
-msgid "{{count}} org units renamed this session."
-msgid_plural "{{count}} org units renamed this session."
-msgstr[0] "{{count}} org units renamed this session."
-msgstr[1] "{{count}} org units renamed this session."
-
 msgid "Continue Renaming"
 msgstr "Continue Renaming"
 
@@ -881,19 +836,6 @@ msgstr "Try Again"
 msgid "Confirm Rename"
 msgstr "Confirm Rename"
 
-msgid ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgid_plural ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[0] ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[1] ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-
 msgid "Bulk Reorganise"
 msgstr "Bulk Reorganise"
 
@@ -902,16 +844,6 @@ msgstr "Select org units and assign them a new parent to move them in bulk."
 
 msgid "moved"
 msgstr "moved"
-
-msgid "Moving {{count}} org units…"
-msgid_plural "Moving {{count}} org units…"
-msgstr[0] "Moving {{count}} org units…"
-msgstr[1] "Moving {{count}} org units…"
-
-msgid "All {{count}} org units moved successfully."
-msgid_plural "All {{count}} org units moved successfully."
-msgstr[0] "All {{count}} org units moved successfully."
-msgstr[1] "All {{count}} org units moved successfully."
 
 msgid "New Operation"
 msgstr "New Operation"
@@ -928,19 +860,6 @@ msgstr ""
 
 msgid "Confirm Bulk Move"
 msgstr "Confirm Bulk Move"
-
-msgid ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgid_plural ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[0] ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[1] ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
 
 msgid "DHIS2 Administration Platform"
 msgstr "DHIS2 Administration Platform"

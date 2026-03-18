@@ -9,7 +9,7 @@
   },
   "scripts": {
     "prepare": "husky",
-    "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-42-4",
+    "start": "d2-app-scripts start --proxy https://play.im.dhis2.org/stable-2-40-11",
     "build": "node scripts/build.js",
     "test": "d2-app-scripts test --jestConfig jest.config.js",
     "lint": "eslint src --ext .ts,.tsx --max-warnings 0",
