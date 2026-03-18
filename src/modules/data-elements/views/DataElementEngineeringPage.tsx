@@ -13,13 +13,16 @@ import { PageHeader } from '../../../components/shared/PageHeader'
 import { ConfirmDialog } from '../../../components/BulkOperations/ConfirmDialog'
 import { ProgressBar } from '../../../components/BulkOperations/ProgressBar'
 import { BulkCreateGrid } from '../components/BulkCreateGrid'
+import { PasteImportModal } from '../components/PasteImportModal'
 import { RenameDatasetTable } from '../components/RenameDatasetTable'
 import { useSupportingMetadata } from '../hooks/useSupportingMetadata'
 import { useBulkCreateElements } from '../hooks/useBulkCreateElements'
 import { useDatasetElements } from '../hooks/useDatasetElements'
 import { useBulkRenameElements } from '../hooks/useBulkRenameElements'
-import type { DataElementRenamePreview } from '../types'
+import type { DataElementRenamePreview, CreateRow } from '../types'
+import type { ParsedRow } from '../services/excelPasteParser'
 import { collectImportErrors } from '../services/metadataService'
+import { nanoid } from '../../../utils/nanoid'
 import styles from './DataElementEngineeringPage.module.css'
 
 // ── Tab identifiers ───────────────────────────────────────────────────────────
@@ -41,10 +44,32 @@ export default function DataElementEngineeringPage() {
 
   // ── Tab 1: Bulk Create ────────────────────────────────────────────────────
   const create = useBulkCreateElements()
+  const [showPasteModal, setShowPasteModal] = useState(false)
 
   const handleCreateConfirm = useCallback(async () => {
     await create.execute()
   }, [create])
+
+  /** Convert ParsedRows from the Excel modal into CreateRows and load them into the grid */
+  const handlePasteImport = useCallback(
+    (parsed: ParsedRow[]) => {
+      const rows: CreateRow[] = parsed.map((p) => ({
+        _id: nanoid(),
+        name: p.name,
+        shortName: p.shortName,
+        code: p.code,
+        valueType: p.valueType,
+        domainType: p.domainType,
+        aggregationType: p.aggregationType,
+        categoryComboId: p.categoryComboId,
+        optionSetId: p.optionSetId,
+        errors: {},
+      }))
+      create.setRows(rows)
+      setShowPasteModal(false)
+    },
+    [create]
+  )
 
   const isCreating = create.state.status === 'running'
   const createDone = create.state.status === 'done'
@@ -217,6 +242,22 @@ export default function DataElementEngineeringPage() {
           {/* ── Grid + submit button ─────────────────────────────── */}
           {!createDone && (
             <>
+              {/* ── Paste from Excel shortcut ────────────────────── */}
+              <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <button
+                  type="button"
+                  className="nx-btn nx-btn-secondary nx-btn-sm"
+                  onClick={() => setShowPasteModal(true)}
+                  disabled={isCreating}
+                  title={i18n.t('Import rows from Excel or CSV paste')}
+                >
+                  <span className="material-icons-round" style={{ fontSize: 16 }}>
+                    table_view
+                  </span>
+                  {i18n.t('Paste from Excel')}
+                </button>
+              </div>
+
               <BulkCreateGrid
                 rows={create.state.rows}
                 template={create.state.template}
@@ -337,6 +378,18 @@ export default function DataElementEngineeringPage() {
             completedCount={renameEl.state.totalRenamed}
           />
         </div>
+      )}
+
+      {/* ══════════════════════════════════════════════════════════
+          Paste from Excel modal
+      ══════════════════════════════════════════════════════════ */}
+      {showPasteModal && (
+        <PasteImportModal
+          categoryCombos={meta.categoryCombos}
+          optionSets={meta.optionSets}
+          onImport={handlePasteImport}
+          onClose={() => setShowPasteModal(false)}
+        />
       )}
 
       {/* ══════════════════════════════════════════════════════════
