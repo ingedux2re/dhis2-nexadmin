@@ -1,4 +1,4 @@
-import { useEffect, useCallback } from 'react'
+import { useEffect, useCallback, useRef } from 'react'
 import { useDataQuery, useDataMutation } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import { useAppStore } from '../store'
@@ -25,7 +25,13 @@ export const useLocale = (): UseLocaleReturn => {
   const { data, loading } = useDataQuery<{ me: { settings: { uiLocale: string } } }>(ME_QUERY)
   const [mutate] = useDataMutation(UPDATE_LOCALE_MUTATION)
 
-  // ── Define applyLocale BEFORE useEffect so it can be in the deps array ──
+  // ── Guard: only apply the auto-detected locale once on initial load. ──────
+  // Without this, every re-render that calls the hook (e.g. after a language
+  // switch triggers a store update) would re-run the effect and revert to the
+  // DHIS2/localStorage locale, overwriting the user's manual selection.
+  const initialised = useRef(false)
+
+  // ── applyLocale is stable (useCallback with only setLocale as dep) ────────
   const applyLocale = useCallback(
     (code: string): void => {
       const safe = isSupported(code) ? code : DEFAULT_LOCALE
@@ -38,18 +44,28 @@ export const useLocale = (): UseLocaleReturn => {
     [setLocale]
   )
 
-  // ── applyLocale is now stable (useCallback) and in deps ─────────────────
+  // ── Run only once: when ME_QUERY data first arrives ───────────────────────
   useEffect(() => {
+    // Skip if already initialised (user already chose a language manually)
+    if (initialised.current) return
+    // Wait until the query has resolved (data !== undefined means it returned)
+    if (data === undefined) return
+
+    initialised.current = true
+
     const dhisLocale = data?.me?.settings?.uiLocale
     const savedLocale = localStorage.getItem('nexadmin_lang')
+    // Priority: 1) user's saved preference (localStorage), 2) DHIS2 uiLocale, 3) default 'en'
     const resolved =
-      [dhisLocale, savedLocale, DEFAULT_LOCALE].find((l): l is string => !!l && isSupported(l)) ??
+      [savedLocale, dhisLocale, DEFAULT_LOCALE].find((l): l is string => !!l && isSupported(l)) ??
       DEFAULT_LOCALE
     applyLocale(resolved)
   }, [data, applyLocale])
 
   const switchLocale = useCallback(
     async (code: string): Promise<void> => {
+      // Mark as initialised so the useEffect guard above never overwrites this
+      initialised.current = true
       applyLocale(code)
       try {
         await mutate({ locale: code })
