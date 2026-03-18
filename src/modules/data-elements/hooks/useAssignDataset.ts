@@ -24,9 +24,11 @@
 //   decision ──(assign-existing)──► selectDatasets
 //            ──(create-new)──────► createDataset
 //            ──(skip)───────────► idle
-//   selectDatasets ──(confirm)──► confirming
-//   createDataset  ──(confirm)──► confirming
-//   confirming ──(cancel)──► selectDatasets | createDataset
+//   selectDatasets ──(next)──► orgUnitDeployment
+//   createDataset  ──(next)──► orgUnitDeployment
+//   orgUnitDeployment ──(next)──► sharing
+//   sharing ──(next)──► confirming
+//   confirming ──(cancel)──► sharing
 //              ──(apply)───► running
 //   running ──(ok)────► done
 //           ──(fail)──► error
@@ -35,6 +37,7 @@
 
 import { useReducer, useCallback } from 'react'
 import { useDataEngine } from '@dhis2/app-runtime'
+import i18n from '@dhis2/d2-i18n'
 
 // ── Public types ──────────────────────────────────────────────────────────────
 
@@ -42,11 +45,47 @@ export type AssignMode =
   | 'decision'
   | 'selectDatasets'
   | 'createDataset'
+  | 'orgUnitDeployment'
+  | 'sharing'
   | 'confirming'
   | 'running'
   | 'done'
   | 'error'
   | 'idle'
+
+/**
+ * DHIS2 access strings (8 chars).
+ * Pos 1: metadata read, 2: metadata write, 3: data read, 4: data write (data entry).
+ */
+export const ACCESS_NONE = '--------'
+export const ACCESS_VIEW = 'r-------' // metadata read only
+export const ACCESS_VIEW_EDIT = 'rw------' // metadata read+write, no data access
+export const ACCESS_VIEW_EDIT_DATA = 'rwrw----' // metadata + data read+write (data entry)
+
+/** User group with access level */
+export interface UserGroupAccess {
+  id: string
+  displayName: string
+  access: string
+}
+
+/** Lightweight user group reference */
+export interface UserGroupRef {
+  id: string
+  displayName: string
+}
+
+/** Lightweight org unit reference */
+export interface OrgUnitRef {
+  id: string
+  displayName: string
+}
+
+/** Lightweight org unit group reference */
+export interface OrgUnitGroupRef {
+  id: string
+  displayName: string
+}
 
 /** Lightweight dataset reference returned by the list query */
 export interface DataSetRef {
@@ -122,6 +161,31 @@ export interface AssignDatasetState {
   /** Result of the assign/create operation */
   resultMessage: string | null
   errors: string[]
+  /** Org unit deployment: all org units (existing only) */
+  orgUnits: OrgUnitRef[]
+  loadingOrgUnits: boolean
+  /** Org unit groups (existing only) */
+  orgUnitGroups: OrgUnitGroupRef[]
+  loadingOrgUnitGroups: boolean
+  /** Selected specific org unit IDs */
+  selectedOrgUnitIds: string[]
+  /** Selected org unit group IDs (members resolved at apply time) */
+  selectedOrgUnitGroupIds: string[]
+  /** Resolved org unit count from groups (for confirm display) */
+  resolvedOrgUnitCountFromGroups: number
+  /** Resolved org unit IDs from groups (for total count deduplication) */
+  resolvedOrgUnitIdsFromGroups: string[]
+  /** Warning when a selected group has zero members */
+  orgUnitGroupZeroMembersWarning: string | null
+  /** Sharing: public access (--------, r-------, rw------) */
+  publicAccess: string
+  /** Sharing: user group accesses */
+  userGroupAccesses: UserGroupAccess[]
+  /** All user groups for picker */
+  userGroups: UserGroupRef[]
+  loadingUserGroups: boolean
+  /** Sharing errors when partial success (dataset ok, sharing failed) */
+  sharingErrors: string[]
 }
 
 type AssignAction =
@@ -139,8 +203,22 @@ type AssignAction =
   | { type: 'UPDATE_FORM'; field: keyof NewDataSetForm; value: string }
   | { type: 'CONFIRM' }
   | { type: 'CANCEL_CONFIRM' }
+  | { type: 'GO_BACK_FROM_ORG_UNIT_DEPLOYMENT' }
+  | { type: 'GO_BACK_FROM_SHARING' }
+  | { type: 'GO_TO_ORG_UNIT_DEPLOYMENT' }
+  | { type: 'SET_ORG_UNITS'; orgUnits: OrgUnitRef[] }
+  | { type: 'SET_ORG_UNIT_GROUPS'; orgUnitGroups: OrgUnitGroupRef[] }
+  | { type: 'TOGGLE_ORG_UNIT'; id: string }
+  | { type: 'TOGGLE_ORG_UNIT_GROUP'; id: string }
+  | { type: 'SET_RESOLVED_ORG_UNIT_COUNT'; count: number }
+  | { type: 'SET_RESOLVED_ORG_UNIT_IDS'; ids: string[] }
+  | { type: 'SET_ORG_UNIT_GROUP_ZERO_WARNING'; message: string | null }
+  | { type: 'SET_PUBLIC_ACCESS'; access: string }
+  | { type: 'SET_USER_GROUPS'; userGroups: UserGroupRef[] }
+  | { type: 'SET_USER_GROUP_ACCESS'; id: string; displayName: string; access: string }
+  | { type: 'REMOVE_USER_GROUP_ACCESS'; id: string }
   | { type: 'START_RUNNING' }
-  | { type: 'SET_DONE'; message: string }
+  | { type: 'SET_DONE'; message: string; sharingErrors?: string[] }
   | { type: 'SET_ERROR'; errors: string[] }
   | { type: 'RESET' }
 
@@ -213,30 +291,132 @@ function reducer(state: AssignDatasetState, action: AssignAction): AssignDataset
     }
 
     case 'CONFIRM': {
-      // Validate new-dataset form before allowing confirmation
+      // From createDataset: validate form first
       if (state.mode === 'createDataset') {
         const errors: Partial<Record<keyof NewDataSetForm, string>> = {}
         if (!state.newDataSetForm.name.trim()) errors.name = 'Name is required'
         if (!state.newDataSetForm.shortName.trim()) errors.shortName = 'Short name is required'
         if (Object.keys(errors).length > 0) return { ...state, formErrors: errors }
       }
-      return { ...state, mode: 'confirming' }
+      // From selectDatasets or createDataset: go to org unit deployment
+      if (state.mode === 'selectDatasets' || state.mode === 'createDataset') {
+        return {
+          ...state,
+          mode: 'orgUnitDeployment',
+          loadingOrgUnits: true,
+          loadingOrgUnitGroups: true,
+        }
+      }
+      // From orgUnitDeployment: go to sharing
+      if (state.mode === 'orgUnitDeployment') {
+        return {
+          ...state,
+          mode: 'sharing',
+          loadingUserGroups: true,
+        }
+      }
+      // From sharing: go to confirming
+      if (state.mode === 'sharing') {
+        return { ...state, mode: 'confirming' }
+      }
+      return state
     }
 
     case 'CANCEL_CONFIRM':
+      return { ...state, mode: 'sharing' }
+
+    case 'GO_BACK_FROM_SHARING':
+      return { ...state, mode: 'orgUnitDeployment' }
+
+    case 'GO_BACK_FROM_ORG_UNIT_DEPLOYMENT':
       return {
         ...state,
-        mode:
-          state.allDataSets.length > 0 || state.loadingDataSets
-            ? 'selectDatasets'
-            : 'createDataset',
+        mode: state.selectedDataSetIds.length > 0 ? 'selectDatasets' : 'createDataset',
+      }
+
+    case 'GO_TO_ORG_UNIT_DEPLOYMENT':
+      return {
+        ...state,
+        mode: 'orgUnitDeployment',
+        loadingOrgUnits: true,
+        loadingOrgUnitGroups: true,
+      }
+
+    case 'SET_ORG_UNITS':
+      return { ...state, orgUnits: action.orgUnits, loadingOrgUnits: false }
+
+    case 'SET_ORG_UNIT_GROUPS':
+      return { ...state, orgUnitGroups: action.orgUnitGroups, loadingOrgUnitGroups: false }
+
+    case 'TOGGLE_ORG_UNIT': {
+      const already = state.selectedOrgUnitIds.includes(action.id)
+      return {
+        ...state,
+        selectedOrgUnitIds: already
+          ? state.selectedOrgUnitIds.filter((id) => id !== action.id)
+          : [...state.selectedOrgUnitIds, action.id],
+      }
+    }
+
+    case 'TOGGLE_ORG_UNIT_GROUP': {
+      const already = state.selectedOrgUnitGroupIds.includes(action.id)
+      return {
+        ...state,
+        selectedOrgUnitGroupIds: already
+          ? state.selectedOrgUnitGroupIds.filter((id) => id !== action.id)
+          : [...state.selectedOrgUnitGroupIds, action.id],
+      }
+    }
+
+    case 'SET_RESOLVED_ORG_UNIT_COUNT':
+      return { ...state, resolvedOrgUnitCountFromGroups: action.count }
+
+    case 'SET_RESOLVED_ORG_UNIT_IDS':
+      return {
+        ...state,
+        resolvedOrgUnitIdsFromGroups: action.ids,
+        resolvedOrgUnitCountFromGroups: action.ids.length,
+      }
+
+    case 'SET_ORG_UNIT_GROUP_ZERO_WARNING':
+      return { ...state, orgUnitGroupZeroMembersWarning: action.message }
+
+    case 'SET_PUBLIC_ACCESS':
+      return { ...state, publicAccess: action.access }
+
+    case 'SET_USER_GROUPS':
+      return { ...state, userGroups: action.userGroups, loadingUserGroups: false }
+
+    case 'SET_USER_GROUP_ACCESS': {
+      const existing = state.userGroupAccesses.find((a) => a.id === action.id)
+      const updated = existing
+        ? state.userGroupAccesses.map((a) =>
+            a.id === action.id ? { ...a, access: action.access } : a
+          )
+        : [
+            ...state.userGroupAccesses,
+            { id: action.id, displayName: action.displayName, access: action.access },
+          ]
+      return { ...state, userGroupAccesses: updated }
+    }
+
+    case 'REMOVE_USER_GROUP_ACCESS':
+      return {
+        ...state,
+        userGroupAccesses: state.userGroupAccesses.filter((a) => a.id !== action.id),
       }
 
     case 'START_RUNNING':
       return { ...state, mode: 'running', errors: [] }
 
     case 'SET_DONE':
-      return { ...state, mode: 'done', resultMessage: action.message, errors: [] }
+      return {
+        ...state,
+        mode: 'done',
+        resultMessage: action.message,
+        errors: [],
+        sharingErrors: action.sharingErrors ?? [],
+      }
 
     case 'SET_ERROR':
       return { ...state, mode: 'error', errors: action.errors }
@@ -260,6 +440,20 @@ const INITIAL_STATE: AssignDatasetState = {
   formErrors: {},
   resultMessage: null,
   errors: [],
+  orgUnits: [],
+  loadingOrgUnits: false,
+  orgUnitGroups: [],
+  loadingOrgUnitGroups: false,
+  selectedOrgUnitIds: [],
+  selectedOrgUnitGroupIds: [],
+  resolvedOrgUnitCountFromGroups: 0,
+  resolvedOrgUnitIdsFromGroups: [],
+  orgUnitGroupZeroMembersWarning: null,
+  publicAccess: ACCESS_NONE,
+  userGroupAccesses: [],
+  userGroups: [],
+  loadingUserGroups: false,
+  sharingErrors: [],
 }
 
 // ── Raw DHIS2 response shapes ─────────────────────────────────────────────────
@@ -275,6 +469,7 @@ interface RawDataSetsResponse {
 /**
  * Full dataset for PUT update — report-fbr-mali-app pattern.
  * Must include categoryCombo and dataSet in each new DataSetElement.
+ * organisationUnits: array of { id } for dataset deployment.
  */
 interface FullDataSetForUpdate {
   id: string
@@ -287,6 +482,7 @@ interface FullDataSetForUpdate {
     categoryCombo?: { id: string }
     dataSet?: { id: string }
   }>
+  organisationUnits?: Array<{ id: string }>
   [key: string]: unknown
 }
 
@@ -360,6 +556,141 @@ export function useAssignDataset() {
 
   const confirm = useCallback(() => dispatch({ type: 'CONFIRM' }), [])
   const cancelConfirm = useCallback(() => dispatch({ type: 'CANCEL_CONFIRM' }), [])
+  const goBackFromOrgUnitDeployment = useCallback(
+    () => dispatch({ type: 'GO_BACK_FROM_ORG_UNIT_DEPLOYMENT' }),
+    []
+  )
+
+  // ── Org unit deployment ───────────────────────────────────────────────────
+
+  const toggleOrgUnit = useCallback((id: string) => dispatch({ type: 'TOGGLE_ORG_UNIT', id }), [])
+  const toggleOrgUnitGroup = useCallback(
+    (id: string) => dispatch({ type: 'TOGGLE_ORG_UNIT_GROUP', id }),
+    []
+  )
+
+  /** Load org units and groups when entering org unit deployment step */
+  const loadOrgUnitsAndGroups = useCallback(async () => {
+    try {
+      const [ouRes, ougRes] = await Promise.all([
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (engine as any).query({
+          orgUnits: {
+            resource: 'organisationUnits',
+            params: {
+              fields: ['id', 'displayName'],
+              paging: false,
+              order: 'displayName:asc',
+            },
+          },
+        }),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (engine as any).query({
+          orgUnitGroups: {
+            resource: 'organisationUnitGroups',
+            params: {
+              fields: ['id', 'displayName'],
+              paging: false,
+              order: 'displayName:asc',
+            },
+          },
+        }),
+      ])
+      const orgUnits: OrgUnitRef[] = (ouRes.orgUnits?.organisationUnits ?? []).map(
+        (ou: { id: string; displayName?: string }) => ({
+          id: ou.id,
+          displayName: ou.displayName ?? ou.id,
+        })
+      )
+      const orgUnitGroups: OrgUnitGroupRef[] = (
+        ougRes.orgUnitGroups?.organisationUnitGroups ?? []
+      ).map((oug: { id: string; displayName?: string }) => ({
+        id: oug.id,
+        displayName: oug.displayName ?? oug.id,
+      }))
+      dispatch({ type: 'SET_ORG_UNITS', orgUnits })
+      dispatch({ type: 'SET_ORG_UNIT_GROUPS', orgUnitGroups })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      dispatch({ type: 'SET_LOAD_ERROR', message: msg })
+      dispatch({ type: 'SET_ORG_UNITS', orgUnits: [] })
+      dispatch({ type: 'SET_ORG_UNIT_GROUPS', orgUnitGroups: [] })
+    }
+  }, [engine])
+
+  /**
+   * Resolve org unit IDs from selected groups.
+   * GET organisationUnitGroups/{id}?fields=organisationUnits[id]
+   * Returns deduplicated list of org unit IDs.
+   */
+  const resolveOrgUnitIdsFromGroups = useCallback(
+    async (groupIds: string[]): Promise<string[]> => {
+      if (groupIds.length === 0) return []
+      const allIds = new Set<string>()
+      for (const gid of groupIds) {
+        try {
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const res = (await (engine as any).query({
+            group: {
+              resource: `organisationUnitGroups/${gid}`,
+              params: { fields: ['organisationUnits[id]'] },
+            },
+          })) as { group: { organisationUnits?: Array<{ id: string }> } }
+          const ous = res.group?.organisationUnits ?? []
+          for (const ou of ous) {
+            if (ou?.id) allIds.add(ou.id)
+          }
+        } catch {
+          // Skip groups that fail to load
+        }
+      }
+      return Array.from(allIds)
+    },
+    [engine]
+  )
+
+  /** Load user groups when entering sharing step */
+  const loadUserGroups = useCallback(async () => {
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const res = (await (engine as any).query({
+        userGroups: {
+          resource: 'userGroups',
+          params: {
+            fields: ['id', 'displayName'],
+            paging: false,
+            order: 'displayName:asc',
+          },
+        },
+      })) as { userGroups: { userGroups?: Array<{ id: string; displayName?: string }> } }
+      const groups: UserGroupRef[] = (res.userGroups?.userGroups ?? []).map((g) => ({
+        id: g.id,
+        displayName: g.displayName ?? g.id,
+      }))
+      dispatch({ type: 'SET_USER_GROUPS', userGroups: groups })
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err)
+      dispatch({ type: 'SET_LOAD_ERROR', message: msg })
+      dispatch({ type: 'SET_USER_GROUPS', userGroups: [] })
+    }
+  }, [engine])
+
+  /** Resolve group members and set count before transitioning to confirm */
+  const confirmFromOrgUnitDeployment = useCallback(async () => {
+    const resolvedIds = await resolveOrgUnitIdsFromGroups(state.selectedOrgUnitGroupIds)
+    dispatch({ type: 'SET_RESOLVED_ORG_UNIT_IDS', ids: resolvedIds })
+    if (state.selectedOrgUnitGroupIds.length > 0 && resolvedIds.length === 0) {
+      dispatch({
+        type: 'SET_ORG_UNIT_GROUP_ZERO_WARNING',
+        message: i18n.t(
+          'Selected org unit group(s) have no members. No org units will be deployed from groups.'
+        ),
+      })
+    } else {
+      dispatch({ type: 'SET_ORG_UNIT_GROUP_ZERO_WARNING', message: null })
+    }
+    dispatch({ type: 'CONFIRM' })
+  }, [state.selectedOrgUnitGroupIds, resolveOrgUnitIdsFromGroups])
 
   // ── Execute: assign to existing datasets ─────────────────────────────────
   //
@@ -369,8 +700,65 @@ export function useAssignDataset() {
   // The collections API (POST /dataElements) can fail for newly created elements
   // due to timing or categoryCombo mismatches; this approach is more reliable.
 
+  /**
+   * Apply sharing to a dataset. GET current sharing, merge, POST.
+   * Preserves owner, user, externalAccess when merging.
+   */
+  const applySharingToDataSet = useCallback(
+    async (
+      dataSetId: string,
+      publicAccess: string,
+      userGroupAccesses: UserGroupAccess[]
+    ): Promise<string | null> => {
+      try {
+        // GET current sharing
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const getRes = (await (engine as any).query({
+          sharing: {
+            resource: 'sharing',
+            params: { type: 'dataSet', id: dataSetId },
+          },
+        })) as {
+          sharing?: {
+            object?: {
+              publicAccess?: string
+              externalAccess?: boolean
+              user?: { id?: string }
+              userGroupAccesses?: Array<{ id: string; access: string }>
+            }
+          }
+        }
+        const current = getRes.sharing?.object ?? {}
+        const merged = {
+          ...current,
+          publicAccess,
+          externalAccess: current.externalAccess ?? false,
+          user: current.user ?? {},
+          userGroupAccesses: userGroupAccesses.map(({ id, access }) => ({ id, access })),
+        }
+        // POST updated sharing
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        await (engine as any).mutate({
+          resource: 'sharing',
+          type: 'create',
+          params: { type: 'dataSet', id: dataSetId },
+          data: { object: merged },
+        })
+        return null
+      } catch (err) {
+        return err instanceof Error ? err.message : String(err)
+      }
+    },
+    [engine]
+  )
+
   const executeAssignExisting = useCallback(
-    async (_createdElements: CreatedElement[], elementIdsToAssign: string[]) => {
+    async (
+      _createdElements: CreatedElement[],
+      elementIdsToAssign: string[],
+      orgUnitIdsToDeploy: string[],
+      sharingConfig: { publicAccess: string; userGroupAccesses: UserGroupAccess[] }
+    ) => {
       dispatch({ type: 'START_RUNNING' })
       const errors: string[] = []
 
@@ -386,32 +774,43 @@ export function useAssignDataset() {
           })) as { ds: FullDataSetForUpdate }
 
           const dataSet = detail.ds
-          const existingIds = new Set(
+
+          // ── Data elements: append new (merge, never overwrite) ────────────
+          const existingDeIds = new Set(
             (dataSet.dataSetElements ?? []).map((dse) => dse.dataElement.id)
           )
-
-          const toAdd = elementIdsToAssign.filter((id) => !existingIds.has(id))
-          if (toAdd.length === 0) continue
-
-          // ── Step 2: append new dataSetElements with full composite ────────
-          // Each must have dataElement, categoryCombo (dataset's), dataSet
+          const toAddDe = elementIdsToAssign.filter((id) => !existingDeIds.has(id))
           const categoryCombo = dataSet.categoryCombo
-          if (!categoryCombo?.id) {
-            errors.push(
-              `${dataSet.name ?? dataSetId}: Dataset has no categoryCombo — cannot add elements`
-            )
-            continue
-          }
-          for (const deId of toAdd) {
-            dataSet.dataSetElements = dataSet.dataSetElements ?? []
-            dataSet.dataSetElements.push({
-              dataElement: { id: deId },
-              categoryCombo: { id: categoryCombo.id },
-              dataSet: { id: dataSet.id },
-            })
+          if (toAddDe.length > 0) {
+            if (!categoryCombo?.id) {
+              errors.push(
+                `${dataSet.name ?? dataSetId}: Dataset has no categoryCombo — cannot add elements`
+              )
+              continue
+            }
+            for (const deId of toAddDe) {
+              dataSet.dataSetElements = dataSet.dataSetElements ?? []
+              dataSet.dataSetElements.push({
+                dataElement: { id: deId },
+                categoryCombo: { id: categoryCombo.id },
+                dataSet: { id: dataSet.id },
+              })
+            }
           }
 
-          // ── Step 3: PUT full dataset back ─────────────────────────────────
+          // ── Organisation units: merge (never overwrite existing) ───────────
+          const existingOuIds = new Set((dataSet.organisationUnits ?? []).map((ou) => ou.id))
+          const toAddOu = orgUnitIdsToDeploy.filter((id) => !existingOuIds.has(id))
+          if (toAddOu.length > 0) {
+            dataSet.organisationUnits = dataSet.organisationUnits ?? []
+            for (const ouId of toAddOu) {
+              dataSet.organisationUnits.push({ id: ouId })
+            }
+          }
+
+          if (toAddDe.length === 0 && toAddOu.length === 0) continue
+
+          // ── Step 2: PUT full dataset back ─────────────────────────────────
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
             resource: 'dataSets',
@@ -428,25 +827,63 @@ export function useAssignDataset() {
         }
       }
 
+      const sharingErrors: string[] = []
+      const hasSharingConfig =
+        sharingConfig.publicAccess !== ACCESS_NONE || sharingConfig.userGroupAccesses.length > 0
+      if (errors.length === 0 && hasSharingConfig) {
+        for (const dataSetId of state.selectedDataSetIds) {
+          const err = await applySharingToDataSet(
+            dataSetId,
+            sharingConfig.publicAccess,
+            sharingConfig.userGroupAccesses
+          )
+          if (err) {
+            const ds = state.allDataSets.find((d) => d.id === dataSetId)
+            sharingErrors.push(`${ds?.displayName ?? dataSetId}: ${err}`)
+          }
+        }
+      }
+
       if (errors.length > 0) {
         dispatch({ type: 'SET_ERROR', errors })
       } else {
         const dsNames = state.selectedDataSetIds
           .map((id) => state.allDataSets.find((d) => d.id === id)?.displayName ?? id)
           .join(', ')
+        const parts: string[] = []
+        if (elementIdsToAssign.length > 0) {
+          parts.push(`${elementIdsToAssign.length} element(s) assigned`)
+        }
+        if (orgUnitIdsToDeploy.length > 0) {
+          parts.push(`deployed to ${orgUnitIdsToDeploy.length} organisation unit(s)`)
+        }
+        if (
+          sharingErrors.length === 0 &&
+          (sharingConfig.publicAccess !== ACCESS_NONE || sharingConfig.userGroupAccesses.length > 0)
+        ) {
+          parts.push('sharing updated')
+        }
+        const summary =
+          parts.length > 0 ? `${parts.join(', ')} — ${dsNames}` : `Dataset(s) updated: ${dsNames}`
         dispatch({
           type: 'SET_DONE',
-          message: `${elementIdsToAssign.length} element(s) assigned to: ${dsNames}`,
+          message: summary,
+          sharingErrors: sharingErrors.length > 0 ? sharingErrors : undefined,
         })
       }
     },
-    [engine, state.selectedDataSetIds, state.allDataSets]
+    [engine, state.selectedDataSetIds, state.allDataSets, applySharingToDataSet]
   )
 
   // ── Execute: create new dataset with elements ─────────────────────────────
 
   const executeCreateNew = useCallback(
-    async (elementIdsToAssign: string[], categoryComboId: string) => {
+    async (
+      elementIdsToAssign: string[],
+      categoryComboId: string,
+      orgUnitIdsToDeploy: string[],
+      sharingConfig: { publicAccess: string; userGroupAccesses: UserGroupAccess[] }
+    ) => {
       dispatch({ type: 'START_RUNNING' })
       const { name, shortName, periodType } = state.newDataSetForm
 
@@ -461,31 +898,82 @@ export function useAssignDataset() {
         dataSetElements,
       }
 
-      // Only include categoryCombo if explicitly chosen
       if (categoryComboId) {
         payload.categoryCombo = { id: categoryComboId }
       }
 
+      if (orgUnitIdsToDeploy.length > 0) {
+        payload.organisationUnits = orgUnitIdsToDeploy.map((id) => ({ id }))
+      }
+
       try {
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        await (engine as any).mutate({
+        const createRes = (await (engine as any).mutate({
           resource: 'dataSets',
           type: 'create',
           data: payload,
-        })
+        })) as Record<string, unknown>
+        const createdId =
+          (createRes?.response as { uid?: string })?.uid ??
+          (createRes?.id as string) ??
+          (createRes?.response as { id?: string })?.id
+        const sharingErrors: string[] = []
+        if (
+          createdId &&
+          (sharingConfig.publicAccess !== ACCESS_NONE || sharingConfig.userGroupAccesses.length > 0)
+        ) {
+          const err = await applySharingToDataSet(
+            createdId,
+            sharingConfig.publicAccess,
+            sharingConfig.userGroupAccesses
+          )
+          if (err) sharingErrors.push(err)
+        }
+        const parts: string[] = []
+        parts.push(`Dataset "${name.trim()}" created`)
+        if (elementIdsToAssign.length > 0) {
+          parts.push(`${elementIdsToAssign.length} element(s) assigned`)
+        }
+        if (orgUnitIdsToDeploy.length > 0) {
+          parts.push(`deployed to ${orgUnitIdsToDeploy.length} organisation unit(s)`)
+        }
+        if (
+          sharingErrors.length === 0 &&
+          (sharingConfig.publicAccess !== ACCESS_NONE || sharingConfig.userGroupAccesses.length > 0)
+        ) {
+          parts.push('sharing updated')
+        }
         dispatch({
           type: 'SET_DONE',
-          message: `Dataset "${name.trim()}" created with ${elementIdsToAssign.length} element(s)`,
+          message: parts.join(', '),
+          sharingErrors: sharingErrors.length > 0 ? sharingErrors : undefined,
         })
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err)
         dispatch({ type: 'SET_ERROR', errors: [msg] })
       }
     },
-    [engine, state.newDataSetForm]
+    [engine, state.newDataSetForm, applySharingToDataSet]
   )
 
   const reset = useCallback(() => dispatch({ type: 'RESET' }), [])
+
+  // ── Sharing actions (for modal) ───────────────────────────────────────────
+
+  const setPublicAccess = useCallback(
+    (access: string) => dispatch({ type: 'SET_PUBLIC_ACCESS', access }),
+    []
+  )
+  const setUserGroupAccess = useCallback(
+    (id: string, displayName: string, access: string) =>
+      dispatch({ type: 'SET_USER_GROUP_ACCESS', id, displayName, access }),
+    []
+  )
+  const removeUserGroupAccess = useCallback(
+    (id: string) => dispatch({ type: 'REMOVE_USER_GROUP_ACCESS', id }),
+    []
+  )
+  const goBackFromSharing = useCallback(() => dispatch({ type: 'GO_BACK_FROM_SHARING' }), [])
 
   return {
     state,
@@ -500,7 +988,18 @@ export function useAssignDataset() {
     deselectAllElements,
     updateForm,
     confirm,
+    confirmFromOrgUnitDeployment,
     cancelConfirm,
+    goBackFromOrgUnitDeployment,
+    toggleOrgUnit,
+    toggleOrgUnitGroup,
+    loadOrgUnitsAndGroups,
+    resolveOrgUnitIdsFromGroups,
+    loadUserGroups,
+    setPublicAccess,
+    setUserGroupAccess,
+    removeUserGroupAccess,
+    goBackFromSharing,
     executeAssignExisting,
     executeCreateNew,
     reset,
