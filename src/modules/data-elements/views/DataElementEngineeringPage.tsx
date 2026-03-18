@@ -7,16 +7,18 @@
 //   Tab 2 — Rename Data Elements in Dataset
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import i18n from '@dhis2/d2-i18n'
 import { PageHeader } from '../../../components/shared/PageHeader'
 import { ConfirmDialog } from '../../../components/BulkOperations/ConfirmDialog'
 import { ProgressBar } from '../../../components/BulkOperations/ProgressBar'
 import { BulkCreateGrid } from '../components/BulkCreateGrid'
 import { PasteImportModal } from '../components/PasteImportModal'
+import { AssignDatasetModal } from '../components/AssignDatasetModal'
 import { RenameDatasetTable } from '../components/RenameDatasetTable'
 import { useSupportingMetadata } from '../hooks/useSupportingMetadata'
 import { useBulkCreateElements } from '../hooks/useBulkCreateElements'
+import { useAssignDataset } from '../hooks/useAssignDataset'
 import { useDatasetElements } from '../hooks/useDatasetElements'
 import { useBulkRenameElements } from '../hooks/useBulkRenameElements'
 import type { DataElementRenamePreview, CreateRow } from '../types'
@@ -46,9 +48,53 @@ export default function DataElementEngineeringPage() {
   const create = useBulkCreateElements()
   const [showPasteModal, setShowPasteModal] = useState(false)
 
+  // ── Post-creation: assign to dataset workflow ─────────────────────────────
+  const assignDs = useAssignDataset()
+  const [showAssignModal, setShowAssignModal] = useState(false)
+
+  /**
+   * The IDs + names of elements just created — sourced from the typeReports
+   * returned by DHIS2 after a successful bulk creation.
+   * We read them from create.state.result?.typeReports.
+   */
+  const createdElements = useMemo(() => {
+    const result = create.state.result
+    if (!result) return []
+    // DHIS2 populates typeReports[].objectReports[].uid for each created object
+    // We pair UIDs with the original row names to give friendly labels in the modal
+    const uids: string[] = []
+    for (const tr of result.typeReports ?? []) {
+      for (const obj of tr.objectReports ?? []) {
+        if (obj.uid) uids.push(obj.uid)
+      }
+    }
+    // If typeReports didn't yield UIDs (some DHIS2 versions omit them), fall
+    // back to the row names without IDs (modal will still work for create-new)
+    if (uids.length > 0) {
+      return uids.map((id, i) => ({
+        id,
+        name: create.state.rows[i]?.name ?? id,
+      }))
+    }
+    return create.state.rows.filter((r) => r.name.trim()).map((r) => ({ id: r._id, name: r.name }))
+  }, [create.state.result, create.state.rows])
+
   const handleCreateConfirm = useCallback(async () => {
     await create.execute()
   }, [create])
+
+  // Auto-open assign modal once creation succeeds
+  useEffect(() => {
+    if (create.state.status === 'done' && create.state.result && !showAssignModal) {
+      setShowAssignModal(true)
+      assignDs.open()
+    }
+  }, [create.state.status]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleCloseAssignModal = useCallback(() => {
+    setShowAssignModal(false)
+    assignDs.reset()
+  }, [assignDs])
 
   /** Convert ParsedRows from the Excel modal into CreateRows and load them into the grid */
   const handlePasteImport = useCallback(
@@ -389,6 +435,18 @@ export default function DataElementEngineeringPage() {
           optionSets={meta.optionSets}
           onImport={handlePasteImport}
           onClose={() => setShowPasteModal(false)}
+        />
+      )}
+
+      {/* ══════════════════════════════════════════════════════════
+          Post-creation: Assign to dataset modal
+      ══════════════════════════════════════════════════════════ */}
+      {showAssignModal && (
+        <AssignDatasetModal
+          hook={assignDs}
+          createdElements={createdElements}
+          categoryCombos={meta.categoryCombos}
+          onClose={handleCloseAssignModal}
         />
       )}
 
