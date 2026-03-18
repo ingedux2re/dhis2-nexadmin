@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-16T14:44:50.121Z\n"
-"PO-Revision-Date: 2026-03-16T14:44:50.121Z\n"
+"POT-Creation-Date: 2026-03-16T20:11:28.942Z\n"
+"PO-Revision-Date: 2026-03-16T20:11:28.942Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -35,21 +35,11 @@ msgstr "New Parent Name"
 msgid "Display name…"
 msgstr "Display name…"
 
-msgid "Preview Move ({{count}})"
-msgid_plural "Preview Move ({{count}})"
-msgstr[0] "Preview Move ({{count}})"
-msgstr[1] "Preview Move ({{count}})"
-
 msgid "Select all"
 msgstr "Select all"
 
 msgid "Select {{name}}"
 msgstr "Select {{name}}"
-
-msgid "{{count}} moves staged"
-msgid_plural "{{count}} moves staged"
-msgstr[0] "{{count}} moves staged"
-msgstr[1] "{{count}} moves staged"
 
 msgid "Export Preview CSV"
 msgstr "Export Preview CSV"
@@ -180,11 +170,6 @@ msgstr "Lvl"
 msgid "Parent"
 msgstr "Parent"
 
-msgid "Add {{count}} to Board →"
-msgid_plural "Add {{count}} to Board →"
-msgstr[0] "Add {{count}} to Board →"
-msgstr[1] "Add {{count}} to Board →"
-
 msgid "Pending Moves"
 msgstr "Pending Moves"
 
@@ -208,11 +193,6 @@ msgstr "{{ready}} / {{total}} assigned"
 
 msgid "Clear"
 msgstr "Clear"
-
-msgid "Execute {{count}} Moves"
-msgid_plural "Execute {{count}} Moves"
-msgstr[0] "Execute {{count}} Moves"
-msgstr[1] "Execute {{count}} Moves"
 
 msgid "Destination Hierarchy"
 msgstr "Destination Hierarchy"
@@ -283,11 +263,6 @@ msgstr "Something went wrong"
 msgid "No duplicates found — system is clean"
 msgstr "No duplicates found — system is clean"
 
-msgid "{{count}} duplicates found"
-msgid_plural "{{count}} duplicates found"
-msgstr[0] "{{count}} duplicates found"
-msgstr[1] "{{count}} duplicates found"
-
 msgid "Actions"
 msgstr "Actions"
 
@@ -318,11 +293,6 @@ msgstr "Longitude"
 msgid "No geo issues found"
 msgstr "No geo issues found"
 
-msgid "{{count}} geo issues found"
-msgid_plural "{{count}} geo issues found"
-msgstr[0] "{{count}} geo issues found"
-msgstr[1] "{{count}} geo issues found"
-
 msgid "All"
 msgstr "All"
 
@@ -347,11 +317,6 @@ msgstr "Violation Type"
 msgid "No violations found — hierarchy is valid"
 msgstr "No violations found — hierarchy is valid"
 
-msgid "{{count}} violations detected"
-msgid_plural "{{count}} violations detected"
-msgstr[0] "{{count}} violations detected"
-msgstr[1] "{{count}} violations detected"
-
 msgid "View Org Unit"
 msgstr "View Org Unit"
 
@@ -369,6 +334,18 @@ msgstr "DHIS2"
 
 msgid "NexAdmin"
 msgstr "NexAdmin"
+
+msgid "v2.42"
+msgstr "v2.42"
+
+msgid "Notifications"
+msgstr "Notifications"
+
+msgid "Help"
+msgstr "Help"
+
+msgid "User menu"
+msgstr "User menu"
 
 msgid "Delete organisation unit"
 msgstr "Delete organisation unit"
@@ -473,14 +450,357 @@ msgstr "Expand sidebar"
 msgid "Health Dashboard"
 msgstr "Health Dashboard"
 
+msgid "Value type for {{name}}"
+msgstr "Value type for {{name}}"
+
+msgid "Aggregation type for {{name}}"
+msgstr "Aggregation type for {{name}}"
+
+msgid "Category combo for {{name}}"
+msgstr "Category combo for {{name}}"
+
+msgid "(default)"
+msgstr "(default)"
+
+msgid "Option set for {{name}}"
+msgstr "Option set for {{name}}"
+
+msgid "—"
+msgstr "—"
+
+msgid "Element name…"
+msgstr "Element name…"
+
+msgid "(set per row)"
+msgstr "(set per row)"
+
+msgid "Default value type"
+msgstr "Default value type"
+
+msgid "Default aggregation type"
+msgstr "Default aggregation type"
+
+msgid "Default category combo"
+msgstr "Default category combo"
+
+msgid "Default option set"
+msgstr "Default option set"
+
+msgid "{{n}} row{{s}}"
+msgstr "{{n}} row{{s}}"
+
+msgid "{{n}} error{{s}}"
+msgstr "{{n}} error{{s}}"
+
+msgid "Add row"
+msgstr "Add row"
+
+msgid "Data elements to create"
+msgstr "Data elements to create"
+
+msgid "Row"
+msgstr "Row"
+
+msgid "DEFAULTS"
+msgstr "DEFAULTS"
+
+msgid "New rows inherit these values"
+msgstr "New rows inherit these values"
+
+msgid "Duplicate row"
+msgstr "Duplicate row"
+
+msgid "Duplicate row {{n}}"
+msgstr "Duplicate row {{n}}"
+
+msgid "Delete row"
+msgstr "Delete row"
+
+msgid "Delete row {{n}}"
+msgstr "Delete row {{n}}"
+
+msgid "Press Tab to move between cells · Tab from last cell adds a new row"
+msgstr "Press Tab to move between cells · Tab from last cell adds a new row"
+
+msgid "Session expired — please refresh the page and log in again."
+msgstr "Session expired — please refresh the page and log in again."
+
+msgid "You do not have permission to read this dataset."
+msgstr "You do not have permission to read this dataset."
+
+msgid "Dataset not found — it may have been deleted. Try selecting another."
+msgstr "Dataset not found — it may have been deleted. Try selecting another."
+
+msgid ""
+"Could not load dataset elements (API error). Please reload the page; if the "
+"problem persists contact your system administrator."
+msgstr ""
+"Could not load dataset elements (API error). Please reload the page; if the "
+"problem persists contact your system administrator."
+
+msgid "Network error — check your connection and try again."
+msgstr "Network error — check your connection and try again."
+
+msgid "Value Type"
+msgstr "Value Type"
+
+msgid "Edit Mode"
+msgstr "Edit Mode"
+
+msgid "Select dataset"
+msgstr "Select dataset"
+
+msgid "Loading datasets…"
+msgstr "Loading datasets…"
+
+msgid "— Select a dataset to begin —"
+msgstr "— Select a dataset to begin —"
+
+msgid "{{n}} elements"
+msgstr "{{n}} elements"
+
+msgid "Search by name, code…"
+msgstr "Search by name, code…"
+
+msgid "Select all {{n}}"
+msgstr "Select all {{n}}"
+
+msgid "No dataset selected"
+msgstr "No dataset selected"
+
+msgid "Choose a dataset above to load its data elements."
+msgstr "Choose a dataset above to load its data elements."
+
+msgid "Loading data elements…"
+msgstr "Loading data elements…"
+
+msgid "Could not load data elements"
+msgstr "Could not load data elements"
+
+msgid "Retry"
+msgstr "Retry"
+
+msgid "No data elements found"
+msgstr "No data elements found"
+
+msgid "This dataset has no data elements configured."
+msgstr "This dataset has no data elements configured."
+
+msgid "Select all on this page"
+msgstr "Select all on this page"
+
+msgid "Short Name"
+msgstr "Short Name"
+
+msgid "New Name (preview)"
+msgstr "New Name (preview)"
+
+msgid "New name for {{name}}"
+msgstr "New name for {{name}}"
+
+msgid "Clear direct edit — revert to rule result"
+msgstr "Clear direct edit — revert to rule result"
+
+msgid "(no change)"
+msgstr "(no change)"
+
+msgid "Click to rename"
+msgstr "Click to rename"
+
+msgid "No data elements match the filter."
+msgstr "No data elements match the filter."
+
+msgid "Rename Rules"
+msgstr "Rename Rules"
+
+msgid "{{n}} will change"
+msgstr "{{n}} will change"
+
+msgid "Export preview"
+msgstr "Export preview"
+
+msgid ""
+"Renaming a data element changes it globally in DHIS2, not only within this "
+"dataset."
+msgstr ""
+"Renaming a data element changes it globally in DHIS2, not only within this "
+"dataset."
+
+msgid "Rule {{n}} mode"
+msgstr "Rule {{n}} mode"
+
+msgid "Prefix text…"
+msgstr "Prefix text…"
+
+msgid "Suffix text…"
+msgstr "Suffix text…"
+
+msgid "Regex pattern…"
+msgstr "Regex pattern…"
+
+msgid "Find text…"
+msgstr "Find text…"
+
+msgid "Find for rule {{n}}"
+msgstr "Find for rule {{n}}"
+
+msgid "Replace with (empty = delete)…"
+msgstr "Replace with (empty = delete)…"
+
+msgid "Replace for rule {{n}}"
+msgstr "Replace for rule {{n}}"
+
+msgid "All letters → UPPERCASE"
+msgstr "All letters → UPPERCASE"
+
+msgid "All letters → lowercase"
+msgstr "All letters → lowercase"
+
+msgid "First Letter Capitalised In Each Word"
+msgstr "First Letter Capitalised In Each Word"
+
+msgid "Remove leading/trailing spaces; collapse double spaces"
+msgstr "Remove leading/trailing spaces; collapse double spaces"
+
+msgid "Move rule {{n}} up"
+msgstr "Move rule {{n}} up"
+
+msgid "Move rule {{n}} down"
+msgstr "Move rule {{n}} down"
+
+msgid "Remove rule {{n}}"
+msgstr "Remove rule {{n}}"
+
+msgid "Add rule"
+msgstr "Add rule"
+
+msgid ""
+"{{n}} names will change. Use \"Export preview\" to review the full list "
+"before applying."
+msgstr ""
+"{{n}} names will change. Use \"Export preview\" to review the full list "
+"before applying."
+
+msgid "{{n}} created"
+msgstr "{{n}} created"
+
+msgid "{{n}} renamed"
+msgstr "{{n}} renamed"
+
+msgid "Data Element Engineering"
+msgstr "Data Element Engineering"
+
+msgid ""
+"Bulk create data elements and rename them within datasets — turning hours "
+"of manual work into minutes."
+msgstr ""
+"Bulk create data elements and rename them within datasets — turning hours "
+"of manual work into minutes."
+
+msgid "Bulk Create"
+msgstr "Bulk Create"
+
+msgid "Rename in Dataset"
+msgstr "Rename in Dataset"
+
+msgid "Submitting data elements to DHIS2…"
+msgstr "Submitting data elements to DHIS2…"
+
+msgid "{{n}} data element{{s}} created successfully"
+msgstr "{{n}} data element{{s}} created successfully"
+
+msgid "{{n}} ignored (may already exist or have validation errors)"
+msgstr "{{n}} ignored (may already exist or have validation errors)"
+
+msgid "Create more"
+msgstr "Create more"
+
+msgid "Creation failed"
+msgstr "Creation failed"
+
+msgid "…and {{n}} more errors"
+msgstr "…and {{n}} more errors"
+
+msgid "Reset"
+msgstr "Reset"
+
+msgid "Review all rows before submitting. Creation cannot be undone from this tool."
+msgstr "Review all rows before submitting. Creation cannot be undone from this tool."
+
+msgid "Create {{n}} data element{{s}}"
+msgstr "Create {{n}} data element{{s}}"
+
+msgid "Renaming data elements…"
+msgstr "Renaming data elements…"
+
+msgid "{{n}} data element{{s}} renamed successfully"
+msgstr "{{n}} data element{{s}} renamed successfully"
+
+msgid "Rename more"
+msgstr "Rename more"
+
+msgid "Rename failed — {{n}} element{{s}} rolled back"
+msgstr "Rename failed — {{n}} element{{s}} rolled back"
+
+msgid "Create {{n}} data element{{s}}?"
+msgstr "Create {{n}} data element{{s}}?"
+
+msgid ""
+"This will create {{n}} new data element{{s}} in DHIS2. Data elements "
+"created here will be immediately visible in the Maintenance app and any "
+"datasets you assign them to."
+msgstr ""
+"This will create {{n}} new data element{{s}} in DHIS2. Data elements "
+"created here will be immediately visible in the Maintenance app and any "
+"datasets you assign them to."
+
+msgid "Rename {{n}} data element{{s}}?"
+msgstr "Rename {{n}} data element{{s}}?"
+
+msgid ""
+"This will rename {{n}} data element{{s}} globally across all datasets and "
+"reports in DHIS2. This action cannot be undone from this tool."
+msgstr ""
+"This will rename {{n}} data element{{s}} globally across all datasets and "
+"reports in DHIS2. This action cannot be undone from this tool."
+
 msgid "Access Control"
 msgstr "Access Control"
 
-msgid "This module is under construction."
-msgstr "This module is under construction."
+msgid ""
+"Manage sharing settings, user restrictions, and organisation-unit-level "
+"access across the system."
+msgstr ""
+"Manage sharing settings, user restrictions, and organisation-unit-level "
+"access across the system."
+
+msgid "Coming soon"
+msgstr "Coming soon"
 
 msgid "Audit Log"
 msgstr "Audit Log"
+
+msgid ""
+"A full record of system changes, including who changed what and when. "
+"Useful for compliance and troubleshooting."
+msgstr ""
+"A full record of system changes, including who changed what and when. "
+"Useful for compliance and troubleshooting."
+
+msgid "User"
+msgstr "User"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Resource"
+msgstr "Resource"
+
+msgid "Time"
+msgstr "Time"
+
+msgid "Full audit trail with filtering, search, and export will be available here."
+msgstr "Full audit trail with filtering, search, and export will be available here."
 
 msgid "Bulk Rename"
 msgstr "Bulk Rename"
@@ -492,21 +812,14 @@ msgstr ""
 "Select org units, apply a rename rule to the selection, then repeat for "
 "other groups."
 
+msgid "renamed"
+msgstr "renamed"
+
 msgid "Loading org units…"
 msgstr "Loading org units…"
 
 msgid "Failed to load org units. {{message}}"
 msgstr "Failed to load org units. {{message}}"
-
-msgid "Renaming {{count}} org units…"
-msgid_plural "Renaming {{count}} org units…"
-msgstr[0] "Renaming {{count}} org units…"
-msgstr[1] "Renaming {{count}} org units…"
-
-msgid "{{count}} org units renamed this session."
-msgid_plural "{{count}} org units renamed this session."
-msgstr[0] "{{count}} org units renamed this session."
-msgstr[1] "{{count}} org units renamed this session."
 
 msgid "Continue Renaming"
 msgstr "Continue Renaming"
@@ -523,34 +836,14 @@ msgstr "Try Again"
 msgid "Confirm Rename"
 msgstr "Confirm Rename"
 
-msgid ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgid_plural ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[0] ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[1] ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-
 msgid "Bulk Reorganise"
 msgstr "Bulk Reorganise"
 
 msgid "Select org units and assign them a new parent to move them in bulk."
 msgstr "Select org units and assign them a new parent to move them in bulk."
 
-msgid "Moving {{count}} org units…"
-msgid_plural "Moving {{count}} org units…"
-msgstr[0] "Moving {{count}} org units…"
-msgstr[1] "Moving {{count}} org units…"
-
-msgid "All {{count}} org units moved successfully."
-msgid_plural "All {{count}} org units moved successfully."
-msgstr[0] "All {{count}} org units moved successfully."
-msgstr[1] "All {{count}} org units moved successfully."
+msgid "moved"
+msgstr "moved"
 
 msgid "New Operation"
 msgstr "New Operation"
@@ -568,30 +861,120 @@ msgstr ""
 msgid "Confirm Bulk Move"
 msgstr "Confirm Bulk Move"
 
-msgid ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgid_plural ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[0] ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[1] ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
+msgid "DHIS2 Administration Platform"
+msgstr "DHIS2 Administration Platform"
 
-msgid "Data Quality"
-msgstr "Data Quality"
+msgid "Welcome to"
+msgstr "Welcome to"
+
+msgid ""
+"A modern, powerful interface for managing your DHIS2 organisation "
+"hierarchy, data integrity, users, and system configuration."
+msgstr ""
+"A modern, powerful interface for managing your DHIS2 organisation "
+"hierarchy, data integrity, users, and system configuration."
+
+msgid "System Overview"
+msgstr "System Overview"
+
+msgid "Organisation Units"
+msgstr "Organisation Units"
+
+msgid "System Users"
+msgstr "System Users"
+
+msgid "Data Integrity Issues"
+msgstr "Data Integrity Issues"
+
+msgid "Completed Bulk Ops"
+msgstr "Completed Bulk Ops"
+
+msgid "Quick Actions"
+msgstr "Quick Actions"
+
+msgid "Manage Org Units"
+msgstr "Manage Org Units"
+
+msgid "Create, edit, and organise your organisation hierarchy."
+msgstr "Create, edit, and organise your organisation hierarchy."
+
+msgid ""
+"Bulk create data elements and rename them in datasets — hours of work in "
+"minutes."
+msgstr ""
+"Bulk create data elements and rename them in datasets — hours of work in "
+"minutes."
+
+msgid "New"
+msgstr "New"
+
+msgid "Rename hundreds of org units at once using patterns and rules."
+msgstr "Rename hundreds of org units at once using patterns and rules."
+
+msgid "Popular"
+msgstr "Popular"
+
+msgid "Move org units to new parents and restructure your hierarchy."
+msgstr "Move org units to new parents and restructure your hierarchy."
 
 msgid "Duplicate Detector"
 msgstr "Duplicate Detector"
 
-msgid "Find org units with identical or suspiciously similar names"
-msgstr "Find org units with identical or suspiciously similar names"
+msgid "Find and resolve duplicate organisation units in your system."
+msgstr "Find and resolve duplicate organisation units in your system."
 
-msgid "Scanning..."
-msgstr "Scanning..."
+msgid "Integrity"
+msgstr "Integrity"
+
+msgid "Hierarchy Validator"
+msgstr "Hierarchy Validator"
+
+msgid "Validate your org unit hierarchy for structural issues."
+msgstr "Validate your org unit hierarchy for structural issues."
+
+msgid "Geo Consistency"
+msgstr "Geo Consistency"
+
+msgid "Check geographic data consistency and coordinate accuracy."
+msgstr "Check geographic data consistency and coordinate accuracy."
+
+msgid "User Management"
+msgstr "User Management"
+
+msgid "Manage users, roles, and access permissions."
+msgstr "Manage users, roles, and access permissions."
+
+msgid "System Settings"
+msgstr "System Settings"
+
+msgid "Configure application settings and preferences."
+msgstr "Configure application settings and preferences."
+
+msgid "All Modules"
+msgstr "All Modules"
+
+msgid "Data Quality"
+msgstr "Data Quality"
+
+msgid ""
+"Run validation rules, detect outliers, and assess completeness and "
+"timeliness of reported data."
+msgstr ""
+"Run validation rules, detect outliers, and assess completeness and "
+"timeliness of reported data."
+
+msgid ""
+"Find org units with identical or suspiciously similar names in the "
+"hierarchy."
+msgstr ""
+"Find org units with identical or suspiciously similar names in the "
+"hierarchy."
+
+msgid "pairs found"
+msgstr "pairs found"
+
+msgid "Scanning…"
+msgstr "Scanning…"
 
 msgid "Scan for Duplicates"
 msgstr "Scan for Duplicates"
@@ -599,20 +982,37 @@ msgstr "Scan for Duplicates"
 msgid "Geo Consistency Checker"
 msgstr "Geo Consistency Checker"
 
-msgid "Identify org units with coordinates outside their district polygon"
-msgstr "Identify org units with coordinates outside their district polygon"
+msgid ""
+"Identify org units with missing coordinates, invalid geometries, or "
+"coordinates outside their parent polygon."
+msgstr ""
+"Identify org units with missing coordinates, invalid geometries, or "
+"coordinates outside their parent polygon."
+
+msgid "issues"
+msgstr "issues"
+
+msgid "All clean"
+msgstr "All clean"
 
 msgid "Run Geo Check"
 msgstr "Run Geo Check"
 
-msgid "Hierarchy Validator"
-msgstr "Hierarchy Validator"
+msgid ""
+"Detect structural violations in the org unit hierarchy — missing parents, "
+"circular references, and level gaps."
+msgstr ""
+"Detect structural violations in the org unit hierarchy — missing parents, "
+"circular references, and level gaps."
 
-msgid "Detect structural violations in the org unit hierarchy"
-msgstr "Detect structural violations in the org unit hierarchy"
+msgid "violations"
+msgstr "violations"
 
-msgid "Validating"
-msgstr "Validating"
+msgid "No violations"
+msgstr "No violations"
+
+msgid "Validating…"
+msgstr "Validating…"
 
 msgid "Run Validation"
 msgstr "Run Validation"
@@ -620,17 +1020,68 @@ msgstr "Run Validation"
 msgid "Hierarchy Viewer"
 msgstr "Hierarchy Viewer"
 
-msgid "Notifications"
-msgstr "Notifications"
+msgid ""
+"Visualise and explore the full organisation unit hierarchy in an "
+"interactive tree view."
+msgstr ""
+"Visualise and explore the full organisation unit hierarchy in an "
+"interactive tree view."
+
+msgid "Interactive Hierarchy Tree"
+msgstr "Interactive Hierarchy Tree"
+
+msgid ""
+"A collapsible, searchable tree view of your entire organisation hierarchy "
+"will be available here. Click any node to view details, relationships, and "
+"assigned data sets."
+msgstr ""
+"A collapsible, searchable tree view of your entire organisation hierarchy "
+"will be available here. Click any node to view details, relationships, and "
+"assigned data sets."
+
+msgid "Expandable tree with search"
+msgstr "Expandable tree with search"
+
+msgid "Filter by level or group"
+msgstr "Filter by level or group"
+
+msgid "View geo boundaries on map"
+msgstr "View geo boundaries on map"
+
+msgid "Export hierarchy as JSON or CSV"
+msgstr "Export hierarchy as JSON or CSV"
+
+msgid ""
+"System alerts, operation results, and important messages about your DHIS2 "
+"instance."
+msgstr ""
+"System alerts, operation results, and important messages about your DHIS2 "
+"instance."
+
+msgid "4 unread"
+msgstr "4 unread"
 
 msgid "Org Unit Groups"
 msgstr "Org Unit Groups"
 
-msgid "Organisation Units"
-msgstr "Organisation Units"
+msgid ""
+"Categorise organisation units into groups and group sets for analytics and "
+"access control."
+msgstr ""
+"Categorise organisation units into groups and group sets for analytics and "
+"access control."
 
-msgid "Managing "
-msgstr "Managing "
+msgid "Group Name"
+msgstr "Group Name"
+
+msgid "Units"
+msgstr "Units"
+
+msgid "Group Sets"
+msgstr "Group Sets"
+
+msgid "Create, edit, search and manage your organisation unit hierarchy."
+msgstr "Create, edit, search and manage your organisation unit hierarchy."
 
 msgid "units"
 msgstr "units"
@@ -641,20 +1092,117 @@ msgstr "Add organisation unit"
 msgid "Error loading organisation units"
 msgstr "Error loading organisation units"
 
-msgid "Roles Authorities"
-msgstr "Roles Authorities"
+msgid "Roles & Authorities"
+msgstr "Roles & Authorities"
 
-msgid "System Settings"
-msgstr "System Settings"
+msgid ""
+"Define user roles with specific authorities to control what users can see "
+"and do in DHIS2."
+msgstr ""
+"Define user roles with specific authorities to control what users can see "
+"and do in DHIS2."
+
+msgid "Role Name"
+msgstr "Role Name"
+
+msgid "Users"
+msgstr "Users"
+
+msgid "Authorities"
+msgstr "Authorities"
+
+msgid ""
+"Configure application behaviour, security policies, email notifications, "
+"and system-wide preferences."
+msgstr ""
+"Configure application behaviour, security policies, email notifications, "
+"and system-wide preferences."
 
 msgid "Usage Statistics"
 msgstr "Usage Statistics"
 
+msgid ""
+"Monitor system usage, active users, popular features, and performance "
+"metrics over time."
+msgstr ""
+"Monitor system usage, active users, popular features, and performance "
+"metrics over time."
+
+msgid "Active Users"
+msgstr "Active Users"
+
+msgid "API Requests / day"
+msgstr "API Requests / day"
+
+msgid "Avg Response (ms)"
+msgstr "Avg Response (ms)"
+
+msgid "Error Rate"
+msgstr "Error Rate"
+
+msgid "Analytics Dashboard"
+msgstr "Analytics Dashboard"
+
+msgid ""
+"Charts, trend lines, and detailed usage reports will be available here. "
+"Track user activity, popular modules, and system performance."
+msgstr ""
+"Charts, trend lines, and detailed usage reports will be available here. "
+"Track user activity, popular modules, and system performance."
+
+msgid "Daily active users chart"
+msgstr "Daily active users chart"
+
+msgid "Most used features and modules"
+msgstr "Most used features and modules"
+
+msgid "Performance and error rate trends"
+msgstr "Performance and error rate trends"
+
+msgid "Export reports as PDF or CSV"
+msgstr "Export reports as PDF or CSV"
+
 msgid "User Groups"
 msgstr "User Groups"
 
-msgid "User Management"
-msgstr "User Management"
+msgid ""
+"Organise users into groups to simplify sharing and access control across "
+"DHIS2 objects."
+msgstr ""
+"Organise users into groups to simplify sharing and access control across "
+"DHIS2 objects."
+
+msgid "Members"
+msgstr "Members"
+
+msgid "Managed"
+msgstr "Managed"
+
+msgid ""
+"Create and manage system users, assign roles, and control access to DHIS2 "
+"resources."
+msgstr ""
+"Create and manage system users, assign roles, and control access to DHIS2 "
+"resources."
+
+msgid ""
+"This module is under active development. User management, role assignments, "
+"and permission configuration will be available here."
+msgstr ""
+"This module is under active development. User management, role assignments, "
+"and permission configuration will be available here."
+
+msgid "Create and edit user accounts"
+msgstr "Create and edit user accounts"
+
+msgid "Assign roles and authorities"
+msgstr "Assign roles and authorities"
+
+msgid "Manage user groups and access"
+msgstr "Manage user groups and access"
+
+msgid "Bulk import users from CSV"
+msgstr "Bulk import users from CSV"
 
 msgid "…"
 msgstr "…"
