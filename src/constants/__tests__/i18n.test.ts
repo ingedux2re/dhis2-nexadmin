@@ -3,7 +3,14 @@
 // Unit tests for i18n constants — Phase 0
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { SUPPORTED_LOCALES, DEFAULT_LOCALE, LOCALE_MAP, isSupported, getLocale } from '../i18n'
+import {
+  SUPPORTED_LOCALES,
+  DEFAULT_LOCALE,
+  LOCALE_MAP,
+  isSupported,
+  getLocale,
+  normaliseLocale,
+} from '../i18n'
 
 describe('i18n constants', () => {
   it('SUPPORTED_LOCALES has EN and FR', () => {
@@ -31,6 +38,20 @@ describe('i18n constants', () => {
     expect(isSupported('')).toBe(false)
   })
 
+  it('isSupported handles regional variants (fr-FR, fr_FR)', () => {
+    expect(isSupported('fr-FR')).toBe(true)
+    expect(isSupported('fr_FR')).toBe(true)
+    expect(isSupported('en-GB')).toBe(true)
+  })
+
+  it('normaliseLocale strips region and script suffixes', () => {
+    expect(normaliseLocale('fr')).toBe('fr')
+    expect(normaliseLocale('fr-FR')).toBe('fr')
+    expect(normaliseLocale('fr_FR')).toBe('fr')
+    expect(normaliseLocale('pt-BR')).toBe('pt')
+    expect(normaliseLocale('EN')).toBe('en')
+  })
+
   it('getLocale returns correct locale for known code', () => {
     const locale = getLocale('fr')
     expect(locale.code).toBe('fr')
@@ -40,6 +61,11 @@ describe('i18n constants', () => {
   it('getLocale falls back to DEFAULT_LOCALE for unknown code', () => {
     const locale = getLocale('xx')
     expect(locale.code).toBe(DEFAULT_LOCALE)
+  })
+
+  it('getLocale resolves regional variant to base locale', () => {
+    expect(getLocale('fr-FR').code).toBe('fr')
+    expect(getLocale('fr_FR').code).toBe('fr')
   })
 
   it('each locale has required fields', () => {
