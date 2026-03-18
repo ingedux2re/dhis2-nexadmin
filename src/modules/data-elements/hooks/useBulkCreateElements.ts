@@ -208,7 +208,11 @@ export function useBulkCreateElements() {
       const raw = await (engine as any).mutate({
         resource: 'metadata',
         type: 'create',
-        params: { mergeMode: 'REPLACE', importStrategy: 'CREATE' },
+        params: {
+          mergeMode: 'REPLACE',
+          importStrategy: 'CREATE',
+          importReportMode: 'FULL',
+        },
         data: payload,
       })
       const result = parseImportResult(raw)

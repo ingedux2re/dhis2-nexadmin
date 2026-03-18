@@ -8,7 +8,11 @@
 //   4. collectImportErrors helper
 // ─────────────────────────────────────────────────────────────────────────────
 
-import { parseImportResult, collectImportErrors } from '../metadataService'
+import {
+  parseImportResult,
+  collectImportErrors,
+  extractCreatedDataElementIds,
+} from '../metadataService'
 
 describe('parseImportResult', () => {
   // ── DHIS2 2.38+ wrapped format ──────────────────────────────────────────────
@@ -190,5 +194,55 @@ describe('collectImportErrors', () => {
     expect(errors).toHaveLength(2)
     expect(errors[0]).toBe('[E4000] Duplicate short name')
     expect(errors[1]).toBe('[E4001] Invalid value type')
+  })
+})
+
+describe('extractCreatedDataElementIds', () => {
+  it('extracts UIDs from objectReports (importReportMode=FULL response)', () => {
+    const result = parseImportResult({
+      status: 'OK',
+      response: {
+        status: 'OK',
+        stats: { created: 2, updated: 0, deleted: 0, ignored: 0, total: 2 },
+        typeReports: [
+          {
+            klass: 'org.hisp.dhis.dataelement.DataElement',
+            stats: { created: 2, updated: 0, deleted: 0, ignored: 0, total: 2 },
+            objectReports: [{ uid: 'de001abc' }, { uid: 'de002def' }],
+          },
+        ],
+      },
+    })
+    expect(extractCreatedDataElementIds(result)).toEqual(['de001abc', 'de002def'])
+  })
+
+  it('falls back to id when uid is absent (some DHIS2 versions)', () => {
+    const result = parseImportResult({
+      status: 'OK',
+      response: {
+        status: 'OK',
+        stats: { created: 1, updated: 0, deleted: 0, ignored: 0, total: 1 },
+        typeReports: [
+          {
+            klass: 'org.hisp.dhis.dataelement.DataElement',
+            stats: { created: 1, updated: 0, deleted: 0, ignored: 0, total: 1 },
+            objectReports: [{ id: 'de003xyz' }],
+          },
+        ],
+      },
+    })
+    expect(extractCreatedDataElementIds(result)).toEqual(['de003xyz'])
+  })
+
+  it('returns empty array when no objectReports (importReportMode=ERRORS default)', () => {
+    const result = parseImportResult({
+      status: 'OK',
+      response: {
+        status: 'OK',
+        stats: { created: 2, updated: 0, deleted: 0, ignored: 0, total: 2 },
+        typeReports: [],
+      },
+    })
+    expect(extractCreatedDataElementIds(result)).toEqual([])
   })
 })

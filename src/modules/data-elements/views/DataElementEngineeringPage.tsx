@@ -23,7 +23,7 @@ import { useDatasetElements } from '../hooks/useDatasetElements'
 import { useBulkRenameElements } from '../hooks/useBulkRenameElements'
 import type { DataElementRenamePreview, CreateRow } from '../types'
 import type { ParsedRow } from '../services/excelPasteParser'
-import { collectImportErrors } from '../services/metadataService'
+import { collectImportErrors, extractCreatedDataElementIds } from '../services/metadataService'
 import { nanoid } from '../../../utils/nanoid'
 import styles from './DataElementEngineeringPage.module.css'
 
@@ -55,41 +55,38 @@ export default function DataElementEngineeringPage() {
   /**
    * The IDs + names of elements just created — sourced from the typeReports
    * returned by DHIS2 after a successful bulk creation.
-   * We read them from create.state.result?.typeReports.
+   * IMPORTANT: We must use DHIS2 UIDs from the import response, never client-side _id (nanoid).
+   * The assign-to-dataset API requires valid DHIS2 metadata IDs.
    */
   const createdElements = useMemo(() => {
     const result = create.state.result
     if (!result) return []
-    // DHIS2 populates typeReports[].objectReports[].uid for each created object
-    // We pair UIDs with the original row names to give friendly labels in the modal
-    const uids: string[] = []
-    for (const tr of result.typeReports ?? []) {
-      for (const obj of tr.objectReports ?? []) {
-        if (obj.uid) uids.push(obj.uid)
-      }
-    }
-    // If typeReports didn't yield UIDs (some DHIS2 versions omit them), fall
-    // back to the row names without IDs (modal will still work for create-new)
-    if (uids.length > 0) {
-      return uids.map((id, i) => ({
-        id,
-        name: create.state.rows[i]?.name ?? id,
-      }))
-    }
-    return create.state.rows.filter((r) => r.name.trim()).map((r) => ({ id: r._id, name: r.name }))
+    const uids = extractCreatedDataElementIds(result)
+    if (uids.length === 0) return []
+    // Valid rows (same order as payload) for name mapping
+    const validRows = create.state.rows.filter((r) => r.name?.trim())
+    return uids.map((id, i) => ({
+      id,
+      name: validRows[i]?.name ?? id,
+    }))
   }, [create.state.result, create.state.rows])
 
   const handleCreateConfirm = useCallback(async () => {
     await create.execute()
   }, [create])
 
-  // Auto-open assign modal once creation succeeds
+  // Auto-open assign modal once creation succeeds (only if we have valid DHIS2 UIDs)
   useEffect(() => {
-    if (create.state.status === 'done' && create.state.result && !showAssignModal) {
+    if (
+      create.state.status === 'done' &&
+      create.state.result &&
+      createdElements.length > 0 &&
+      !showAssignModal
+    ) {
       setShowAssignModal(true)
       assignDs.open()
     }
-  }, [create.state.status]) // eslint-disable-line react-hooks/exhaustive-deps
+  }, [create.state.status, createdElements.length]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleCloseAssignModal = useCallback(() => {
     setShowAssignModal(false)
