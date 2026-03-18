@@ -8,14 +8,14 @@
 //   • Assign data elements to existing dataSets via JSON Patch (append-only)
 //   • Create a brand-new dataSet with the data elements already attached via POST
 //
-// Why JSON Patch for assigning to existing datasets?
-//   PUT /api/dataSets/{id} requires round-tripping the full object. Any
-//   existing dataSetElement whose structure doesn't exactly match what DHIS2
-//   expects (e.g. missing categoryCombo) triggers a Hibernate null-value error.
-//   JSON Patch with op:"add" path:"/dataSetElements/-" appends elements without
-//   touching existing ones, completely avoiding the round-trip problem.
-//   app-runtime type:'json-patch' sends PATCH with content-type
-//   application/json-patch+json which is what DHIS2 expects.
+// Why metadata batch endpoint for assigning to existing datasets?
+//   PUT /api/dataSets/{id} with a partial body triggers Hibernate null-value
+//   errors on existing dataSetElements (missing categoryCombo etc.).
+//   JSON Patch also proved unreliable across DHIS2 versions.
+//   The safest approach: fetch the dataset with fields=:owner (which gives
+//   DHIS2's own "safe to round-trip" representation), append the new elements,
+//   then POST /api/metadata?importStrategy=UPDATE — the same pattern used
+//   successfully by useBulkRenameElements.
 //
 // State machine:
 //   idle  ──(open)──► decision
@@ -270,11 +270,21 @@ interface RawDataSetsResponse {
   }>
 }
 
-// RawDataSetDetailResponse is used to check which elements are already present
-// before building the patch (so we don't try to add duplicates).
-interface RawDataSetDetailResponse {
+/**
+ * When fetched with fields=:owner DHIS2 returns all properties it needs for a
+ * clean round-trip import via POST /api/metadata?importStrategy=UPDATE.
+ * We only type the fields we actually need; extra fields are passed through
+ * as-is via the spread below.
+ */
+interface RawDataSetOwnerResponse {
   id: string
-  dataSetElements?: Array<{ dataElement: { id: string } }>
+  dataSetElements?: Array<{
+    /** The dataSetElement composite id (may be absent on older DHIS2 versions) */
+    id?: string
+    dataElement: { id: string }
+    categoryCombo?: { id: string }
+  }>
+  [key: string]: unknown
 }
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
@@ -357,49 +367,50 @@ export function useAssignDataset() {
 
       for (const dataSetId of state.selectedDataSetIds) {
         try {
-          // Step 1: Fetch ONLY the existing dataSetElement IDs so we can skip
-          // duplicates. We intentionally do NOT fetch other fields to avoid
-          // needing a full round-trip PUT (which triggers Hibernate errors when
-          // any existing dataSetElement has a null/missing sub-field).
+          // Fetch the dataset using :owner preset.
+          // :owner returns ALL fields that DHIS2 needs for a clean import
+          // round-trip via POST /api/metadata?importStrategy=UPDATE, including
+          // each dataSetElement with its own id, dataElement ref and categoryCombo.
+          // This is the same strategy used by useBulkRenameElements and is
+          // confirmed to work for updating existing objects.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const detail = (await (engine as any).query({
             ds: {
               resource: `dataSets/${dataSetId}`,
-              params: { fields: ['id', 'dataSetElements[dataElement[id]]'] },
+              params: { fields: [':owner'] },
             },
-          })) as { ds: RawDataSetDetailResponse }
+          })) as { ds: RawDataSetOwnerResponse }
 
-          const existingIds = new Set(
-            (detail.ds.dataSetElements ?? []).map((dse) => dse.dataElement.id)
-          )
+          const existingElements = detail.ds.dataSetElements ?? []
+          const existingIds = new Set(existingElements.map((dse) => dse.dataElement.id))
 
-          // Only append elements that are not already in the dataset
-          const toAdd = elementIdsToAssign.filter((id) => !existingIds.has(id))
+          // Only add elements not already present (dedup)
+          const toAdd = elementIdsToAssign
+            .filter((id) => !existingIds.has(id))
+            .map((id) => ({ dataElement: { id } }))
 
           if (toAdd.length === 0) {
-            // Nothing new to add — skip without error
+            // All elements already in dataset — skip without error
             continue
           }
 
-          // Step 2: Use JSON Patch (RFC 6902) to append each element.
-          //   op:"add"  path:"/dataSetElements/-"  appends to the array.
-          //   This never touches existing entries, so no round-trip needed and
-          //   no risk of Hibernate null-value errors on existing elements.
-          //   app-runtime type:'json-patch' sends:
-          //     PATCH /api/dataSets/{id}
-          //     Content-Type: application/json-patch+json
-          const patchOps = toAdd.map((id) => ({
-            op: 'add',
-            path: '/dataSetElements/-',
-            value: { dataElement: { id } },
-          }))
+          // Build the updated dataset object:
+          //   - spread all :owner fields so DHIS2 gets everything it expects
+          //   - override dataSetElements with existing + new ones appended
+          const updatedDataSet = {
+            ...detail.ds,
+            dataSetElements: [...existingElements, ...toAdd],
+          }
 
+          // POST /api/metadata?importStrategy=UPDATE — the metadata batch
+          // endpoint is the recommended way to update existing DHIS2 objects.
+          // It avoids per-field null checks that PUT triggers via Hibernate.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
-            resource: 'dataSets',
-            id: dataSetId,
-            type: 'json-patch',
-            data: patchOps,
+            resource: 'metadata',
+            type: 'create',
+            params: { importStrategy: 'UPDATE', mergeMode: 'REPLACE' },
+            data: { dataSets: [updatedDataSet] },
           })
         } catch (err) {
           const ds = state.allDataSets.find((d) => d.id === dataSetId)
