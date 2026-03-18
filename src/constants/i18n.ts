@@ -64,9 +64,20 @@ export const LOCALE_MAP: Record<string, SupportedLocale> = Object.fromEntries(
   SUPPORTED_LOCALES.map((l) => [l.code, l])
 )
 
-/** Returns true if the given locale code is supported */
-export const isSupported = (code: string): boolean => code in LOCALE_MAP
+/**
+ * Normalise a locale code to the base language tag we store in LOCALE_MAP.
+ * DHIS2 stores locales in Java format (e.g. 'fr', 'fr_FR', 'pt_BR').
+ * The @dhis2/app-adapter converts them to BCP 47 (e.g. 'fr', 'fr-FR', 'pt-BR')
+ * before calling i18n.changeLanguage().  We only have translations for the
+ * two-letter base code ('fr', 'pt', …), so we strip the region/script suffix.
+ * Examples: 'fr' → 'fr', 'fr-FR' → 'fr', 'fr_FR' → 'fr', 'pt-BR' → 'pt'
+ */
+export const normaliseLocale = (code: string): string => code.split(/[-_]/)[0].toLowerCase()
+
+/** Returns true if the given locale code (or its base language) is supported */
+export const isSupported = (code: string): boolean =>
+  code in LOCALE_MAP || normaliseLocale(code) in LOCALE_MAP
 
 /** Returns the locale for a code, falling back to DEFAULT_LOCALE */
 export const getLocale = (code: string): SupportedLocale =>
-  LOCALE_MAP[code] ?? LOCALE_MAP[DEFAULT_LOCALE]
+  LOCALE_MAP[code] ?? LOCALE_MAP[normaliseLocale(code)] ?? LOCALE_MAP[DEFAULT_LOCALE]

@@ -2,10 +2,10 @@ import { useEffect, useCallback, useRef } from 'react'
 import { useDataQuery, useDataMutation } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
 import { useAppStore } from '../store'
-import { DEFAULT_LOCALE, isSupported, getLocale } from '../constants/i18n'
+import { DEFAULT_LOCALE, isSupported, getLocale, normaliseLocale } from '../constants/i18n'
 
 const ME_QUERY = {
-  me: { resource: 'me', params: { fields: 'id,displayName,settings[uiLocale]' } },
+  me: { resource: 'me', params: { fields: 'id,displayName,settings[keyUiLocale]' } },
 }
 
 const UPDATE_LOCALE_MUTATION = {
@@ -22,19 +22,23 @@ interface UseLocaleReturn {
 
 export const useLocale = (): UseLocaleReturn => {
   const { currentLocale, setLocale } = useAppStore()
-  const { data, loading } = useDataQuery<{ me: { settings: { uiLocale: string } } }>(ME_QUERY)
+  const { data, loading } = useDataQuery<{ me: { settings: { keyUiLocale: string } } }>(ME_QUERY)
   const [mutate] = useDataMutation(UPDATE_LOCALE_MUTATION)
 
   // ── Guard: only apply the auto-detected locale once on initial load. ──────
-  // Without this, every re-render that calls the hook (e.g. after a language
-  // switch triggers a store update) would re-run the effect and revert to the
+  // Without this, every re-render would re-run the effect and revert to the
   // DHIS2/localStorage locale, overwriting the user's manual selection.
   const initialised = useRef(false)
 
-  // ── applyLocale is stable (useCallback with only setLocale as dep) ────────
+  // ── applyLocale: normalise locale code then call i18n.changeLanguage ──────
+  // DHIS2 returns Java-format codes (fr, fr_FR, pt_BR); app-adapter converts
+  // them to BCP 47 (fr, fr-FR, pt-BR).  We normalise to the base language code
+  // ('fr', 'pt') because that's what we registered translations under.
   const applyLocale = useCallback(
     (code: string): void => {
-      const safe = isSupported(code) ? code : DEFAULT_LOCALE
+      // Normalise: 'fr-FR' → 'fr', 'fr_FR' → 'fr', 'fr' → 'fr'
+      const base = normaliseLocale(code)
+      const safe = isSupported(base) ? base : DEFAULT_LOCALE
       i18n.changeLanguage(safe)
       setLocale(safe)
       localStorage.setItem('nexadmin_lang', safe)
@@ -53,7 +57,8 @@ export const useLocale = (): UseLocaleReturn => {
 
     initialised.current = true
 
-    const dhisLocale = data?.me?.settings?.uiLocale
+    // DHIS2 returns the locale under 'keyUiLocale' (Java format, e.g. 'fr_FR')
+    const dhisLocale = data?.me?.settings?.keyUiLocale
     const savedLocale = localStorage.getItem('nexadmin_lang')
     // Priority: 1) user's saved preference (localStorage), 2) DHIS2 uiLocale, 3) default 'en'
     const resolved =
