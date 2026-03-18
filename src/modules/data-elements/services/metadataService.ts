@@ -201,11 +201,13 @@ export function buildDataElementPayload(row: CreateRow): Record<string, unknown>
 
 /**
  * Build the full POST /api/metadata body for bulk creating data elements.
+ * Only includes rows with a non-empty name (validation should enforce this, but belt-and-suspenders).
  */
 export function buildBulkCreatePayload(rows: CreateRow[]): {
   dataElements: Record<string, unknown>[]
 } {
-  return { dataElements: rows.map(buildDataElementPayload) }
+  const validRows = rows.filter((r) => r.name?.trim())
+  return { dataElements: validRows.map(buildDataElementPayload) }
 }
 
 /**
