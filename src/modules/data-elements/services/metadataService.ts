@@ -233,6 +233,8 @@ export function buildBulkRenamePayload(
  * Older DHIS2 versions or single-object endpoints may return the fields at top level:
  *   { status, stats, typeReports }
  *
+ * Some DHIS2 versions use `importCount` instead of `stats` for the counts object.
+ *
  * We unwrap `response` first (if present) then fall back to top-level fields.
  */
 export function parseImportResult(raw: unknown): MetadataImportResult {
@@ -241,13 +243,20 @@ export function parseImportResult(raw: unknown): MetadataImportResult {
   // DHIS2 2.38+ wraps ImportReport inside a 'response' key; fall back to top-level for older versions
   const report = (r.response as Record<string, unknown>) ?? r
 
-  const stats: MetadataImportStats = (report.stats as MetadataImportStats) ?? {
-    created: 0,
-    updated: 0,
-    deleted: 0,
-    ignored: 0,
-    total: 0,
+  // Some DHIS2 versions use `importCount` (singular) rather than `stats`
+  const rawStats =
+    (report.stats as Record<string, unknown> | undefined) ??
+    (report.importCount as Record<string, unknown> | undefined) ??
+    {}
+
+  const stats: MetadataImportStats = {
+    created: Number(rawStats.created ?? 0),
+    updated: Number(rawStats.updated ?? 0),
+    deleted: Number(rawStats.deleted ?? 0),
+    ignored: Number(rawStats.ignored ?? 0),
+    total: Number(rawStats.total ?? 0),
   }
+
   const typeReports = (report.typeReports as MetadataTypeReport[]) ?? []
   // Prefer the nested report status; fall back to top-level status
   const status = ((report.status ?? r.status) as 'OK' | 'WARNING' | 'ERROR' | undefined) ?? 'ERROR'

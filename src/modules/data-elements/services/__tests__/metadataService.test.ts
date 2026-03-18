@@ -102,6 +102,51 @@ describe('parseImportResult', () => {
     const result = parseImportResult({})
     expect(result.status).toBe('ERROR')
   })
+
+  // ── importCount alias (some DHIS2 versions) ─────────────────────────────────
+
+  it('reads stats from importCount when stats key is absent (top-level)', () => {
+    const raw = {
+      status: 'OK',
+      importCount: { created: 5, updated: 0, deleted: 0, ignored: 2, total: 7 },
+      typeReports: [],
+    }
+    const result = parseImportResult(raw)
+    expect(result.status).toBe('OK')
+    expect(result.stats.created).toBe(5)
+    expect(result.stats.ignored).toBe(2)
+    expect(result.stats.total).toBe(7)
+  })
+
+  it('reads stats from response.importCount when response.stats is absent', () => {
+    const raw = {
+      httpStatus: 'OK',
+      httpStatusCode: 200,
+      status: 'OK',
+      response: {
+        responseType: 'ImportReport',
+        status: 'OK',
+        importCount: { created: 4, updated: 1, deleted: 0, ignored: 0, total: 5 },
+        typeReports: [],
+      },
+    }
+    const result = parseImportResult(raw)
+    expect(result.status).toBe('OK')
+    expect(result.stats.created).toBe(4)
+    expect(result.stats.updated).toBe(1)
+    expect(result.stats.total).toBe(5)
+  })
+
+  it('prefers stats over importCount when both are present', () => {
+    const raw = {
+      status: 'OK',
+      stats: { created: 3, updated: 0, deleted: 0, ignored: 0, total: 3 },
+      importCount: { created: 99, updated: 0, deleted: 0, ignored: 0, total: 99 },
+      typeReports: [],
+    }
+    const result = parseImportResult(raw)
+    expect(result.stats.created).toBe(3)
+  })
 })
 
 describe('collectImportErrors', () => {
