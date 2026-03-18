@@ -5,17 +5,19 @@
 //
 // Responsibilities:
 //   • Fetch all dataSets (with existing dataSetElements) via the DHIS2 API
-//   • Assign data elements to existing dataSets via JSON Patch (append-only)
+//   • Assign data elements to existing dataSets via the collections API
 //   • Create a brand-new dataSet with the data elements already attached via POST
 //
-// Why metadata batch endpoint for assigning to existing datasets?
-//   PUT /api/dataSets/{id} with a partial body triggers Hibernate null-value
-//   errors on existing dataSetElements (missing categoryCombo etc.).
-//   JSON Patch also proved unreliable across DHIS2 versions.
-//   The safest approach: fetch the dataset with fields=:owner (which gives
-//   DHIS2's own "safe to round-trip" representation), append the new elements,
-//   then POST /api/metadata?importStrategy=UPDATE — the same pattern used
-//   successfully by useBulkRenameElements.
+// Why collections API for assigning to existing datasets?
+//   POST /api/dataSets/{id}/dataElements with {"identifiableObjects":[{"id":"..."}]}
+//   is the documented DHIS2 approach for adding data elements to a dataset.
+//   DHIS2 handles the composite DataSetElement join-table internally, so we never
+//   need to construct the join object manually — which avoids Hibernate null-value
+//   errors on "dataElement" (not-null) and "dataSet" (circular reference) fields.
+//   All previous approaches (PUT with full body, POST /api/metadata with
+//   importStrategy=UPDATE, JSON Patch) produced 409 Conflict errors because the
+//   server requires the full composite object with the correct id fields.
+//   The collections API is the safest and simplest approach.
 //
 // State machine:
 //   idle  ──(open)──► decision
@@ -271,22 +273,14 @@ interface RawDataSetsResponse {
 }
 
 /**
- * When fetched with fields=:owner DHIS2 returns all properties it needs for a
- * clean round-trip import via POST /api/metadata?importStrategy=UPDATE.
- * We only type the fields we actually need; extra fields are passed through
- * as-is via the spread below.
+ * Shape of the dataset list response — used only for fetching existing
+ * dataSetElement IDs so we can skip already-assigned elements.
  */
-interface RawDataSetOwnerResponse {
+interface RawDataSetDetailResponse {
   id: string
   dataSetElements?: Array<{
-    /** The dataSetElement composite id (may be absent on older DHIS2 versions) */
-    id?: string
     dataElement: { id: string }
-    categoryCombo?: { id: string }
-    /** :owner includes the back-reference to the parent dataSet — we strip this before POSTing */
-    dataSet?: { id: string }
   }>
-  [key: string]: unknown
 }
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
@@ -369,64 +363,46 @@ export function useAssignDataset() {
 
       for (const dataSetId of state.selectedDataSetIds) {
         try {
-          // Fetch the dataset using :owner preset.
-          // :owner returns ALL fields that DHIS2 needs for a clean import
-          // round-trip via POST /api/metadata?importStrategy=UPDATE, including
-          // each dataSetElement with its own id, dataElement ref and categoryCombo.
-          // This is the same strategy used by useBulkRenameElements and is
-          // confirmed to work for updating existing objects.
+          // ── Step 1: fetch existing dataSetElements for deduplication ──────
+          // We only need the dataElement ids to know which elements are already
+          // present, so we can skip the ones that don't need to be added.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const detail = (await (engine as any).query({
             ds: {
               resource: `dataSets/${dataSetId}`,
-              params: { fields: [':owner'] },
+              params: { fields: ['id', 'dataSetElements[dataElement[id]]'] },
             },
-          })) as { ds: RawDataSetOwnerResponse }
+          })) as { ds: RawDataSetDetailResponse }
 
-          const existingElements = detail.ds.dataSetElements ?? []
-          const existingIds = new Set(existingElements.map((dse) => dse.dataElement.id))
+          const existingIds = new Set(
+            (detail.ds.dataSetElements ?? []).map((dse) => dse.dataElement.id)
+          )
 
           // Only add elements not already present (dedup)
-          const toAdd = elementIdsToAssign
-            .filter((id) => !existingIds.has(id))
-            .map((id) => ({ dataElement: { id } }))
+          const toAdd = elementIdsToAssign.filter((id) => !existingIds.has(id))
 
           if (toAdd.length === 0) {
             // All elements already in dataset — skip without error
             continue
           }
 
-          // Normalise existing dataSetElements: keep only dataElement + optional
-          // categoryCombo. Strip the dataSet back-reference (which :owner includes)
-          // because sending it inside dataSets[].dataSetElements creates a circular
-          // reference that confuses the DHIS2 metadata importer and causes Hibernate
-          // to see a null dataElement on the re-hydrated objects.
-          const normalisedExisting = existingElements.map((dse) => {
-            const entry: Record<string, unknown> = { dataElement: { id: dse.dataElement.id } }
-            if (dse.categoryCombo?.id) entry.categoryCombo = { id: dse.categoryCombo.id }
-            return entry
-          })
-
-          // Build the updated dataset object:
-          //   - spread all :owner fields (name, shortName, periodType, etc.)
-          //   - override dataSetElements with normalised existing + new ones
-          //   - explicitly omit the dataSet back-ref if :owner included it
-          const dsOwner = detail.ds as Record<string, unknown>
-          const updatedDataSet: Record<string, unknown> = {}
-          for (const key of Object.keys(dsOwner)) {
-            if (key !== 'dataSetElements') updatedDataSet[key] = dsOwner[key]
-          }
-          updatedDataSet.dataSetElements = [...normalisedExisting, ...toAdd]
-
-          // POST /api/metadata?importStrategy=UPDATE — the metadata batch
-          // endpoint is the recommended way to update existing DHIS2 objects.
-          // It avoids per-field null checks that PUT triggers via Hibernate.
+          // ── Step 2: add via collections API ───────────────────────────────
+          // POST /api/dataSets/{id}/dataElements with identifiableObjects is the
+          // documented DHIS2 collections endpoint for adding data elements to a
+          // dataset. DHIS2 creates the DataSetElement composite join records
+          // internally — we never touch that table directly, which avoids the
+          // Hibernate not-null constraint on DataSetElement.dataElement.
+          //
+          // This is different from /api/dataSets/{id}/dataSetElements:
+          //   - /dataElements  → simple identifiable object collection (works)
+          //   - /dataSetElements → composite join table (requires full object, broken)
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
-            resource: 'metadata',
+            resource: `dataSets/${dataSetId}/dataElements`,
             type: 'create',
-            params: { importStrategy: 'UPDATE', mergeMode: 'REPLACE' },
-            data: { dataSets: [updatedDataSet] },
+            data: {
+              identifiableObjects: toAdd.map((id) => ({ id })),
+            },
           })
         } catch (err) {
           const ds = state.allDataSets.find((d) => d.id === dataSetId)
