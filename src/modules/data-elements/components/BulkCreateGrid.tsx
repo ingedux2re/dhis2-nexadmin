@@ -38,13 +38,13 @@ interface BulkCreateGridProps {
 // ── Column definitions ────────────────────────────────────────────────────────
 
 const COLUMNS = [
-  { key: 'name', label: 'Name *', width: '22%' },
-  { key: 'shortName', label: 'Short Name *', width: '14%' },
-  { key: 'code', label: 'Code', width: '12%' },
-  { key: 'valueType', label: 'Value Type *', width: '13%' },
-  { key: 'aggregationType', label: 'Aggregation *', width: '13%' },
-  { key: 'categoryComboId', label: 'Category Combo', width: '14%' },
-  { key: 'optionSetId', label: 'Option Set', width: '12%' },
+  { key: 'name', label: 'Name *', minWidth: '180px' },
+  { key: 'shortName', label: 'Short Name *', minWidth: '120px' },
+  { key: 'code', label: 'Code', minWidth: '100px' },
+  { key: 'valueType', label: 'Value Type *', minWidth: '110px' },
+  { key: 'aggregationType', label: 'Aggregation *', minWidth: '110px' },
+  { key: 'categoryComboId', label: 'Category Combo', minWidth: '120px' },
+  { key: 'optionSetId', label: 'Option Set', minWidth: '100px' },
 ] as const
 
 type ColKey = (typeof COLUMNS)[number]['key']
@@ -354,7 +354,7 @@ export const BulkCreateGrid: FC<BulkCreateGridProps> = ({
               {/* Row number gutter */}
               <th className={styles.gutterHead} aria-label={i18n.t('Row')} />
               {COLUMNS.map((col) => (
-                <th key={col.key} className={styles.colHead} style={{ width: col.width }}>
+                <th key={col.key} className={styles.colHead} style={{ minWidth: col.minWidth }}>
                   {i18n.t(col.label)}
                 </th>
               ))}

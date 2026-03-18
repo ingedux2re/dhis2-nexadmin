@@ -46,6 +46,10 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-sm);
+  /* Chrome fix: prevent the flex container from distributing extra height
+     into table rows, which creates large empty gaps between the template
+     row and data rows when the grid is taller than its content. */
+  display: block;
 }
 
 /* ── Table ─────────────────────────────────────────────────────── */
@@ -54,7 +58,10 @@
   min-width: 900px;
   border-collapse: collapse;
   font-size: var(--text-sm);
-  table-layout: fixed;
+  /* table-layout: auto lets Chrome size columns correctly based on content;
+     combined with explicit min-width on th/td this prevents the Chrome
+     flex+table row-stretching bug. */
+  table-layout: auto;
 }
 
 /* ── Headers ───────────────────────────────────────────────────── */
@@ -72,8 +79,6 @@
   letter-spacing: 0.05em;
   border-bottom: 2px solid var(--border-subtle);
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .gutterHead,
@@ -84,10 +89,12 @@
   background: var(--grey-50);
   border-bottom: 2px solid var(--border-subtle);
   width: 36px;
+  min-width: 36px;
 }
 
 .actionsHead {
   width: 68px;
+  min-width: 68px;
 }
 
 /* ── Template row ──────────────────────────────────────────────── */
@@ -175,6 +182,8 @@
 /* ── Gutter cell ───────────────────────────────────────────────── */
 .gutterCell {
   width: 36px;
+  min-width: 36px;
+  max-width: 36px;
   text-align: center;
   border-right: 1px solid var(--border-subtle);
   background: var(--grey-50);
@@ -263,6 +272,8 @@
 /* ── Actions cell ──────────────────────────────────────────────── */
 .actionsCell {
   width: 68px;
+  min-width: 68px;
+  max-width: 68px;
   padding: 3px 4px;
   border-bottom: 1px solid var(--grey-100);
   vertical-align: middle;
