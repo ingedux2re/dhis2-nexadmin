@@ -5,9 +5,17 @@
 //
 // Responsibilities:
 //   • Fetch all dataSets (with existing dataSetElements) via the DHIS2 API
-//   • Fetch a specific dataset's existing elements before patching
-//   • Assign data elements to one or more existing dataSets via PUT
+//   • Assign data elements to existing dataSets via JSON Patch (append-only)
 //   • Create a brand-new dataSet with the data elements already attached via POST
+//
+// Why JSON Patch for assigning to existing datasets?
+//   PUT /api/dataSets/{id} requires round-tripping the full object. Any
+//   existing dataSetElement whose structure doesn't exactly match what DHIS2
+//   expects (e.g. missing categoryCombo) triggers a Hibernate null-value error.
+//   JSON Patch with op:"add" path:"/dataSetElements/-" appends elements without
+//   touching existing ones, completely avoiding the round-trip problem.
+//   app-runtime type:'json-patch' sends PATCH with content-type
+//   application/json-patch+json which is what DHIS2 expects.
 //
 // State machine:
 //   idle  ──(open)──► decision
@@ -262,14 +270,11 @@ interface RawDataSetsResponse {
   }>
 }
 
+// RawDataSetDetailResponse is used to check which elements are already present
+// before building the patch (so we don't try to add duplicates).
 interface RawDataSetDetailResponse {
   id: string
-  name: string
-  shortName: string
-  periodType: string
-  categoryCombo?: { id: string }
   dataSetElements?: Array<{ dataElement: { id: string } }>
-  // DHIS2 includes many other fields; we only need these for the PUT round-trip
 }
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
@@ -352,59 +357,49 @@ export function useAssignDataset() {
 
       for (const dataSetId of state.selectedDataSetIds) {
         try {
-          // Fetch full dataset — we need name/shortName/periodType/categoryCombo
-          // for the PUT round-trip (DHIS2 requires all required fields in a PUT).
-          // Also fetches existing dataSetElements so we can merge without losing them.
+          // Step 1: Fetch ONLY the existing dataSetElement IDs so we can skip
+          // duplicates. We intentionally do NOT fetch other fields to avoid
+          // needing a full round-trip PUT (which triggers Hibernate errors when
+          // any existing dataSetElement has a null/missing sub-field).
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const detail = (await (engine as any).query({
             ds: {
               resource: `dataSets/${dataSetId}`,
-              params: {
-                fields: [
-                  'id',
-                  'name',
-                  'shortName',
-                  'periodType',
-                  'categoryCombo[id]',
-                  'dataSetElements[dataElement[id]]',
-                ],
-              },
+              params: { fields: ['id', 'dataSetElements[dataElement[id]]'] },
             },
           })) as { ds: RawDataSetDetailResponse }
 
-          const existing = (detail.ds.dataSetElements ?? []).map((dse) => ({
-            dataElement: { id: dse.dataElement.id },
+          const existingIds = new Set(
+            (detail.ds.dataSetElements ?? []).map((dse) => dse.dataElement.id)
+          )
+
+          // Only append elements that are not already in the dataset
+          const toAdd = elementIdsToAssign.filter((id) => !existingIds.has(id))
+
+          if (toAdd.length === 0) {
+            // Nothing new to add — skip without error
+            continue
+          }
+
+          // Step 2: Use JSON Patch (RFC 6902) to append each element.
+          //   op:"add"  path:"/dataSetElements/-"  appends to the array.
+          //   This never touches existing entries, so no round-trip needed and
+          //   no risk of Hibernate null-value errors on existing elements.
+          //   app-runtime type:'json-patch' sends:
+          //     PATCH /api/dataSets/{id}
+          //     Content-Type: application/json-patch+json
+          const patchOps = toAdd.map((id) => ({
+            op: 'add',
+            path: '/dataSetElements/-',
+            value: { dataElement: { id } },
           }))
-
-          // Merge: append new ones that are not already present
-          const existingIds = new Set(existing.map((e) => e.dataElement.id))
-          const toAdd = elementIdsToAssign
-            .filter((id) => !existingIds.has(id))
-            .map((id) => ({ dataElement: { id } }))
-
-          const mergedElements = [...existing, ...toAdd]
-
-          // Build a minimal-but-complete PUT payload:
-          //   - Required DHIS2 fields: name, shortName, periodType
-          //   - categoryCombo only when present (omitting it keeps the existing one)
-          //   - dataSetElements: merged list
-          // Using type:'update' + id sends PUT /api/dataSets/{id}
-          const putPayload: Record<string, unknown> = {
-            name: detail.ds.name,
-            shortName: detail.ds.shortName,
-            periodType: detail.ds.periodType,
-            dataSetElements: mergedElements,
-          }
-          if (detail.ds.categoryCombo?.id) {
-            putPayload.categoryCombo = { id: detail.ds.categoryCombo.id }
-          }
 
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
             resource: 'dataSets',
             id: dataSetId,
-            type: 'update',
-            data: putPayload,
+            type: 'json-patch',
+            data: patchOps,
           })
         } catch (err) {
           const ds = state.allDataSets.find((d) => d.id === dataSetId)
