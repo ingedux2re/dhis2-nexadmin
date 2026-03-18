@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-18T14:55:55.114Z\n"
-"PO-Revision-Date: 2026-03-18T14:55:55.114Z\n"
+"POT-Creation-Date: 2026-03-18T15:20:55.788Z\n"
+"PO-Revision-Date: 2026-03-18T15:20:55.789Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -450,6 +450,157 @@ msgstr "Expand sidebar"
 msgid "Health Dashboard"
 msgstr "Health Dashboard"
 
+msgid "{{n}} data element{{s}} created!"
+msgstr "{{n}} data element{{s}} created!"
+
+msgid "Would you like to assign them to a dataset now?"
+msgstr "Would you like to assign them to a dataset now?"
+
+msgid "Add to existing dataset"
+msgstr "Add to existing dataset"
+
+msgid "Pick one or more datasets already in DHIS2 and append these elements."
+msgstr "Pick one or more datasets already in DHIS2 and append these elements."
+
+msgid "Create a new dataset"
+msgstr "Create a new dataset"
+
+msgid "Define a brand-new dataset and include these elements immediately."
+msgstr "Define a brand-new dataset and include these elements immediately."
+
+msgid "Do nothing for now"
+msgstr "Do nothing for now"
+
+msgid "Close this dialog — you can assign elements later from the Maintenance app."
+msgstr "Close this dialog — you can assign elements later from the Maintenance app."
+
+msgid "Elements to assign"
+msgstr "Elements to assign"
+
+msgid "All {{n}} elements"
+msgstr "All {{n}} elements"
+
+msgid "Select specific elements"
+msgstr "Select specific elements"
+
+msgid "{{n}} of {{total}} selected"
+msgstr "{{n}} of {{total}} selected"
+
+msgid "Target dataset(s)"
+msgstr "Target dataset(s)"
+
+msgid "Loading datasets…"
+msgstr "Loading datasets…"
+
+msgid "Search datasets…"
+msgstr "Search datasets…"
+
+msgid "Search datasets"
+msgstr "Search datasets"
+
+msgid "Clear search"
+msgstr "Clear search"
+
+msgid "No datasets match \"{{q}}\""
+msgstr "No datasets match \"{{q}}\""
+
+msgid "{{n}} elements"
+msgstr "{{n}} elements"
+
+msgid "New dataset details"
+msgstr "New dataset details"
+
+msgid "e.g. Malaria Indicators 2024"
+msgstr "e.g. Malaria Indicators 2024"
+
+msgid "Dataset name"
+msgstr "Dataset name"
+
+msgid "e.g. Malaria 2024"
+msgstr "e.g. Malaria 2024"
+
+msgid "Dataset short name"
+msgstr "Dataset short name"
+
+msgid "Period type"
+msgstr "Period type"
+
+msgid "Category combo"
+msgstr "Category combo"
+
+msgid "(default)"
+msgstr "(default)"
+
+msgid "Action"
+msgstr "Action"
+
+msgid "Assign to existing dataset(s)"
+msgstr "Assign to existing dataset(s)"
+
+msgid "Create new dataset"
+msgstr "Create new dataset"
+
+msgid "Dataset(s)"
+msgstr "Dataset(s)"
+
+msgid "Elements"
+msgstr "Elements"
+
+msgid "All {{n}} created element{{s}}"
+msgstr "All {{n}} created element{{s}}"
+
+msgid "{{n}} selected element{{s}}"
+msgstr "{{n}} selected element{{s}}"
+
+msgid "more"
+msgstr "more"
+
+msgid ""
+"Existing elements in the selected dataset(s) will not be removed. Only new "
+"elements will be appended."
+msgstr ""
+"Existing elements in the selected dataset(s) will not be removed. Only new "
+"elements will be appended."
+
+msgid "Applying changes…"
+msgstr "Applying changes…"
+
+msgid "Done!"
+msgstr "Done!"
+
+msgid "Elements assigned successfully."
+msgstr "Elements assigned successfully."
+
+msgid "Assignment failed"
+msgstr "Assignment failed"
+
+msgid "One or more operations failed. Check the errors below."
+msgstr "One or more operations failed. Check the errors below."
+
+msgid "Confirm & Apply"
+msgstr "Confirm & Apply"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Assign to dataset"
+msgstr "Assign to dataset"
+
+msgid "Go from \"created\" to \"fully usable\" in under a minute"
+msgstr "Go from \"created\" to \"fully usable\" in under a minute"
+
+msgid "{{n}} dataset{{s}} selected"
+msgstr "{{n}} dataset{{s}} selected"
+
+msgid "{{n}} element{{s}} will be assigned"
+msgstr "{{n}} element{{s}} will be assigned"
+
+msgid "\"{{name}}\" · {{n}} element{{s}}"
+msgstr "\"{{name}}\" · {{n}} element{{s}}"
+
+msgid "Back"
+msgstr "Back"
+
 msgid "Value type for {{name}}"
 msgstr "Value type for {{name}}"
 
@@ -458,9 +609,6 @@ msgstr "Aggregation type for {{name}}"
 
 msgid "Category combo for {{name}}"
 msgstr "Category combo for {{name}}"
-
-msgid "(default)"
-msgstr "(default)"
 
 msgid "Option set for {{name}}"
 msgstr "Option set for {{name}}"
@@ -620,12 +768,6 @@ msgstr "{{n}} data row{{s}} detected"
 msgid "{{n}} blank row{{s}} skipped"
 msgstr "{{n}} blank row{{s}} skipped"
 
-msgid "Back"
-msgstr "Back"
-
-msgid "Next"
-msgstr "Next"
-
 msgid "Import {{n}} row{{s}} into grid"
 msgstr "Import {{n}} row{{s}} into grid"
 
@@ -654,14 +796,8 @@ msgstr "Edit Mode"
 msgid "Select dataset"
 msgstr "Select dataset"
 
-msgid "Loading datasets…"
-msgstr "Loading datasets…"
-
 msgid "— Select a dataset to begin —"
 msgstr "— Select a dataset to begin —"
-
-msgid "{{n}} elements"
-msgstr "{{n}} elements"
 
 msgid "Search by name, code…"
 msgstr "Search by name, code…"
@@ -896,9 +1032,6 @@ msgstr ""
 
 msgid "User"
 msgstr "User"
-
-msgid "Action"
-msgstr "Action"
 
 msgid "Resource"
 msgstr "Resource"
