@@ -241,12 +241,16 @@ export function useBulkCreateElements() {
     [state.template]
   )
 
+  /** Replace the entire row list (used by the Excel paste import flow) */
+  const setRows = useCallback((rows: CreateRow[]) => dispatch({ type: 'SET_ROWS', rows }), [])
+
   return {
     state,
     addRow,
     duplicateRow,
     deleteRow,
     updateCell,
+    setRows,
     setTemplate,
     updateTemplateField,
     validateAndConfirm,
