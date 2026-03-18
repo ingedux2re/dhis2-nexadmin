@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-18T10:32:39.550Z\n"
-"PO-Revision-Date: 2026-03-18T10:32:39.551Z\n"
+"POT-Creation-Date: 2026-03-18T14:55:55.114Z\n"
+"PO-Revision-Date: 2026-03-18T14:55:55.114Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -522,6 +522,113 @@ msgstr "Delete row {{n}}"
 msgid "Press Tab to move between cells · Tab from last cell adds a new row"
 msgstr "Press Tab to move between cells · Tab from last cell adds a new row"
 
+msgid "Paste your spreadsheet data"
+msgstr "Paste your spreadsheet data"
+
+msgid "{{n}} line{{s}}"
+msgstr "{{n}} line{{s}}"
+
+msgid "Paste spreadsheet data"
+msgstr "Paste spreadsheet data"
+
+msgid ""
+"Include a header row for auto column detection. Supports Tab (Excel), "
+"Comma, and Semicolon delimiters."
+msgstr ""
+"Include a header row for auto column detection. Supports Tab (Excel), "
+"Comma, and Semicolon delimiters."
+
+msgid "Global defaults"
+msgstr "Global defaults"
+
+msgid "Applied to every row where the field is missing"
+msgstr "Applied to every row where the field is missing"
+
+msgid "Value Type"
+msgstr "Value Type"
+
+msgid "Aggregation"
+msgstr "Aggregation"
+
+msgid "Domain"
+msgstr "Domain"
+
+msgid "Aggregate"
+msgstr "Aggregate"
+
+msgid "Tracker"
+msgstr "Tracker"
+
+msgid "Category Combo"
+msgstr "Category Combo"
+
+msgid "Option Set"
+msgstr "Option Set"
+
+msgid "Column mapping"
+msgstr "Column mapping"
+
+msgid "No header row detected — positional mapping applied"
+msgstr "No header row detected — positional mapping applied"
+
+msgid "Spreadsheet Header"
+msgstr "Spreadsheet Header"
+
+msgid "First Data Row (preview)"
+msgstr "First Data Row (preview)"
+
+msgid "Maps to field"
+msgstr "Maps to field"
+
+msgid "(empty)"
+msgstr "(empty)"
+
+msgid "Map column {{col}}"
+msgstr "Map column {{col}}"
+
+msgid "No rows to preview"
+msgstr "No rows to preview"
+
+msgid "Go back to paste step and make sure your data has at least one data row."
+msgstr "Go back to paste step and make sure your data has at least one data row."
+
+msgid "{{n}} warning{{s}}"
+msgstr "{{n}} warning{{s}}"
+
+msgid "Rows with errors will be imported but may fail DHIS2 validation."
+msgstr "Rows with errors will be imported but may fail DHIS2 validation."
+
+msgid "Paste from Excel"
+msgstr "Paste from Excel"
+
+msgid "Import data elements from Excel, Google Sheets, or any CSV source"
+msgstr "Import data elements from Excel, Google Sheets, or any CSV source"
+
+msgid ""
+"{{valid}} of {{total}} rows ready. {{errors}} rows have errors and will "
+"still be imported — fix them in the grid before submitting."
+msgstr ""
+"{{valid}} of {{total}} rows ready. {{errors}} rows have errors and will "
+"still be imported — fix them in the grid before submitting."
+
+msgid "{{n}} row{{s}} ready to import into the Bulk Create grid."
+msgstr "{{n}} row{{s}} ready to import into the Bulk Create grid."
+
+msgid "{{n}} data row{{s}} detected"
+msgstr "{{n}} data row{{s}} detected"
+
+msgid "{{n}} blank row{{s}} skipped"
+msgstr "{{n}} blank row{{s}} skipped"
+
+msgid "Back"
+msgstr "Back"
+
+msgid "Next"
+msgstr "Next"
+
+msgid "Import {{n}} row{{s}} into grid"
+msgstr "Import {{n}} row{{s}} into grid"
+
 msgid "Session expired — please refresh the page and log in again."
 msgstr "Session expired — please refresh the page and log in again."
 
@@ -540,9 +647,6 @@ msgstr ""
 
 msgid "Network error — check your connection and try again."
 msgstr "Network error — check your connection and try again."
-
-msgid "Value Type"
-msgstr "Value Type"
 
 msgid "Edit Mode"
 msgstr "Edit Mode"
@@ -723,6 +827,9 @@ msgstr "…and {{n}} more errors"
 
 msgid "Reset"
 msgstr "Reset"
+
+msgid "Import rows from Excel or CSV paste"
+msgstr "Import rows from Excel or CSV paste"
 
 msgid "Review all rows before submitting. Creation cannot be undone from this tool."
 msgstr "Review all rows before submitting. Creation cannot be undone from this tool."

@@ -707,6 +707,7 @@
     "Assign roles and authorities": "Assigner des rôles et des autorisations",
     "Manage user groups and access": "Gérer les groupes d'utilisateurs et l'accès",
     "Bulk import users from CSV": "Importer des utilisateurs en masse depuis CSV",
+<<<<<<< HEAD
     "…": "…",
     "(empty)": "(vide)",
     "Aggregate": "Agrégat",
@@ -785,3 +786,7 @@
     "{{n}} element{{s}} will be assigned": "{{n}} élément(s) seront affectés",
     "\"{{name}}\" · {{n}} element{{s}}": "« {{name}} » · {{n}} élément(s)"
 }
+=======
+    "…": "…"
+}
+>>>>>>> 963ff38 (local translations)
