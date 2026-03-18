@@ -264,7 +264,12 @@ interface RawDataSetsResponse {
 
 interface RawDataSetDetailResponse {
   id: string
+  name: string
+  shortName: string
+  periodType: string
+  categoryCombo?: { id: string }
   dataSetElements?: Array<{ dataElement: { id: string } }>
+  // DHIS2 includes many other fields; we only need these for the PUT round-trip
 }
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
@@ -347,12 +352,23 @@ export function useAssignDataset() {
 
       for (const dataSetId of state.selectedDataSetIds) {
         try {
-          // Fetch current dataset state (existing dataSetElements must be preserved)
+          // Fetch full dataset — we need name/shortName/periodType/categoryCombo
+          // for the PUT round-trip (DHIS2 requires all required fields in a PUT).
+          // Also fetches existing dataSetElements so we can merge without losing them.
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const detail = (await (engine as any).query({
             ds: {
               resource: `dataSets/${dataSetId}`,
-              params: { fields: ['id', 'dataSetElements[dataElement[id]]'] },
+              params: {
+                fields: [
+                  'id',
+                  'name',
+                  'shortName',
+                  'periodType',
+                  'categoryCombo[id]',
+                  'dataSetElements[dataElement[id]]',
+                ],
+              },
             },
           })) as { ds: RawDataSetDetailResponse }
 
@@ -368,11 +384,27 @@ export function useAssignDataset() {
 
           const mergedElements = [...existing, ...toAdd]
 
+          // Build a minimal-but-complete PUT payload:
+          //   - Required DHIS2 fields: name, shortName, periodType
+          //   - categoryCombo only when present (omitting it keeps the existing one)
+          //   - dataSetElements: merged list
+          // Using type:'update' + id sends PUT /api/dataSets/{id}
+          const putPayload: Record<string, unknown> = {
+            name: detail.ds.name,
+            shortName: detail.ds.shortName,
+            periodType: detail.ds.periodType,
+            dataSetElements: mergedElements,
+          }
+          if (detail.ds.categoryCombo?.id) {
+            putPayload.categoryCombo = { id: detail.ds.categoryCombo.id }
+          }
+
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
-            resource: `dataSets/${dataSetId}`,
+            resource: 'dataSets',
+            id: dataSetId,
             type: 'update',
-            data: { dataSetElements: mergedElements },
+            data: putPayload,
           })
         } catch (err) {
           const ds = state.allDataSets.find((d) => d.id === dataSetId)
