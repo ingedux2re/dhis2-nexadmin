@@ -283,6 +283,8 @@ interface RawDataSetOwnerResponse {
     id?: string
     dataElement: { id: string }
     categoryCombo?: { id: string }
+    /** :owner includes the back-reference to the parent dataSet — we strip this before POSTing */
+    dataSet?: { id: string }
   }>
   [key: string]: unknown
 }
@@ -394,13 +396,27 @@ export function useAssignDataset() {
             continue
           }
 
+          // Normalise existing dataSetElements: keep only dataElement + optional
+          // categoryCombo. Strip the dataSet back-reference (which :owner includes)
+          // because sending it inside dataSets[].dataSetElements creates a circular
+          // reference that confuses the DHIS2 metadata importer and causes Hibernate
+          // to see a null dataElement on the re-hydrated objects.
+          const normalisedExisting = existingElements.map((dse) => {
+            const entry: Record<string, unknown> = { dataElement: { id: dse.dataElement.id } }
+            if (dse.categoryCombo?.id) entry.categoryCombo = { id: dse.categoryCombo.id }
+            return entry
+          })
+
           // Build the updated dataset object:
-          //   - spread all :owner fields so DHIS2 gets everything it expects
-          //   - override dataSetElements with existing + new ones appended
-          const updatedDataSet = {
-            ...detail.ds,
-            dataSetElements: [...existingElements, ...toAdd],
+          //   - spread all :owner fields (name, shortName, periodType, etc.)
+          //   - override dataSetElements with normalised existing + new ones
+          //   - explicitly omit the dataSet back-ref if :owner included it
+          const dsOwner = detail.ds as Record<string, unknown>
+          const updatedDataSet: Record<string, unknown> = {}
+          for (const key of Object.keys(dsOwner)) {
+            if (key !== 'dataSetElements') updatedDataSet[key] = dsOwner[key]
           }
+          updatedDataSet.dataSetElements = [...normalisedExisting, ...toAdd]
 
           // POST /api/metadata?importStrategy=UPDATE — the metadata batch
           // endpoint is the recommended way to update existing DHIS2 objects.
