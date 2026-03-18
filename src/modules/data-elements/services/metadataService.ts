@@ -264,6 +264,24 @@ export function parseImportResult(raw: unknown): MetadataImportResult {
 }
 
 /**
+ * Extract created data element UIDs from a metadata import result.
+ * Used after bulk create to get the DHIS2-assigned IDs for the assign-to-dataset workflow.
+ * Supports objectReports[].uid and objectReports[].id (some DHIS2 versions vary).
+ * Returns empty array if no UIDs found — caller must not use client-side _id as fallback.
+ */
+export function extractCreatedDataElementIds(result: MetadataImportResult): string[] {
+  const uids: string[] = []
+  for (const tr of result.typeReports ?? []) {
+    for (const obj of tr.objectReports ?? []) {
+      const o = obj as Record<string, unknown>
+      const uid = (o.uid ?? o.id) as string | undefined
+      if (uid && typeof uid === 'string') uids.push(uid)
+    }
+  }
+  return uids
+}
+
+/**
  * Flatten all error messages from a metadata import result into a string array.
  */
 export function collectImportErrors(result: MetadataImportResult): string[] {

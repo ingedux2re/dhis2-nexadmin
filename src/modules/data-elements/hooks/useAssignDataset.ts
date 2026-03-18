@@ -273,14 +273,21 @@ interface RawDataSetsResponse {
 }
 
 /**
- * Shape of the dataset list response — used only for fetching existing
- * dataSetElement IDs so we can skip already-assigned elements.
+ * Full dataset for PUT update — report-fbr-mali-app pattern.
+ * Must include categoryCombo and dataSet in each new DataSetElement.
  */
-interface RawDataSetDetailResponse {
+interface FullDataSetForUpdate {
   id: string
-  dataSetElements?: Array<{
+  name?: string
+  shortName?: string
+  periodType?: string
+  categoryCombo?: { id: string }
+  dataSetElements: Array<{
     dataElement: { id: string }
+    categoryCombo?: { id: string }
+    dataSet?: { id: string }
   }>
+  [key: string]: unknown
 }
 
 // ── Hook ──────────────────────────────────────────────────────────────────────
@@ -355,6 +362,12 @@ export function useAssignDataset() {
   const cancelConfirm = useCallback(() => dispatch({ type: 'CANCEL_CONFIRM' }), [])
 
   // ── Execute: assign to existing datasets ─────────────────────────────────
+  //
+  // Uses report-fbr-mali-app pattern: full GET + append dataSetElements + PUT.
+  // Each new DataSetElement must include dataElement, categoryCombo (dataset's),
+  // and dataSet — DHIS2 requires the full composite for Hibernate to persist.
+  // The collections API (POST /dataElements) can fail for newly created elements
+  // due to timing or categoryCombo mismatches; this approach is more reliable.
 
   const executeAssignExisting = useCallback(
     async (_createdElements: CreatedElement[], elementIdsToAssign: string[]) => {
@@ -363,46 +376,49 @@ export function useAssignDataset() {
 
       for (const dataSetId of state.selectedDataSetIds) {
         try {
-          // ── Step 1: fetch existing dataSetElements for deduplication ──────
-          // We only need the dataElement ids to know which elements are already
-          // present, so we can skip the ones that don't need to be added.
+          // ── Step 1: fetch full dataset (report-fbr-mali-app pattern) ──────
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           const detail = (await (engine as any).query({
             ds: {
               resource: `dataSets/${dataSetId}`,
-              params: { fields: ['id', 'dataSetElements[dataElement[id]]'] },
+              params: { fields: ':owner' },
             },
-          })) as { ds: RawDataSetDetailResponse }
+          })) as { ds: FullDataSetForUpdate }
 
+          const dataSet = detail.ds
           const existingIds = new Set(
-            (detail.ds.dataSetElements ?? []).map((dse) => dse.dataElement.id)
+            (dataSet.dataSetElements ?? []).map((dse) => dse.dataElement.id)
           )
 
-          // Only add elements not already present (dedup)
           const toAdd = elementIdsToAssign.filter((id) => !existingIds.has(id))
+          if (toAdd.length === 0) continue
 
-          if (toAdd.length === 0) {
-            // All elements already in dataset — skip without error
+          // ── Step 2: append new dataSetElements with full composite ────────
+          // Each must have dataElement, categoryCombo (dataset's), dataSet
+          const categoryCombo = dataSet.categoryCombo
+          if (!categoryCombo?.id) {
+            errors.push(
+              `${dataSet.name ?? dataSetId}: Dataset has no categoryCombo — cannot add elements`
+            )
             continue
           }
+          for (const deId of toAdd) {
+            dataSet.dataSetElements = dataSet.dataSetElements ?? []
+            dataSet.dataSetElements.push({
+              dataElement: { id: deId },
+              categoryCombo: { id: categoryCombo.id },
+              dataSet: { id: dataSet.id },
+            })
+          }
 
-          // ── Step 2: add via collections API ───────────────────────────────
-          // POST /api/dataSets/{id}/dataElements with identifiableObjects is the
-          // documented DHIS2 collections endpoint for adding data elements to a
-          // dataset. DHIS2 creates the DataSetElement composite join records
-          // internally — we never touch that table directly, which avoids the
-          // Hibernate not-null constraint on DataSetElement.dataElement.
-          //
-          // This is different from /api/dataSets/{id}/dataSetElements:
-          //   - /dataElements  → simple identifiable object collection (works)
-          //   - /dataSetElements → composite join table (requires full object, broken)
+          // ── Step 3: PUT full dataset back ─────────────────────────────────
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           await (engine as any).mutate({
-            resource: `dataSets/${dataSetId}/dataElements`,
-            type: 'create',
-            data: {
-              identifiableObjects: toAdd.map((id) => ({ id })),
-            },
+            resource: 'dataSets',
+            type: 'update',
+            id: dataSetId,
+            params: { mergeMode: 'REPLACE' },
+            data: dataSet,
           })
         } catch (err) {
           const ds = state.allDataSets.find((d) => d.id === dataSetId)
