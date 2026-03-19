@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-19T00:04:59.954Z\n"
-"PO-Revision-Date: 2026-03-19T00:04:59.955Z\n"
+"POT-Creation-Date: 2026-03-19T00:38:14.579Z\n"
+"PO-Revision-Date: 2026-03-19T00:38:14.580Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -35,21 +35,11 @@ msgstr "New Parent Name"
 msgid "Display name…"
 msgstr "Display name…"
 
-msgid "Preview Move ({{count}})"
-msgid_plural "Preview Move ({{count}})"
-msgstr[0] "Preview Move ({{count}})"
-msgstr[1] "Preview Move ({{count}})"
-
 msgid "Select all"
 msgstr "Select all"
 
 msgid "Select {{name}}"
 msgstr "Select {{name}}"
-
-msgid "{{count}} moves staged"
-msgid_plural "{{count}} moves staged"
-msgstr[0] "{{count}} moves staged"
-msgstr[1] "{{count}} moves staged"
 
 msgid "Export Preview CSV"
 msgstr "Export Preview CSV"
@@ -180,11 +170,6 @@ msgstr "Lvl"
 msgid "Parent"
 msgstr "Parent"
 
-msgid "Add {{count}} to Board →"
-msgid_plural "Add {{count}} to Board →"
-msgstr[0] "Add {{count}} to Board →"
-msgstr[1] "Add {{count}} to Board →"
-
 msgid "Pending Moves"
 msgstr "Pending Moves"
 
@@ -208,11 +193,6 @@ msgstr "{{ready}} / {{total}} assigned"
 
 msgid "Clear"
 msgstr "Clear"
-
-msgid "Execute {{count}} Moves"
-msgid_plural "Execute {{count}} Moves"
-msgstr[0] "Execute {{count}} Moves"
-msgstr[1] "Execute {{count}} Moves"
 
 msgid "Destination Hierarchy"
 msgstr "Destination Hierarchy"
@@ -283,11 +263,6 @@ msgstr "Something went wrong"
 msgid "No duplicates found — system is clean"
 msgstr "No duplicates found — system is clean"
 
-msgid "{{count}} duplicates found"
-msgid_plural "{{count}} duplicates found"
-msgstr[0] "{{count}} duplicates found"
-msgstr[1] "{{count}} duplicates found"
-
 msgid "Actions"
 msgstr "Actions"
 
@@ -318,11 +293,6 @@ msgstr "Longitude"
 msgid "No geo issues found"
 msgstr "No geo issues found"
 
-msgid "{{count}} geo issues found"
-msgid_plural "{{count}} geo issues found"
-msgstr[0] "{{count}} geo issues found"
-msgstr[1] "{{count}} geo issues found"
-
 msgid "All"
 msgstr "All"
 
@@ -346,11 +316,6 @@ msgstr "Violation Type"
 
 msgid "No violations found — hierarchy is valid"
 msgstr "No violations found — hierarchy is valid"
-
-msgid "{{count}} violations detected"
-msgid_plural "{{count}} violations detected"
-msgstr[0] "{{count}} violations detected"
-msgstr[1] "{{count}} violations detected"
 
 msgid "View Org Unit"
 msgstr "View Org Unit"
@@ -566,6 +531,97 @@ msgstr "Category combo"
 msgid "(default)"
 msgstr "(default)"
 
+msgid ""
+"Only existing organisation units are supported. No new org units will be "
+"created in this flow."
+msgstr ""
+"Only existing organisation units are supported. No new org units will be "
+"created in this flow."
+
+msgid "Specific organisation units"
+msgstr "Specific organisation units"
+
+msgid "Loading organisation units…"
+msgstr "Loading organisation units…"
+
+msgid "Search org units…"
+msgstr "Search org units…"
+
+msgid "Search organisation units"
+msgstr "Search organisation units"
+
+msgid "No org units match \"{{q}}\""
+msgstr "No org units match \"{{q}}\""
+
+msgid "No organisation units found"
+msgstr "No organisation units found"
+
+msgid "Organisation unit groups"
+msgstr "Organisation unit groups"
+
+msgid "Loading org unit groups…"
+msgstr "Loading org unit groups…"
+
+msgid "Search groups…"
+msgstr "Search groups…"
+
+msgid "Search org unit groups"
+msgstr "Search org unit groups"
+
+msgid "No groups match \"{{q}}\""
+msgstr "No groups match \"{{q}}\""
+
+msgid "No org unit groups found"
+msgstr "No org unit groups found"
+
+msgid "None (private)"
+msgstr "None (private)"
+
+msgid "View only"
+msgstr "View only"
+
+msgid "Edit metadata only"
+msgstr "Edit metadata only"
+
+msgid "Edit metadata and data entry"
+msgstr "Edit metadata and data entry"
+
+msgid "Public access"
+msgstr "Public access"
+
+msgid "Who can see this dataset?"
+msgstr "Who can see this dataset?"
+
+msgid "Public access level"
+msgstr "Public access level"
+
+msgid "User groups"
+msgstr "User groups"
+
+msgid "{{n}} group{{s}}"
+msgstr "{{n}} group{{s}}"
+
+msgid "Access for {{name}}"
+msgstr "Access for {{name}}"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "Loading user groups…"
+msgstr "Loading user groups…"
+
+msgid "Search user groups…"
+msgstr "Search user groups…"
+
+msgid "Search user groups"
+msgstr "Search user groups"
+
+msgid "Add"
+msgstr "Add"
+
+msgid "All groups added or no user groups available"
+msgstr "All groups added or no user groups available"
+
 msgid "Action"
 msgstr "Action"
 
@@ -587,6 +643,30 @@ msgstr "All {{n}} created element{{s}}"
 msgid "{{n}} selected element{{s}}"
 msgstr "{{n}} selected element{{s}}"
 
+msgid "Org unit deployment"
+msgstr "Org unit deployment"
+
+msgid "None selected"
+msgstr "None selected"
+
+msgid "{{n}} organisation unit{{s}} total"
+msgstr "{{n}} organisation unit{{s}} total"
+
+msgid "{{n}} specific org unit{{s}}"
+msgstr "{{n}} specific org unit{{s}}"
+
+msgid "{{n}} group{{s}} ({{m}} org unit{{p}} resolved)"
+msgstr "{{n}} group{{s}} ({{m}} org unit{{p}} resolved)"
+
+msgid "Sharing"
+msgstr "Sharing"
+
+msgid "{{n}} user group{{s}}"
+msgstr "{{n}} user group{{s}}"
+
+msgid "No changes (keep existing)"
+msgstr "No changes (keep existing)"
+
 msgid "more"
 msgstr "more"
 
@@ -599,6 +679,9 @@ msgstr ""
 
 msgid "Applying changes…"
 msgstr "Applying changes…"
+
+msgid "Done with warnings"
+msgstr "Done with warnings"
 
 msgid "Done!"
 msgstr "Done!"
@@ -632,6 +715,15 @@ msgstr "{{n}} element{{s}} will be assigned"
 
 msgid "\"{{name}}\" · {{n}} element{{s}}"
 msgstr "\"{{name}}\" · {{n}} element{{s}}"
+
+msgid "{{ou}} org unit{{s}}, {{g}} group{{p}} selected"
+msgstr "{{ou}} org unit{{s}}, {{g}} group{{p}} selected"
+
+msgid "Optional — skip to deploy only to data elements"
+msgstr "Optional — skip to deploy only to data elements"
+
+msgid "Optional — keep existing sharing"
+msgstr "Optional — keep existing sharing"
 
 msgid "Back"
 msgstr "Back"
@@ -956,6 +1048,13 @@ msgstr ""
 "{{n}} names will change. Use \"Export preview\" to review the full list "
 "before applying."
 
+msgid ""
+"Selected org unit group(s) have no members. No org units will be deployed "
+"from groups."
+msgstr ""
+"Selected org unit group(s) have no members. No org units will be deployed "
+"from groups."
+
 msgid "{{n}} created"
 msgstr "{{n}} created"
 
@@ -1270,6 +1369,9 @@ msgstr "Request history"
 msgid "Confirm transition"
 msgstr "Confirm transition"
 
+msgid "This will move the request to status {{status}}"
+msgstr "This will move the request to status {{status}}"
+
 msgid "Comment (optional)"
 msgstr "Comment (optional)"
 
@@ -1352,16 +1454,6 @@ msgstr "Loading org units…"
 msgid "Failed to load org units. {{message}}"
 msgstr "Failed to load org units. {{message}}"
 
-msgid "Renaming {{count}} org units…"
-msgid_plural "Renaming {{count}} org units…"
-msgstr[0] "Renaming {{count}} org units…"
-msgstr[1] "Renaming {{count}} org units…"
-
-msgid "{{count}} org units renamed this session."
-msgid_plural "{{count}} org units renamed this session."
-msgstr[0] "{{count}} org units renamed this session."
-msgstr[1] "{{count}} org units renamed this session."
-
 msgid "Continue Renaming"
 msgstr "Continue Renaming"
 
@@ -1377,19 +1469,6 @@ msgstr "Try Again"
 msgid "Confirm Rename"
 msgstr "Confirm Rename"
 
-msgid ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgid_plural ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[0] ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[1] ""
-"This will rename {{count}} org units. This cannot be undone without a "
-"snapshot."
-
 msgid "Bulk Reorganise"
 msgstr "Bulk Reorganise"
 
@@ -1398,16 +1477,6 @@ msgstr "Select org units and assign them a new parent to move them in bulk."
 
 msgid "moved"
 msgstr "moved"
-
-msgid "Moving {{count}} org units…"
-msgid_plural "Moving {{count}} org units…"
-msgstr[0] "Moving {{count}} org units…"
-msgstr[1] "Moving {{count}} org units…"
-
-msgid "All {{count}} org units moved successfully."
-msgid_plural "All {{count}} org units moved successfully."
-msgstr[0] "All {{count}} org units moved successfully."
-msgstr[1] "All {{count}} org units moved successfully."
 
 msgid "New Operation"
 msgstr "New Operation"
@@ -1424,19 +1493,6 @@ msgstr ""
 
 msgid "Confirm Bulk Move"
 msgstr "Confirm Bulk Move"
-
-msgid ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgid_plural ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[0] ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
-msgstr[1] ""
-"This will move {{count}} org units. This cannot be undone without a "
-"snapshot."
 
 msgid "DHIS2 Administration Platform"
 msgstr "DHIS2 Administration Platform"
