@@ -1,0 +1,32 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/modules/ou-governance/views/OuGovernancePage.module.css
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.page {
+  padding: var(--page-padding);
+  max-width: var(--content-max);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+/* ── Top controls bar ────────────────────────────────────────── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.controlsLeft {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.controlsRight {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
