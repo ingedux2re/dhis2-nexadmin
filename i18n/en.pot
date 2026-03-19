@@ -5,8 +5,8 @@ msgstr ""
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
-"POT-Creation-Date: 2026-03-18T15:20:55.788Z\n"
-"PO-Revision-Date: 2026-03-18T15:20:55.789Z\n"
+"POT-Creation-Date: 2026-03-19T00:04:59.954Z\n"
+"PO-Revision-Date: 2026-03-19T00:04:59.955Z\n"
 
 msgid "{{total}} total"
 msgstr "{{total}} total"
@@ -35,11 +35,21 @@ msgstr "New Parent Name"
 msgid "Display name…"
 msgstr "Display name…"
 
+msgid "Preview Move ({{count}})"
+msgid_plural "Preview Move ({{count}})"
+msgstr[0] "Preview Move ({{count}})"
+msgstr[1] "Preview Move ({{count}})"
+
 msgid "Select all"
 msgstr "Select all"
 
 msgid "Select {{name}}"
 msgstr "Select {{name}}"
+
+msgid "{{count}} moves staged"
+msgid_plural "{{count}} moves staged"
+msgstr[0] "{{count}} moves staged"
+msgstr[1] "{{count}} moves staged"
 
 msgid "Export Preview CSV"
 msgstr "Export Preview CSV"
@@ -170,6 +180,11 @@ msgstr "Lvl"
 msgid "Parent"
 msgstr "Parent"
 
+msgid "Add {{count}} to Board →"
+msgid_plural "Add {{count}} to Board →"
+msgstr[0] "Add {{count}} to Board →"
+msgstr[1] "Add {{count}} to Board →"
+
 msgid "Pending Moves"
 msgstr "Pending Moves"
 
@@ -193,6 +208,11 @@ msgstr "{{ready}} / {{total}} assigned"
 
 msgid "Clear"
 msgstr "Clear"
+
+msgid "Execute {{count}} Moves"
+msgid_plural "Execute {{count}} Moves"
+msgstr[0] "Execute {{count}} Moves"
+msgstr[1] "Execute {{count}} Moves"
 
 msgid "Destination Hierarchy"
 msgstr "Destination Hierarchy"
@@ -263,6 +283,11 @@ msgstr "Something went wrong"
 msgid "No duplicates found — system is clean"
 msgstr "No duplicates found — system is clean"
 
+msgid "{{count}} duplicates found"
+msgid_plural "{{count}} duplicates found"
+msgstr[0] "{{count}} duplicates found"
+msgstr[1] "{{count}} duplicates found"
+
 msgid "Actions"
 msgstr "Actions"
 
@@ -293,6 +318,11 @@ msgstr "Longitude"
 msgid "No geo issues found"
 msgstr "No geo issues found"
 
+msgid "{{count}} geo issues found"
+msgid_plural "{{count}} geo issues found"
+msgstr[0] "{{count}} geo issues found"
+msgstr[1] "{{count}} geo issues found"
+
 msgid "All"
 msgstr "All"
 
@@ -316,6 +346,11 @@ msgstr "Violation Type"
 
 msgid "No violations found — hierarchy is valid"
 msgstr "No violations found — hierarchy is valid"
+
+msgid "{{count}} violations detected"
+msgid_plural "{{count}} violations detected"
+msgstr[0] "{{count}} violations detected"
+msgstr[1] "{{count}} violations detected"
 
 msgid "View Org Unit"
 msgstr "View Org Unit"
@@ -1007,6 +1042,262 @@ msgstr ""
 "This will rename {{n}} data element{{s}} globally across all datasets and "
 "reports in DHIS2. This action cannot be undone from this tool."
 
+msgid "Governance statistics"
+msgstr "Governance statistics"
+
+msgid "Workflow Pipeline"
+msgstr "Workflow Pipeline"
+
+msgid "Workflow stages"
+msgstr "Workflow stages"
+
+msgid "Completed"
+msgstr "Completed"
+
+msgid "Current"
+msgstr "Current"
+
+msgid "Pending"
+msgstr "Pending"
+
+msgid "Rejected"
+msgstr "Rejected"
+
+msgid "Back to requests"
+msgstr "Back to requests"
+
+msgid "DHIS2 UID assigned"
+msgstr "DHIS2 UID assigned"
+
+msgid "Facility Name"
+msgstr "Facility Name"
+
+msgid "Facility Type"
+msgstr "Facility Type"
+
+msgid "Proposed Parent"
+msgstr "Proposed Parent"
+
+msgid "Location"
+msgstr "Location"
+
+msgid "Opening Date"
+msgstr "Opening Date"
+
+msgid "Metadata"
+msgstr "Metadata"
+
+msgid "Created"
+msgstr "Created"
+
+msgid "Last Updated"
+msgstr "Last Updated"
+
+msgid "Region Comment"
+msgstr "Region Comment"
+
+msgid "Admin Comment"
+msgstr "Admin Comment"
+
+msgid "Available Actions"
+msgstr "Available Actions"
+
+msgid "Actions available as {{role}}"
+msgstr "Actions available as {{role}}"
+
+msgid "District Officer"
+msgstr "District Officer"
+
+msgid "Region Officer"
+msgstr "Region Officer"
+
+msgid "National Admin"
+msgstr "National Admin"
+
+msgid "Confirm transition to {{status}}"
+msgstr "Confirm transition to {{status}}"
+
+msgid "Add a comment (optional)…"
+msgstr "Add a comment (optional)…"
+
+msgid "Transition comment"
+msgstr "Transition comment"
+
+msgid "Request History"
+msgstr "Request History"
+
+msgid "Facility name is required"
+msgstr "Facility name is required"
+
+msgid "Facility type is required"
+msgstr "Facility type is required"
+
+msgid "Level is required"
+msgstr "Level is required"
+
+msgid "Proposed parent is required"
+msgstr "Proposed parent is required"
+
+msgid "Edit Request — {{ref}}"
+msgstr "Edit Request — {{ref}}"
+
+msgid "New Facility Request"
+msgstr "New Facility Request"
+
+msgid "Complete all required fields and submit for regional review"
+msgstr "Complete all required fields and submit for regional review"
+
+msgid "e.g. Kailahun Health Centre"
+msgstr "e.g. Kailahun Health Centre"
+
+msgid "Auto-derived from name"
+msgstr "Auto-derived from name"
+
+msgid "Max 50 characters"
+msgstr "Max 50 characters"
+
+msgid "Select type…"
+msgstr "Select type…"
+
+msgid "Organisation Unit Level"
+msgstr "Organisation Unit Level"
+
+msgid "Select level…"
+msgstr "Select level…"
+
+msgid "Proposed Parent Organisation Unit"
+msgstr "Proposed Parent Organisation Unit"
+
+msgid "Search parent org unit…"
+msgstr "Search parent org unit…"
+
+msgid "Parent organisation unit suggestions"
+msgstr "Parent organisation unit suggestions"
+
+msgid "Location (optional)"
+msgstr "Location (optional)"
+
+msgid "Save as Draft"
+msgstr "Save as Draft"
+
+msgid "Submit for Review"
+msgstr "Submit for Review"
+
+msgid "Facility Requests"
+msgstr "Facility Requests"
+
+msgid "Search requests…"
+msgstr "Search requests…"
+
+msgid "Search requests"
+msgstr "Search requests"
+
+msgid "Filter by status"
+msgstr "Filter by status"
+
+msgid "All statuses"
+msgstr "All statuses"
+
+msgid "No requests found"
+msgstr "No requests found"
+
+msgid "Try adjusting your search or filter"
+msgstr "Try adjusting your search or filter"
+
+msgid "Create a new request to get started"
+msgstr "Create a new request to get started"
+
+msgid "Reference"
+msgstr "Reference"
+
+msgid "Type"
+msgstr "Type"
+
+msgid "Submitted"
+msgstr "Submitted"
+
+msgid "View request {{ref}}"
+msgstr "View request {{ref}}"
+
+msgid "View details"
+msgstr "View details"
+
+msgid "View {{ref}}"
+msgstr "View {{ref}}"
+
+msgid "Edit draft"
+msgstr "Edit draft"
+
+msgid "Edit {{ref}}"
+msgstr "Edit {{ref}}"
+
+msgid "Delete draft"
+msgstr "Delete draft"
+
+msgid "Delete {{ref}}"
+msgstr "Delete {{ref}}"
+
+msgid "Demo role switcher"
+msgstr "Demo role switcher"
+
+msgid "Role"
+msgstr "Role"
+
+msgid "Demo"
+msgstr "Demo"
+
+msgid "DRAFT"
+msgstr "DRAFT"
+
+msgid "SUBMITTED"
+msgstr "SUBMITTED"
+
+msgid "VALIDATED"
+msgstr "VALIDATED"
+
+msgid "CREATED"
+msgstr "CREATED"
+
+msgid "REJECTED"
+msgstr "REJECTED"
+
+msgid "No history available"
+msgstr "No history available"
+
+msgid "Request history"
+msgstr "Request history"
+
+msgid "Confirm transition"
+msgstr "Confirm transition"
+
+msgid "Comment (optional)"
+msgstr "Comment (optional)"
+
+msgid "Reason for rejection…"
+msgstr "Reason for rejection…"
+
+msgid "Validation notes…"
+msgstr "Validation notes…"
+
+msgid "Add a comment…"
+msgstr "Add a comment…"
+
+msgid "OU Governance Workflow"
+msgstr "OU Governance Workflow"
+
+msgid ""
+"Manage the lifecycle of organisation unit creation requests through a "
+"structured approval pipeline (District, Region, National Admin)."
+msgstr ""
+"Manage the lifecycle of organisation unit creation requests through a "
+"structured approval pipeline (District, Region, National Admin)."
+
+msgid "MVP Demo"
+msgstr "MVP Demo"
+
+msgid "New Request"
+msgstr "New Request"
+
 msgid "Access Control"
 msgstr "Access Control"
 
@@ -1061,6 +1352,16 @@ msgstr "Loading org units…"
 msgid "Failed to load org units. {{message}}"
 msgstr "Failed to load org units. {{message}}"
 
+msgid "Renaming {{count}} org units…"
+msgid_plural "Renaming {{count}} org units…"
+msgstr[0] "Renaming {{count}} org units…"
+msgstr[1] "Renaming {{count}} org units…"
+
+msgid "{{count}} org units renamed this session."
+msgid_plural "{{count}} org units renamed this session."
+msgstr[0] "{{count}} org units renamed this session."
+msgstr[1] "{{count}} org units renamed this session."
+
 msgid "Continue Renaming"
 msgstr "Continue Renaming"
 
@@ -1076,6 +1377,19 @@ msgstr "Try Again"
 msgid "Confirm Rename"
 msgstr "Confirm Rename"
 
+msgid ""
+"This will rename {{count}} org units. This cannot be undone without a "
+"snapshot."
+msgid_plural ""
+"This will rename {{count}} org units. This cannot be undone without a "
+"snapshot."
+msgstr[0] ""
+"This will rename {{count}} org units. This cannot be undone without a "
+"snapshot."
+msgstr[1] ""
+"This will rename {{count}} org units. This cannot be undone without a "
+"snapshot."
+
 msgid "Bulk Reorganise"
 msgstr "Bulk Reorganise"
 
@@ -1084,6 +1398,16 @@ msgstr "Select org units and assign them a new parent to move them in bulk."
 
 msgid "moved"
 msgstr "moved"
+
+msgid "Moving {{count}} org units…"
+msgid_plural "Moving {{count}} org units…"
+msgstr[0] "Moving {{count}} org units…"
+msgstr[1] "Moving {{count}} org units…"
+
+msgid "All {{count}} org units moved successfully."
+msgid_plural "All {{count}} org units moved successfully."
+msgstr[0] "All {{count}} org units moved successfully."
+msgstr[1] "All {{count}} org units moved successfully."
 
 msgid "New Operation"
 msgstr "New Operation"
@@ -1100,6 +1424,19 @@ msgstr ""
 
 msgid "Confirm Bulk Move"
 msgstr "Confirm Bulk Move"
+
+msgid ""
+"This will move {{count}} org units. This cannot be undone without a "
+"snapshot."
+msgid_plural ""
+"This will move {{count}} org units. This cannot be undone without a "
+"snapshot."
+msgstr[0] ""
+"This will move {{count}} org units. This cannot be undone without a "
+"snapshot."
+msgstr[1] ""
+"This will move {{count}} org units. This cannot be undone without a "
+"snapshot."
 
 msgid "DHIS2 Administration Platform"
 msgstr "DHIS2 Administration Platform"
@@ -1446,3 +1783,15 @@ msgstr "Bulk import users from CSV"
 
 msgid "…"
 msgstr "…"
+
+msgctxt "REVIEW"
+msgid "UNDER"
+msgstr "UNDER_REVIEW"
+
+msgctxt "USER"
+msgid "PENDING"
+msgstr "PENDING_USER"
+
+msgctxt "CREATED"
+msgid "USER"
+msgstr "USER_CREATED"

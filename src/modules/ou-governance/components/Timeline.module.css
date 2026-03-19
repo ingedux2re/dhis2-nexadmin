@@ -1,0 +1,133 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/modules/ou-governance/components/Timeline.module.css
+   ───────────────────────────────────────────────────────────────────────────── */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── Single event ─────────────────────────────────────────────── */
+.event {
+  display: flex;
+  gap: var(--space-4);
+  position: relative;
+  padding-bottom: var(--space-5);
+}
+
+/* vertical connector */
+.event:not(:last-child) .connector {
+  position: absolute;
+  left: 15px;
+  top: 32px;
+  bottom: 0;
+  width: 2px;
+  background: var(--border-subtle);
+}
+
+/* icon column */
+.iconCol {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  position: relative;
+  z-index: 1;
+}
+
+.iconCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--border-subtle);
+  background: var(--surface-card);
+  flex-shrink: 0;
+}
+
+.iconCircle .material-icons-round {
+  font-size: 15px;
+}
+
+/* content column */
+.content {
+  flex: 1;
+  min-width: 0;
+  padding-top: 4px;
+}
+
+.eventHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  margin-bottom: var(--space-1);
+}
+
+.eventTitle {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--text-primary);
+}
+
+.rolePill {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 1px 7px;
+  border-radius: var(--radius-full);
+  font-size: 10px;
+  font-weight: var(--weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.roleDistrict {
+  background: var(--brand-50);
+  color: var(--brand-700);
+  border: 1px solid var(--brand-100);
+}
+
+.roleRegion {
+  background: rgba(0, 188, 212, 0.08);
+  color: var(--accent-600);
+  border: 1px solid rgba(0, 188, 212, 0.25);
+}
+
+.roleAdmin {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+  border: 1px solid var(--color-success-border);
+}
+
+.timestamp {
+  font-size: var(--text-xs);
+  color: var(--text-tertiary);
+  font-family: var(--font-mono);
+  margin-left: auto;
+}
+
+.comment {
+  font-size: var(--text-sm);
+  color: var(--text-secondary);
+  background: var(--grey-50);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: var(--space-2) var(--space-3);
+  margin-top: var(--space-2);
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  font-style: italic;
+}
+
+.comment .material-icons-round {
+  font-size: 15px;
+  color: var(--text-tertiary);
+  flex-shrink: 0;
+  margin-top: 1px;
+}
