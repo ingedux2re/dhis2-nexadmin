@@ -120,6 +120,13 @@ export const NAV_ITEMS: NavItem[] = [
     section: 'governance',
   },
   {
+    id: 'ou-governance',
+    label: 'OU Governance Workflow',
+    path: '/governance/ou-workflow',
+    icon: 'account_tree',
+    section: 'governance',
+  },
+  {
     id: 'access-control',
     label: 'Access Control',
     path: '/governance/access',

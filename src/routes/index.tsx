@@ -26,6 +26,8 @@ const BulkRename = lazy(() => import('../pages/BulkRename'))
 const DataElementEngineering = lazy(
   () => import('../modules/data-elements/views/DataElementEngineeringPage')
 )
+// OU Governance Workflow
+const OuGovernance = lazy(() => import('../modules/ou-governance/views/OuGovernancePage'))
 
 export const AppRoutes: React.FC = () => (
   <Layout>
@@ -42,6 +44,8 @@ export const AppRoutes: React.FC = () => (
       <Route path="/bulk/rename" element={<BulkRename />} />
       {/* Data Element Engineering */}
       <Route path="/data-elements" element={<DataElementEngineering />} />
+      {/* OU Governance Workflow */}
+      <Route path="/governance/ou-workflow" element={<OuGovernance />} />
       <Route path="/users" element={<UserManagement />} />
       <Route path="/users/roles" element={<RolesAuthorities />} />
       <Route path="/users/groups" element={<UserGroups />} />
