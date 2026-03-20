@@ -1,29 +1,42 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/components/DataIntegrity/SeverityBadge.module.css
+   UI improvement: Sharper severity badges — higher contrast, refined colours
+   No class names changed — CSS values only
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* UI improvement: Base badge — tighter, more readable */
 .badge {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   padding: 2px 8px;
   border-radius: 10px;
   font-size: 11px;
-  font-weight: 600;
+  font-weight: 700;
   text-transform: uppercase;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.05em;
   border: 1px solid transparent;
   white-space: nowrap;
+  line-height: 1.5;
 }
 
+/* UI improvement: Error — stronger red, higher contrast */
 .error {
-  background-color: #fdf3f3;
-  color: #c0392b;
-  border-color: #c0392b;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border-color: #fca5a5;
 }
 
+/* UI improvement: Warning — amber, WCAG-compliant */
 .warning {
-  background-color: #fef9f0;
-  color: #d6850a;
-  border-color: #d6850a;
+  background-color: #fffbeb;
+  color: #b45309;
+  border-color: #fcd34d;
 }
 
+/* UI improvement: Info — DHIS2 blue accent */
 .info {
-  background-color: #f0f7fd;
-  color: #276696;
-  border-color: #276696;
+  background-color: #eff6ff;
+  color: #1d4ed8;
+  border-color: #bfdbfe;
 }
