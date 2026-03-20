@@ -1,248 +1,240 @@
 // ── Governance Page ───────────────────────────────────────────
-// UI: Metadata quality scoring, orphan detection, and governance reporting
+// UI: Metadata quality scoring, orphan detection, and governance rule management
 import { Icons } from '../components/layout'
 
 export function GovernancePage(): string {
-  // UI: Governance score ring chart (SVG-based, no external library)
-  function scoreRing(score: number, color: string, size = 100) {
-    const r = 38
-    const circ = 2 * Math.PI * r
-    const dash = (score / 100) * circ
-    return `
-      <div class="score-ring" style="width:${size}px;height:${size}px;">
-        <svg width="${size}" height="${size}" viewBox="0 0 100 100">
-          <circle class="score-ring-bg" cx="50" cy="50" r="${r}"/>
-          <circle class="score-ring-fill"
-            cx="50" cy="50" r="${r}"
-            stroke="${color}"
-            stroke-dasharray="${dash.toFixed(1)} ${circ.toFixed(1)}"
-            style="stroke-dashoffset:0;transform:rotate(-90deg);transform-origin:50% 50%;"/>
-        </svg>
-        <div class="score-ring-label">
-          <span class="score-ring-value" style="color:${color}">${score}</span>
-          <span class="score-ring-unit">/100</span>
-        </div>
-      </div>
-    `
+  // UI: Governance dimension scores
+  const dimensions = [
+    { label: 'Naming Conventions',   score: 91, issues: 8,   color: '#22c55e', stroke: 'var(--color-success-500)' },
+    { label: 'Dataset Coverage',     score: 84, issues: 29,  color: '#f59e0b', stroke: 'var(--color-warning-500)' },
+    { label: 'Orphaned Elements',    score: 67, issues: 47,  color: '#ef4444', stroke: 'var(--color-danger-500)'  },
+    { label: 'Category Consistency', score: 79, issues: 21,  color: '#f59e0b', stroke: 'var(--color-warning-500)' },
+    { label: 'Sharing Config',       score: 88, issues: 12,  color: '#22c55e', stroke: 'var(--color-success-500)' },
+    { label: 'Version Hygiene',      score: 72, issues: 34,  color: '#f59e0b', stroke: 'var(--color-warning-500)' },
+  ]
+
+  const overall = Math.round(dimensions.reduce((a, d) => a + d.score, 0) / dimensions.length)
+  const overallColor = overall >= 85 ? 'var(--color-success-500)' : overall >= 70 ? 'var(--color-warning-500)' : 'var(--color-danger-500)'
+  const circumference = 2 * Math.PI * 42  // r=42
+  const dashOffset = circumference * (1 - overall / 100)
+
+  // UI: Issue list
+  const issues = [
+    { severity: 'Critical', category: 'Orphaned',   title: '12 data elements not assigned to any dataset',                  count: 12,  action: 'Auto-fix available' },
+    { severity: 'Critical', category: 'Orphaned',   title: '3 indicators referencing deleted data elements',                count: 3,   action: 'Manual review required' },
+    { severity: 'High',     category: 'Naming',     title: 'Data elements missing short name',                              count: 31,  action: 'Bulk fix available' },
+    { severity: 'High',     category: 'Coverage',   title: 'Datasets with no org unit assignment',                          count: 7,   action: 'Manual review required' },
+    { severity: 'Medium',   category: 'Sharing',    title: 'Public metadata objects with no sharing restrictions',          count: 18,  action: 'Bulk fix available' },
+    { severity: 'Medium',   category: 'Category',   title: 'Data elements sharing name but different category combos',      count: 9,   action: 'Review required' },
+    { severity: 'Medium',   category: 'Version',    title: 'Deprecated elements still referenced in active indicators',     count: 6,   action: 'Manual review required' },
+    { severity: 'Low',      category: 'Naming',     title: 'Elements with inconsistent prefix style',                       count: 24,  action: 'Bulk fix available' },
+    { severity: 'Low',      category: 'Coverage',   title: 'Indicators with no associated dataset',                         count: 44,  action: 'Review optional' },
+  ]
+
+  const severityBadge: Record<string, string> = {
+    Critical: 'badge-danger', High: 'badge-warning', Medium: 'badge-primary', Low: 'badge-neutral'
+  }
+  const categoryBadge: Record<string, string> = {
+    Orphaned: 'badge-danger', Naming: 'badge-info', Coverage: 'badge-warning', Sharing: 'badge-primary', Category: 'badge-neutral', Version: 'badge-warning'
   }
 
-  // UI: Score breakdown categories
-  const scoreCategories = [
-    { label: 'Naming Convention',    score: 82, weight: '25%', issues: 47,  color: 'var(--color-success-500)' },
-    { label: 'Orphaned Objects',     score: 65, weight: '20%', issues: 14,  color: 'var(--color-warning-500)' },
-    { label: 'Category Compliance',  score: 91, weight: '20%', issues: 8,   color: 'var(--color-success-500)' },
-    { label: 'Dataset Completeness', score: 88, weight: '20%', issues: 23,  color: 'var(--color-success-500)' },
-    { label: 'Sharing Settings',     score: 57, weight: '15%', issues: 62,  color: 'var(--color-danger-500)'  },
-  ]
-
-  const scoreBreakdownHtml = scoreCategories.map(cat => `
-    <div style="display:flex;align-items:center;gap:var(--space-4);padding:var(--space-3) 0;border-bottom:1px solid var(--color-gray-100);">
-      <div style="flex:1;min-width:0;">
-        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
-          <span style="font-size:var(--text-sm);font-weight:var(--font-medium);color:var(--color-gray-800);">${cat.label}</span>
-          <span style="font-size:var(--text-xs);color:var(--color-gray-400);">weight: ${cat.weight}</span>
-        </div>
-        <div class="progress-bar" style="height:8px;">
-          <div style="height:100%;border-radius:99px;background:${cat.color};width:${cat.score}%;transition:width 600ms ease;"></div>
-        </div>
-      </div>
-      <div style="text-align:right;min-width:80px;">
-        <div style="font-size:var(--text-lg);font-weight:var(--font-bold);color:var(--color-gray-900);">${cat.score}<span style="font-size:var(--text-xs);color:var(--color-gray-400);">/100</span></div>
-        <div style="font-size:var(--text-xs);color:var(--color-danger-500);">${cat.issues} issue${cat.issues !== 1 ? 's' : ''}</div>
-      </div>
-    </div>
-  `).join('')
-
-  // UI: Issues table
-  const issues = [
-    { id: 'GOV-001', severity: 'Critical', category: 'Orphaned Objects',    object: 'bROufk3y7fP',  name: 'Unused Element ABC',         desc: 'Data element not assigned to any dataset',          status: 'Open'     },
-    { id: 'GOV-002', severity: 'Critical', category: 'Orphaned Objects',    object: 'GQY2lXrypjO',  name: 'OPD Attendance (old)',        desc: 'Deprecated element still receiving data entries',   status: 'Open'     },
-    { id: 'GOV-003', severity: 'High',     category: 'Naming Convention',   object: 'n5nS0SmkUpq',  name: 'hiv tests performed',         desc: 'Name does not follow Title Case convention',       status: 'Open'     },
-    { id: 'GOV-004', severity: 'High',     category: 'Sharing Settings',    object: 'pBOMPrpg1QX',  name: 'HMIS Monthly Report',         desc: 'Dataset is publicly readable — restrict access',   status: 'Review'   },
-    { id: 'GOV-005', severity: 'Medium',   category: 'Naming Convention',   object: 'l6byfWFUGaP',  name: 'HIV Positive',                desc: 'Ambiguous name — should specify test type',        status: 'Open'     },
-    { id: 'GOV-006', severity: 'Medium',   category: 'Category Compliance', object: 'rbkr8PL0rwM',  name: 'Births attended by skilled', desc: 'Missing disaggregation by facility type',          status: 'Open'     },
-    { id: 'GOV-007', severity: 'Low',      category: 'Dataset Completeness',object: 'Lpw6GcnCNpP',  name: 'Emergency Health (Old)',      desc: 'Completeness below 15% — consider archiving',      status: 'Resolved' },
-    { id: 'GOV-008', severity: 'Low',      category: 'Sharing Settings',    object: 'XuFcuFpyMHF',  name: 'TB Program Report',           desc: 'No user group assigned for data entry access',     status: 'Open'     },
-  ]
-
-  const sevColor: Record<string, string>    = { Critical: 'badge-danger', High: 'badge-warning', Medium: 'badge-info', Low: 'badge-neutral' }
-  const statusColor: Record<string, string> = { Open: 'badge-danger', Review: 'badge-warning', Resolved: 'badge-success' }
-
-  const issuesHtml = issues.map(iss => `
+  const issuesHtml = issues.map(i => `
     <tr>
-      <td class="td-mono" style="font-size:var(--text-xs);">${iss.id}</td>
-      <td><span class="badge ${sevColor[iss.severity] || 'badge-neutral'}">${iss.severity}</span></td>
-      <td style="font-size:var(--text-xs);color:var(--color-gray-500);">${iss.category}</td>
-      <td>
-        <div style="font-weight:var(--font-medium);color:var(--color-gray-900);font-size:var(--text-sm);">${iss.name}</div>
-        <div style="font-family:var(--font-mono);font-size:10px;color:var(--color-gray-400);margin-top:1px;">${iss.object}</div>
-      </td>
-      <td style="font-size:var(--text-sm);color:var(--color-gray-600);max-width:240px;">
-        <span style="display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;" title="${iss.desc}">${iss.desc}</span>
-      </td>
-      <td><span class="badge ${statusColor[iss.status] || 'badge-neutral'}">
-        <span class="badge-dot" style="background:currentColor;"></span>${iss.status}
-      </span></td>
+      <td><span class="badge ${severityBadge[i.severity]}">${i.severity}</span></td>
+      <td><span class="badge ${categoryBadge[i.category] || 'badge-neutral'}">${i.category}</span></td>
+      <td class="td-primary" style="max-width:340px;"><div class="truncate" title="${i.title}">${i.title}</div></td>
+      <td style="font-size:var(--text-sm);font-weight:var(--font-semibold);color:var(--color-gray-800);">${i.count}</td>
+      <td style="font-size:var(--text-xs);color:var(--color-gray-500);">${i.action}</td>
       <td class="td-actions">
         <div class="td-actions-group">
-          <button class="btn btn-ghost btn-sm btn-icon" title="View">${Icons.eye}</button>
-          <button class="btn btn-ghost btn-sm btn-icon" title="Resolve">${Icons.check}</button>
+          <button class="btn btn-ghost btn-sm" style="font-size:var(--text-xs);">${Icons.eye} Inspect</button>
+          ${i.action.includes('fix') || i.action.includes('Bulk') ? `<button class="btn btn-outline-primary btn-sm" style="font-size:var(--text-xs);">${Icons.check} Fix</button>` : ''}
         </div>
       </td>
     </tr>
   `).join('')
 
-  // UI: Trend metrics
-  const trendCards = [
-    { label: 'Issues This Month',   value: '154',  delta: '−32',  dir: 'down', note: 'vs last month' },
-    { label: 'Resolved This Month', value: '88',   delta: '+21',  dir: 'up',   note: 'vs last month' },
-    { label: 'Open Critical',       value: '2',    delta: '0',    dir: 'flat', note: 'unchanged'     },
-    { label: 'Score Trend',         value: '+4',   delta: '78→82',dir: 'up',   note: 'score points'  },
-  ]
-
-  const trendsHtml = trendCards.map(t => `
-    <div class="stat-card">
-      <div class="stat-card-header">
-        <span class="stat-card-label">${t.label}</span>
+  // UI: Dimension score bars
+  const dimBarsHtml = dimensions.map(d => `
+    <div style="margin-bottom:var(--space-3);">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:5px;">
+        <span style="font-size:var(--text-sm);color:var(--color-gray-700);">${d.label}</span>
+        <div style="display:flex;align-items:center;gap:var(--space-2);">
+          <span style="font-size:var(--text-xs);color:var(--color-gray-400);">${d.issues} issues</span>
+          <span style="font-size:var(--text-sm);font-weight:var(--font-bold);color:${d.color};">${d.score}</span>
+        </div>
       </div>
-      <div class="stat-card-value">${t.value}</div>
-      <div class="stat-card-delta ${t.dir}">
-        ${t.dir === 'up' ? Icons.arrowUp : t.dir === 'down' ? Icons.arrowDown : ''}
-        <span>${t.delta} ${t.note}</span>
+      <div class="progress-bar">
+        <div class="progress-fill" style="width:${d.score}%;background:${d.color};"></div>
       </div>
     </div>
   `).join('')
 
+  // UI: Governance rules table
+  const rules = [
+    { rule: 'All data elements must have a short name',           scope: 'Data Elements', auto: true,  enabled: true  },
+    { rule: 'No data element should exist without a dataset',     scope: 'Data Elements', auto: false, enabled: true  },
+    { rule: 'Datasets must have at least one org unit assigned',  scope: 'Datasets',      auto: false, enabled: true  },
+    { rule: 'Indicators must reference valid data elements',      scope: 'Indicators',    auto: false, enabled: true  },
+    { rule: 'Public objects must have explicit sharing settings', scope: 'All Metadata',  auto: true,  enabled: false },
+    { rule: 'Deprecated elements must not be referenced',         scope: 'All Metadata',  auto: false, enabled: true  },
+  ]
+
+  const rulesHtml = rules.map(r => `
+    <tr>
+      <td class="td-primary">${r.rule}</td>
+      <td><span class="badge badge-neutral">${r.scope}</span></td>
+      <td>
+        <span class="badge ${r.auto ? 'badge-success' : 'badge-neutral'}">
+          ${r.auto ? 'Auto-fix' : 'Manual'}
+        </span>
+      </td>
+      <td>
+        <label style="display:flex;align-items:center;gap:var(--space-2);cursor:pointer;">
+          <input type="checkbox" ${r.enabled ? 'checked' : ''} style="accent-color:var(--color-primary-600);width:14px;height:14px;"/>
+          <span style="font-size:var(--text-xs);color:var(--color-gray-600);">${r.enabled ? 'Enabled' : 'Disabled'}</span>
+        </label>
+      </td>
+      <td class="td-actions">
+        <div class="td-actions-group">
+          <button class="btn btn-ghost btn-sm btn-icon" title="Edit rule">${Icons.edit}</button>
+        </div>
+      </td>
+    </tr>
+  `).join('')
+
   return `
-    <!-- Page Header -->
     <div class="page-header">
       <div class="page-header-left">
-        <h1 class="page-title">Governance &amp; Quality</h1>
-        <p class="page-subtitle">Metadata governance scoring, compliance checks, and issue resolution</p>
+        <h1 class="page-title">Governance</h1>
+        <p class="page-subtitle">Metadata quality assessment, rule enforcement, and compliance reporting</p>
       </div>
       <div class="page-header-actions">
-        <button class="btn btn-secondary btn-md">${Icons.refresh} Re-run Analysis</button>
-        <button class="btn btn-primary btn-md">${Icons.download} Export Report</button>
+        <button class="btn btn-secondary btn-md">${Icons.refresh} <span>Re-scan</span></button>
+        <button class="btn btn-secondary btn-md">${Icons.download} <span>Export Report</span></button>
+        <button class="btn btn-primary btn-md">${Icons.check} <span>Run Auto-Fix</span></button>
       </div>
     </div>
 
-    <!-- Trend Stats -->
-    <div class="stats-grid" style="grid-template-columns:repeat(4,1fr);margin-bottom:var(--space-5);">
-      ${trendsHtml}
-    </div>
+    <!-- Top row: Score + Dimensions -->
+    <div style="display:grid;grid-template-columns:auto 1fr;gap:var(--space-5);margin-bottom:var(--space-6);">
 
-    <!-- Score Overview + Breakdown -->
-    <div style="display:grid;grid-template-columns:auto 1fr;gap:var(--space-5);margin-bottom:var(--space-6);" class="dashboard-grid">
-
-      <!-- Overall Score Card -->
-      <div class="card">
-        <div class="card-header">
-          <div>
-            <div class="card-title">Overall Score</div>
-            <div class="card-subtitle">Last analysed: Mar 18, 2025</div>
-          </div>
-          <span class="badge badge-warning">Needs Work</span>
-        </div>
+      <!-- Overall Score Ring -->
+      <div class="card" style="min-width:200px;">
+        <div class="card-header"><div class="card-title">Overall Score</div></div>
         <div class="card-body" style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4);">
-          ${scoreRing(78, 'var(--color-warning-500)', 110)}
-          <div style="text-align:center;">
-            <div style="font-size:var(--text-sm);font-weight:var(--font-semibold);color:var(--color-warning-700);">Fair — Improvement Needed</div>
-            <div style="font-size:var(--text-xs);color:var(--color-gray-400);margin-top:4px;">Target: ≥ 85 for compliant status</div>
+          <div class="score-ring">
+            <svg viewBox="0 0 100 100" width="100" height="100">
+              <circle class="score-ring-bg" cx="50" cy="50" r="42"/>
+              <circle class="score-ring-fill"
+                cx="50" cy="50" r="42"
+                stroke="${overallColor}"
+                stroke-dasharray="${circumference}"
+                stroke-dashoffset="${dashOffset}"
+              />
+            </svg>
+            <div class="score-ring-label">
+              <span class="score-ring-value" style="color:${overallColor};">${overall}</span>
+              <span class="score-ring-unit">/100</span>
+            </div>
           </div>
-          <div style="display:flex;gap:var(--space-3);width:100%;justify-content:center;">
-            <div style="text-align:center;">
-              <div style="font-size:var(--text-xl);font-weight:var(--font-bold);color:var(--color-danger-600);">7</div>
-              <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Critical</div>
+          <div style="text-align:center;">
+            <div style="font-size:var(--text-sm);font-weight:var(--font-semibold);color:var(--color-warning-600);">Needs Attention</div>
+            <div style="font-size:var(--text-xs);color:var(--color-gray-400);margin-top:2px;">Last scan: 2 min ago</div>
+          </div>
+          <div style="width:100%;display:flex;flex-direction:column;gap:var(--space-2);">
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);">
+              <span style="color:var(--color-danger-600);font-weight:var(--font-semibold);">● Critical</span><span>15 issues</span>
             </div>
-            <div style="width:1px;background:var(--border-color);"></div>
-            <div style="text-align:center;">
-              <div style="font-size:var(--text-xl);font-weight:var(--font-bold);color:var(--color-warning-600);">28</div>
-              <div style="font-size:var(--text-xs);color:var(--color-gray-500);">High</div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);">
+              <span style="color:var(--color-warning-600);font-weight:var(--font-semibold);">● High</span><span>38 issues</span>
             </div>
-            <div style="width:1px;background:var(--border-color);"></div>
-            <div style="text-align:center;">
-              <div style="font-size:var(--text-xl);font-weight:var(--font-bold);color:var(--color-gray-600);">119</div>
-              <div style="font-size:var(--text-xs);color:var(--color-gray-500);">Total</div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);">
+              <span style="color:var(--color-primary-600);font-weight:var(--font-semibold);">● Medium</span><span>27 issues</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;font-size:var(--text-xs);">
+              <span style="color:var(--color-gray-500);font-weight:var(--font-semibold);">● Low</span><span>68 issues</span>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Score Breakdown -->
+      <!-- Dimension Scores -->
       <div class="card">
         <div class="card-header">
           <div>
-            <div class="card-title">Score Breakdown by Category</div>
-            <div class="card-subtitle">Weighted contribution to overall governance score</div>
+            <div class="card-title">Dimension Scores</div>
+            <div class="card-subtitle">Score breakdown by governance category</div>
           </div>
-          <button class="btn btn-ghost btn-sm">Configure Rules</button>
         </div>
-        <div class="card-body">
-          ${scoreBreakdownHtml}
-        </div>
+        <div class="card-body">${dimBarsHtml}</div>
       </div>
+    </div>
 
+    <!-- Tabs -->
+    <div class="tabs">
+      <a href="#" class="tab-item active">Issues <span class="badge badge-danger" style="margin-left:4px;">148</span></a>
+      <a href="#" class="tab-item">Rules</a>
+      <a href="#" class="tab-item">Reports</a>
+      <a href="#" class="tab-item">History</a>
     </div>
 
     <!-- Issues Table -->
-    <div class="section-header">
-      <div>
-        <div class="section-title">Open Issues</div>
-        <div class="section-subtitle">All detected governance violations requiring action</div>
-      </div>
-    </div>
-
-    <div class="tabs">
-      <a href="#" class="tab-item active">All Issues <span class="badge badge-neutral" style="margin-left:2px;">154</span></a>
-      <a href="#" class="tab-item">Critical <span class="badge badge-danger" style="margin-left:2px;">7</span></a>
-      <a href="#" class="tab-item">High <span class="badge badge-warning" style="margin-left:2px;">28</span></a>
-      <a href="#" class="tab-item">Resolved <span class="badge badge-success" style="margin-left:2px;">88</span></a>
-    </div>
-
-    <div class="card" style="overflow:hidden;">
+    <div class="card" style="overflow:hidden;margin-bottom:var(--space-6);">
       <div class="table-toolbar">
         <div class="table-toolbar-left">
           <div class="table-search">
             ${Icons.search}
-            <input type="text" placeholder="Search issues…" aria-label="Search governance issues"/>
+            <input type="text" placeholder="Search issues…" aria-label="Search issues"/>
           </div>
-          <span class="filter-chip active">Status: Open</span>
+          <span class="filter-chip active">Severity: All</span>
           <span class="filter-chip">Category</span>
-          <span class="filter-chip">Severity</span>
+          <span class="filter-chip">Fix: Available</span>
         </div>
         <div class="table-toolbar-right">
-          <button class="btn btn-success btn-sm">${Icons.check} Resolve Selected</button>
+          <button class="btn btn-secondary btn-sm">${Icons.download} Export</button>
         </div>
       </div>
-
       <div class="table-container" style="border:none;border-radius:0;box-shadow:none;">
         <table class="data-table">
           <thead>
             <tr>
-              <th>ID</th>
               <th>Severity</th>
               <th>Category</th>
-              <th>Object</th>
-              <th>Description</th>
-              <th>Status</th>
+              <th class="sortable"><div class="th-inner">Issue ${Icons.sortAsc}</div></th>
+              <th>Count</th>
+              <th>Fix Type</th>
               <th class="td-actions"></th>
             </tr>
           </thead>
           <tbody>${issuesHtml}</tbody>
         </table>
       </div>
+    </div>
 
-      <div class="table-pagination">
-        <div class="pagination-info">Showing <strong>1–8</strong> of <strong>154</strong> issues</div>
-        <div class="pagination-controls">
-          <button class="page-btn" disabled>‹</button>
-          <button class="page-btn active">1</button>
-          <button class="page-btn">2</button>
-          <button class="page-btn">3</button>
-          <span style="font-size:var(--text-xs);color:var(--color-gray-400);">…</span>
-          <button class="page-btn">7</button>
-          <button class="page-btn">›</button>
-        </div>
+    <!-- Governance Rules -->
+    <div class="section-header">
+      <div>
+        <div class="section-title">Governance Rules</div>
+        <div class="section-subtitle">Configure which quality checks are enforced</div>
+      </div>
+      <button class="btn btn-primary btn-sm">${Icons.plus} Add Rule</button>
+    </div>
+
+    <div class="card" style="overflow:hidden;">
+      <div class="table-container" style="border:none;border-radius:0;box-shadow:none;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Rule</th>
+              <th>Scope</th>
+              <th>Fix Type</th>
+              <th>Status</th>
+              <th class="td-actions"></th>
+            </tr>
+          </thead>
+          <tbody>${rulesHtml}</tbody>
+        </table>
       </div>
     </div>
   `

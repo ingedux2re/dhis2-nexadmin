@@ -1,116 +1,127 @@
+// ── DHIS2 NexAdmin — Main Application Entry Point ─────────────
+// Routes all pages through the Layout shell; no business logic here
 import { Hono } from 'hono'
-import { serveStatic } from 'hono/cloudflare-workers'
 import { Layout } from './components/layout'
-import { DashboardPage }    from './routes/dashboard'
+import { DashboardPage } from './routes/dashboard'
 import { DataElementsPage } from './routes/elements'
-import { DatasetsPage }     from './routes/datasets'
-import { BulkOperationsPage }from './routes/bulk'
-import { GovernancePage }   from './routes/governance'
-import { IndicatorsPage }   from './routes/indicators'
-import { OrgUnitsPage }     from './routes/orgunits'
-import { ValidationPage }   from './routes/validation'
-import { SettingsPage }     from './routes/settings'
+import { DatasetsPage } from './routes/datasets'
+import { BulkOperationsPage } from './routes/bulk'
+import { GovernancePage } from './routes/governance'
+import {
+  IndicatorsPage,
+  OrgUnitsPage,
+  ValidationPage,
+  SettingsPage,
+} from './routes/misc'
 
 const app = new Hono()
 
-// ── Static Assets ─────────────────────────────────────────────
-app.use('/static/*', serveStatic({ root: './public' }))
+// ── Dashboard ─────────────────────────────────────────────────
+app.get('/', (c) => {
+  return c.html(
+    Layout({
+      title: 'Dashboard',
+      activePage: 'dashboard',
+      breadcrumb: [{ label: 'Dashboard' }],
+      children: DashboardPage(),
+    })
+  )
+})
 
-// ── Helper: render page inside the layout shell ───────────────
-function page(
-  title: string,
-  activePage: string,
-  content: string,
-  breadcrumb?: Array<{ label: string; href?: string }>
-) {
-  return Layout({ title, activePage, breadcrumb, children: content })
-}
+// ── Data Elements ─────────────────────────────────────────────
+app.get('/elements', (c) => {
+  return c.html(
+    Layout({
+      title: 'Data Elements',
+      activePage: 'elements',
+      breadcrumb: [{ label: 'Metadata' }, { label: 'Data Elements' }],
+      children: DataElementsPage(),
+    })
+  )
+})
 
-// ── Routes ────────────────────────────────────────────────────
+// ── Datasets ──────────────────────────────────────────────────
+app.get('/datasets', (c) => {
+  return c.html(
+    Layout({
+      title: 'Datasets',
+      activePage: 'datasets',
+      breadcrumb: [{ label: 'Metadata' }, { label: 'Datasets' }],
+      children: DatasetsPage(),
+    })
+  )
+})
 
-// Dashboard
-app.get('/', (c) =>
-  c.html(page('Dashboard', 'dashboard', DashboardPage()))
-)
+// ── Indicators ────────────────────────────────────────────────
+app.get('/indicators', (c) => {
+  return c.html(
+    Layout({
+      title: 'Indicators',
+      activePage: 'indicators',
+      breadcrumb: [{ label: 'Metadata' }, { label: 'Indicators' }],
+      children: IndicatorsPage(),
+    })
+  )
+})
 
-// Data Elements
-app.get('/elements', (c) =>
-  c.html(page('Data Elements', 'elements', DataElementsPage(), [
-    { label: 'Data Elements' }
-  ]))
-)
+// ── Organisation Units ────────────────────────────────────────
+app.get('/orgunits', (c) => {
+  return c.html(
+    Layout({
+      title: 'Organisation Units',
+      activePage: 'orgunits',
+      breadcrumb: [{ label: 'Metadata' }, { label: 'Organisation Units' }],
+      children: OrgUnitsPage(),
+    })
+  )
+})
 
-// Datasets
-app.get('/datasets', (c) =>
-  c.html(page('Datasets', 'datasets', DatasetsPage(), [
-    { label: 'Datasets' }
-  ]))
-)
+// ── Bulk Operations ───────────────────────────────────────────
+app.get('/bulk', (c) => {
+  return c.html(
+    Layout({
+      title: 'Bulk Operations',
+      activePage: 'bulk',
+      breadcrumb: [{ label: 'Tools' }, { label: 'Bulk Operations' }],
+      children: BulkOperationsPage(),
+    })
+  )
+})
 
-// Indicators
-app.get('/indicators', (c) =>
-  c.html(page('Indicators', 'indicators', IndicatorsPage(), [
-    { label: 'Indicators' }
-  ]))
-)
+// ── Governance ────────────────────────────────────────────────
+app.get('/governance', (c) => {
+  return c.html(
+    Layout({
+      title: 'Governance',
+      activePage: 'governance',
+      breadcrumb: [{ label: 'Tools' }, { label: 'Governance' }],
+      children: GovernancePage(),
+    })
+  )
+})
 
-// Org Units
-app.get('/orgunits', (c) =>
-  c.html(page('Organisation Units', 'orgunits', OrgUnitsPage(), [
-    { label: 'Organisation Units' }
-  ]))
-)
+// ── Validation Rules ──────────────────────────────────────────
+app.get('/validation', (c) => {
+  return c.html(
+    Layout({
+      title: 'Validation Rules',
+      activePage: 'validation',
+      breadcrumb: [{ label: 'Tools' }, { label: 'Validation Rules' }],
+      children: ValidationPage(),
+    })
+  )
+})
 
-// Bulk Operations
-app.get('/bulk', (c) =>
-  c.html(page('Bulk Operations', 'bulk', BulkOperationsPage(), [
-    { label: 'Tools', href: '/bulk' },
-    { label: 'Bulk Operations' }
-  ]))
-)
-
-// Governance
-app.get('/governance', (c) =>
-  c.html(page('Governance & Quality', 'governance', GovernancePage(), [
-    { label: 'Tools', href: '/governance' },
-    { label: 'Governance & Quality' }
-  ]))
-)
-
-// Validation
-app.get('/validation', (c) =>
-  c.html(page('Validation Rules', 'validation', ValidationPage(), [
-    { label: 'Tools', href: '/validation' },
-    { label: 'Validation Rules' }
-  ]))
-)
-
-// Settings
-app.get('/settings', (c) =>
-  c.html(page('Settings', 'settings', SettingsPage(), [
-    { label: 'Settings' }
-  ]))
-)
-
-// ── 404 Not Found ─────────────────────────────────────────────
-app.notFound((c) => {
-  const content = `
-    <div class="empty-state" style="min-height:60vh;">
-      <div class="empty-state-icon" style="background:var(--color-danger-50);color:var(--color-danger-400);">
-        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="10"/>
-          <line x1="12" y1="8" x2="12" y2="12"/>
-          <line x1="12" y1="16" x2="12.01" y2="16"/>
-        </svg>
-      </div>
-      <h2 class="empty-state-title">Page Not Found</h2>
-      <p class="empty-state-desc">
-        The page you're looking for doesn't exist or has been moved.
-      </p>
-      <a href="/" class="btn btn-primary btn-md">Back to Dashboard</a>
-    </div>
-  `
-  return c.html(page('Not Found', '', content), 404)
+// ── Settings ──────────────────────────────────────────────────
+app.get('/settings', (c) => {
+  return c.html(
+    Layout({
+      title: 'Settings',
+      activePage: 'settings',
+      breadcrumb: [{ label: 'System' }, { label: 'Settings' }],
+      children: SettingsPage(),
+    })
+  )
 })
 
 export default app
