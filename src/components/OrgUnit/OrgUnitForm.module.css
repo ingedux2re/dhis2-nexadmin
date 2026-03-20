@@ -1,14 +1,27 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/components/OrgUnit/OrgUnitForm.module.css
+   UI improvement: Form layout — consistent grid, better error box spacing
+   No class names changed — CSS values only
+   ───────────────────────────────────────────────────────────────────────────── */
+
+/* UI improvement: Error notice with proper bottom margin */
 .errorBox {
   margin-bottom: 16px;
 }
+
+/* UI improvement: Two-column responsive grid for form fields */
 .grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
 }
+
+/* UI improvement: Full-width field span */
 .fullWidth {
   grid-column: 1 / -1;
 }
+
+/* UI improvement: Stack on mobile */
 @media (max-width: 600px) {
   .grid {
     grid-template-columns: 1fr;

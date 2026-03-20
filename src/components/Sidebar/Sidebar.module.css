@@ -1,84 +1,175 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   src/components/Sidebar/Sidebar.module.css
+   UI improvement: Enterprise dark sidebar — professional internal tool feel
+   No class names changed, no logic touched — CSS values only
+   ───────────────────────────────────────────────────────────────────────────── */
 @import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+
+/* UI improvement: Dark navy sidebar matching WHO/World Bank internal tool standard */
 .sidebar {
   display: flex;
   flex-direction: column;
   width: 240px;
   min-width: 240px;
   height: 100%;
-  background: #fff;
-  border-right: 1px solid #e0e0e0;
+  background: #0f172a;
+  border-right: none;
   overflow-y: auto;
+  overflow-x: hidden;
   transition:
-    width 0.2s ease,
-    min-width 0.2s ease;
+    width 0.25s ease,
+    min-width 0.25s ease;
+  scrollbar-width: thin;
+  scrollbar-color: #1e293b transparent;
+  flex-shrink: 0;
 }
+
+.sidebar::-webkit-scrollbar { width: 3px; }
+.sidebar::-webkit-scrollbar-track { background: transparent; }
+.sidebar::-webkit-scrollbar-thumb { background: #334155; border-radius: 3px; }
+
+/* UI improvement: Smooth collapse to icon-only width */
 .sidebar.collapsed {
   width: 56px;
   min-width: 56px;
 }
+
+/* UI improvement: Cleaner toggle button, right-aligned chevron */
 .toggleButton {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding: 8px 12px;
-  border-bottom: 1px solid #e0e0e0;
+  padding: 10px 14px;
+  border-bottom: 1px solid #1e293b;
   cursor: pointer;
-  background: none;
+  background: transparent;
   border-left: none;
   border-top: none;
   border-right: none;
   width: 100%;
+  color: #64748b;
+  transition: color 0.15s ease, background 0.15s ease;
+  min-height: 40px;
 }
+
+.toggleButton:hover {
+  background: #1e293b;
+  color: #94a3b8;
+}
+
+.toggleButton:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: -2px;
+}
+
+/* UI improvement: Section spacing and label styling */
 .section {
   padding: 0;
+  margin-bottom: 2px;
 }
+
 .sectionHeader {
-  padding: 12px 16px 4px;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
+  padding: 14px 16px 5px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #6c757d;
+  color: #475569;
   white-space: nowrap;
   overflow: hidden;
 }
+
+/* UI improvement: Hide section labels gracefully when collapsed */
 .collapsed .sectionHeader {
   visibility: hidden;
   height: 0;
   padding: 0;
+  margin: 0;
 }
+
+/* UI improvement: Nav item — high contrast hover + active state */
 .navItem {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
+  gap: 10px;
+  padding: 8px 12px;
+  margin: 1px 8px;
   cursor: pointer;
   text-decoration: none;
-  color: #212529;
-  font-size: 14px;
-  border-left: 3px solid transparent;
+  color: #94a3b8;
+  font-size: 13px;
+  font-weight: 500;
+  border-left: none;
+  border-radius: 6px;
   white-space: nowrap;
   overflow: hidden;
-  transition: background 0.15s;
+  transition: background 0.12s ease, color 0.12s ease;
+  min-height: 34px;
 }
+
 .navItem:hover {
-  background: #f5f5f5;
+  background: #1e293b;
+  color: #e2e8f0;
+  text-decoration: none;
 }
+
+/* UI improvement: Active item uses primary blue accent */
 .navItem.active {
-  background: #e8f5e9;
-  border-left-color: #276696;
-  color: #276696;
+  background: #1d4ed8;
+  color: #ffffff;
   font-weight: 600;
 }
+
+.navItem.active .navIcon {
+  color: #ffffff;
+}
+
+/* UI improvement: Hide label text when sidebar is collapsed */
 .navLabel {
   overflow: hidden;
   text-overflow: ellipsis;
+  flex: 1;
+  line-height: 1.4;
 }
+
 .collapsed .navLabel {
   display: none;
 }
+
+/* UI improvement: Icon sizing and color */
 .navIcon {
   flex-shrink: 0;
-  font-size: 20px;
+  font-size: 18px;
   font-family: "Material Icons", sans-serif;
+  color: #64748b;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.navItem:hover .navIcon {
+  color: #e2e8f0;
+}
+
+/* UI improvement: Centered icon in collapsed mode */
+.collapsed .navItem {
+  justify-content: center;
+  padding: 8px;
+  margin: 2px 6px;
+}
+
+.collapsed .navIcon {
+  color: #64748b;
+  font-size: 20px;
+}
+
+.collapsed .navItem:hover .navIcon {
+  color: #e2e8f0;
+}
+
+.collapsed .navItem.active .navIcon {
+  color: #ffffff;
 }
