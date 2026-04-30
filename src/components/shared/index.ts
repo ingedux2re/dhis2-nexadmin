@@ -1,4 +1,2 @@
-// src/components/shared/index.ts
+// src/components/shared/index.ts — Competition build: only PageHeader remains
 export { PageHeader } from './PageHeader'
-export { StatCard } from './StatCard'
-export { QuickActionCard } from './QuickActionCard'

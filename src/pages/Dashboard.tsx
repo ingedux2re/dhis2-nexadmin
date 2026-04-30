@@ -1,20 +1,20 @@
-// src/pages/Dashboard.tsx
+// src/pages/Dashboard.tsx — Competition version
+// Clean, focused landing page for exactly 3 features
 import i18n from '@dhis2/d2-i18n'
-import { StatCard } from '../components/shared/StatCard'
-import { QuickActionCard } from '../components/shared/QuickActionCard'
+import { Link } from 'react-router-dom'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
   return (
     <div className={styles.page}>
-      {/* ── Hero ──────────────────────────────────────────────── */}
+      {/* ── Hero ─────────────────────────────────────────────── */}
       <div className={styles.hero}>
         <div className={styles.heroContent}>
           <div className={styles.heroBadge}>
-            <span className="material-icons-round" style={{ fontSize: 14 }}>
+            <span className="material-icons-round" style={{ fontSize: 13 }}>
               verified
             </span>
-            {i18n.t('DHIS2 Administration Platform')}
+            {i18n.t('DHIS2 Competition 2026')}
           </div>
           <h1 className={styles.heroTitle}>
             {i18n.t('Welcome to')}{' '}
@@ -22,7 +22,7 @@ export default function Dashboard() {
           </h1>
           <p className={styles.heroSubtitle}>
             {i18n.t(
-              'A modern, powerful interface for managing your DHIS2 organisation hierarchy, data integrity, users, and system configuration.'
+              'The administration toolkit DHIS2 was missing. Bulk operations, data integrity, and metadata engineering — all in one place.'
             )}
           </p>
         </div>
@@ -33,242 +33,142 @@ export default function Dashboard() {
             className="material-icons-round"
             style={{ fontSize: 80, color: 'rgba(255,255,255,0.15)', position: 'relative' }}
           >
-            account_tree
+            data_object
           </span>
         </div>
       </div>
 
-      {/* ── KPI Stats ─────────────────────────────────────────── */}
+      {/* ── 3 Feature cards ───────────────────────────────────── */}
       <section>
-        <h2 className={styles.sectionTitle}>{i18n.t('System Overview')}</h2>
-        <div className={styles.statsGrid}>
-          <StatCard
-            icon="account_tree"
-            label={i18n.t('Organisation Units')}
-            value="—"
-            color="brand"
-          />
-          <StatCard icon="people" label={i18n.t('System Users')} value="—" color="info" />
-          <StatCard
-            icon="warning_amber"
-            label={i18n.t('Data Integrity Issues')}
-            value="—"
-            color="warning"
-          />
-          <StatCard
-            icon="done_all"
-            label={i18n.t('Completed Bulk Ops')}
-            value="—"
-            color="success"
-          />
-        </div>
-      </section>
-
-      {/* ── Quick Actions ──────────────────────────────────────── */}
-      <section>
-        <h2 className={styles.sectionTitle}>{i18n.t('Quick Actions')}</h2>
-        <div className={styles.actionsGrid}>
-          <QuickActionCard
-            icon="account_tree"
-            title={i18n.t('Manage Org Units')}
-            description={i18n.t('Create, edit, and organise your organisation hierarchy.')}
-            to="/org-units"
-            color="brand"
-          />
-          <QuickActionCard
-            icon="data_object"
-            title={i18n.t('Data Element Engineering')}
-            description={i18n.t(
-              'Bulk create data elements and rename them in datasets — hours of work in minutes.'
-            )}
-            to="/data-elements"
-            color="success"
-            badge={i18n.t('New')}
-          />
-          <QuickActionCard
-            icon="drive_file_rename_outline"
-            title={i18n.t('Bulk Rename')}
-            description={i18n.t('Rename hundreds of org units at once using patterns and rules.')}
-            to="/bulk/rename"
-            color="accent"
-            badge={i18n.t('Popular')}
-          />
-          <QuickActionCard
-            icon="low_priority"
-            title={i18n.t('Bulk Reorganise')}
-            description={i18n.t('Move org units to new parents and restructure your hierarchy.')}
-            to="/bulk/reorganise"
-            color="accent"
-          />
-          <QuickActionCard
-            icon="find_replace"
-            title={i18n.t('Duplicate Detector')}
-            description={i18n.t('Find and resolve duplicate organisation units in your system.')}
-            to="/integrity/duplicates"
-            color="warning"
-            badge={i18n.t('Integrity')}
-          />
-          <QuickActionCard
-            icon="account_tree"
-            title={i18n.t('Hierarchy Validator')}
-            description={i18n.t('Validate your org unit hierarchy for structural issues.')}
-            to="/integrity/hierarchy"
-            color="warning"
-          />
-          <QuickActionCard
-            icon="place"
-            title={i18n.t('Geo Consistency')}
-            description={i18n.t('Check geographic data consistency and coordinate accuracy.')}
-            to="/integrity/geo"
-            color="info"
-          />
-          <QuickActionCard
-            icon="manage_accounts"
-            title={i18n.t('User Management')}
-            description={i18n.t('Manage users, roles, and access permissions.')}
-            to="/users"
-            color="brand"
-          />
-          <QuickActionCard
-            icon="settings"
-            title={i18n.t('System Settings')}
-            description={i18n.t('Configure application settings and preferences.')}
-            to="/system/settings"
-            color="brand"
-          />
-        </div>
-      </section>
-
-      {/* ── Module cards ───────────────────────────────────────── */}
-      <section>
-        <h2 className={styles.sectionTitle}>{i18n.t('All Modules')}</h2>
-        <div className={styles.moduleGrid}>
-          {MODULES.map((mod) => (
-            <a
-              key={mod.id}
-              href={`#${mod.path}`}
-              className={`${styles.moduleCard} ${styles[`module-${mod.color}`]}`}
-            >
-              <span className={`material-icons-round ${styles.moduleIcon}`}>{mod.icon}</span>
-              <div className={styles.moduleInfo}>
-                <div className={styles.moduleTitle}>{i18n.t(mod.title)}</div>
-                <div className={styles.moduleSection}>{i18n.t(mod.section)}</div>
+        <h2 className={styles.sectionTitle}>{i18n.t('Core Features')}</h2>
+        <div className={styles.featureGrid}>
+          {/* Feature 1 */}
+          <Link to="/data-elements" className={`${styles.featureCard} ${styles.featureCardGreen}`}>
+            <div className={styles.featureIconWrap}>
+              <span className="material-icons-round">data_object</span>
+            </div>
+            <div className={styles.featureBody}>
+              <div className={styles.featureTitle}>
+                {i18n.t('Data Element Engineering')}
+                <span className={styles.featureBadgeNew}>{i18n.t('New')}</span>
               </div>
-              <span className="material-icons-round" style={{ fontSize: 16, opacity: 0.4 }}>
-                chevron_right
-              </span>
-            </a>
-          ))}
+              <p className={styles.featureDesc}>
+                {i18n.t(
+                  'Bulk-create dozens of data elements in seconds. Paste directly from Excel, auto-map columns, and assign to datasets — all in one workflow.'
+                )}
+              </p>
+              <ul className={styles.featureList}>
+                <li>
+                  <span className="material-icons-round">table_view</span>
+                  {i18n.t('Paste from Excel / CSV')}
+                </li>
+                <li>
+                  <span className="material-icons-round">cloud_upload</span>
+                  {i18n.t('Bulk create via DHIS2 metadata API')}
+                </li>
+                <li>
+                  <span className="material-icons-round">drive_file_rename_outline</span>
+                  {i18n.t('Rename elements within datasets')}
+                </li>
+              </ul>
+            </div>
+            <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
+          </Link>
+
+          {/* Feature 2 */}
+          <Link to="/bulk/rename" className={`${styles.featureCard} ${styles.featureCardAccent}`}>
+            <div className={styles.featureIconWrap}>
+              <span className="material-icons-round">drive_file_rename_outline</span>
+            </div>
+            <div className={styles.featureBody}>
+              <div className={styles.featureTitle}>
+                {i18n.t('Bulk Rename')}
+                <span className={styles.featureBadgePopular}>{i18n.t('Popular')}</span>
+              </div>
+              <p className={styles.featureDesc}>
+                {i18n.t(
+                  'Rename hundreds of org units at once. Find & Replace, Prefix, Suffix, or Regex — with live preview before any change is committed.'
+                )}
+              </p>
+              <ul className={styles.featureList}>
+                <li>
+                  <span className="material-icons-round">find_replace</span>
+                  {i18n.t('4 rename modes including Regex')}
+                </li>
+                <li>
+                  <span className="material-icons-round">preview</span>
+                  {i18n.t('Live preview panel — zero surprises')}
+                </li>
+                <li>
+                  <span className="material-icons-round">undo</span>
+                  {i18n.t('Auto-rollback on any failure')}
+                </li>
+              </ul>
+            </div>
+            <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
+          </Link>
+
+          {/* Feature 3 */}
+          <Link to="/integrity" className={`${styles.featureCard} ${styles.featureCardWarning}`}>
+            <div className={styles.featureIconWrap}>
+              <span className="material-icons-round">verified_user</span>
+            </div>
+            <div className={styles.featureBody}>
+              <div className={styles.featureTitle}>
+                {i18n.t('Data Integrity Scan')}
+                <span className={styles.featureBadgeIntegrity}>{i18n.t('Integrity')}</span>
+              </div>
+              <p className={styles.featureDesc}>
+                {i18n.t(
+                  'One scan, three checks. Detect duplicate org units, hierarchy violations, and geo inconsistencies across your entire instance in seconds.'
+                )}
+              </p>
+              <ul className={styles.featureList}>
+                <li>
+                  <span className="material-icons-round">content_copy</span>
+                  {i18n.t('Fuzzy duplicate detection (Levenshtein)')}
+                </li>
+                <li>
+                  <span className="material-icons-round">account_tree</span>
+                  {i18n.t('Hierarchy validator — circular refs, orphans')}
+                </li>
+                <li>
+                  <span className="material-icons-round">place</span>
+                  {i18n.t('Geo consistency — boundaries & precision')}
+                </li>
+              </ul>
+            </div>
+            <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
+          </Link>
+        </div>
+      </section>
+
+      {/* ── Quick stat strip ──────────────────────────────────── */}
+      <section className={styles.statStrip}>
+        <div className={styles.statItem}>
+          <span className="material-icons-round">bolt</span>
+          <strong>{i18n.t('Hours → Seconds')}</strong>
+          <span>{i18n.t('Bulk metadata operations')}</span>
+        </div>
+        <div className={styles.statDivider} />
+        <div className={styles.statItem}>
+          <span className="material-icons-round">undo</span>
+          <strong>{i18n.t('Auto-Rollback')}</strong>
+          <span>{i18n.t('Every destructive op is safe')}</span>
+        </div>
+        <div className={styles.statDivider} />
+        <div className={styles.statItem}>
+          <span className="material-icons-round">radar</span>
+          <strong>{i18n.t('3-in-1 Integrity Scan')}</strong>
+          <span>{i18n.t('Duplicates · Hierarchy · Geo')}</span>
+        </div>
+        <div className={styles.statDivider} />
+        <div className={styles.statItem}>
+          <span className="material-icons-round">table_view</span>
+          <strong>{i18n.t('Excel-Native Import')}</strong>
+          <span>{i18n.t('Paste directly from spreadsheets')}</span>
         </div>
       </section>
     </div>
   )
 }
-
-interface ModuleDef {
-  id: string
-  icon: string
-  title: string
-  section: string
-  path: string
-  color: string
-}
-
-const MODULES: ModuleDef[] = [
-  {
-    id: 'ou',
-    icon: 'account_tree',
-    title: 'Org Unit Management',
-    section: 'Organisation Units',
-    path: '/org-units',
-    color: 'brand',
-  },
-  {
-    id: 'hierarchy',
-    icon: 'schema',
-    title: 'Hierarchy Viewer',
-    section: 'Organisation Units',
-    path: '/org-units/hierarchy',
-    color: 'brand',
-  },
-  {
-    id: 'groups',
-    icon: 'folder_special',
-    title: 'Org Unit Groups',
-    section: 'Organisation Units',
-    path: '/org-units/groups',
-    color: 'brand',
-  },
-  {
-    id: 'duplicates',
-    icon: 'find_replace',
-    title: 'Duplicate Detector',
-    section: 'Data Integrity',
-    path: '/integrity/duplicates',
-    color: 'warning',
-  },
-  {
-    id: 'hier-valid',
-    icon: 'rule',
-    title: 'Hierarchy Validator',
-    section: 'Data Integrity',
-    path: '/integrity/hierarchy',
-    color: 'warning',
-  },
-  {
-    id: 'geo',
-    icon: 'place',
-    title: 'Geo Consistency',
-    section: 'Data Integrity',
-    path: '/integrity/geo',
-    color: 'info',
-  },
-  {
-    id: 'reorg',
-    icon: 'low_priority',
-    title: 'Bulk Reorganise',
-    section: 'Bulk Operations',
-    path: '/bulk/reorganise',
-    color: 'accent',
-  },
-  {
-    id: 'rename',
-    icon: 'drive_file_rename_outline',
-    title: 'Bulk Rename',
-    section: 'Bulk Operations',
-    path: '/bulk/rename',
-    color: 'accent',
-  },
-  {
-    id: 'users',
-    icon: 'manage_accounts',
-    title: 'User Management',
-    section: 'Users',
-    path: '/users',
-    color: 'info',
-  },
-  {
-    id: 'audit',
-    icon: 'history',
-    title: 'Audit Log',
-    section: 'Governance',
-    path: '/governance/audit',
-    color: 'info',
-  },
-  {
-    id: 'settings',
-    icon: 'settings',
-    title: 'System Settings',
-    section: 'System',
-    path: '/system/settings',
-    color: 'brand',
-  },
-  {
-    id: 'notif',
-    icon: 'notifications',
-    title: 'Notifications',
-    section: 'System',
-    path: '/system/notifications',
-    color: 'info',
-  },
-]
