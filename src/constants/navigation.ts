@@ -1,3 +1,7 @@
+// src/constants/navigation.ts — Competition version: 4 entries, 2 sections
+// NOTE: The Sidebar now uses its own inline nav config for simplicity.
+// This file is kept as the canonical source for route definitions.
+
 export interface NavItem {
   id: string
   label: string
@@ -6,16 +10,7 @@ export interface NavItem {
   section: NavSection
 }
 
-export type NavSection =
-  | 'overview'
-  | 'org-units'
-  | 'data-elements'
-  | 'data-integrity'
-  | 'bulk-operations'
-  | 'users'
-  | 'governance'
-  | 'analytics'
-  | 'system'
+export type NavSection = 'overview' | 'features'
 
 export const NAV_ITEMS: NavItem[] = [
   {
@@ -25,154 +20,35 @@ export const NAV_ITEMS: NavItem[] = [
     icon: 'dashboard',
     section: 'overview',
   },
-  {
-    id: 'ou-management',
-    label: 'Org Unit Management',
-    path: '/org-units',
-    icon: 'domain',
-    section: 'org-units',
-  },
-  {
-    id: 'ou-hierarchy',
-    label: 'Hierarchy Viewer',
-    path: '/org-units/hierarchy',
-    icon: 'account_tree',
-    section: 'org-units',
-  },
-  {
-    id: 'ou-groups',
-    label: 'Org Unit Groups',
-    path: '/org-units/groups',
-    icon: 'folder_special',
-    section: 'org-units',
-  },
-  {
-    id: 'duplicate-detector',
-    label: 'Duplicate Detector',
-    path: '/integrity/duplicates',
-    icon: 'content_copy',
-    section: 'data-integrity',
-  },
-  {
-    id: 'hierarchy-validator',
-    label: 'Hierarchy Validator',
-    path: '/integrity/hierarchy',
-    icon: 'rule',
-    section: 'data-integrity',
-  },
-  {
-    id: 'geo-consistency',
-    label: 'Geo Consistency',
-    path: '/integrity/geo',
-    icon: 'map',
-    section: 'data-integrity',
-  },
-  // ─── Data Element Engineering ────────────────────────────────────────────────
+  // ── Feature 1: Data Element Engineering ──────────────────────────────────
   {
     id: 'data-element-engineering',
     label: 'Data Element Engineering',
     path: '/data-elements',
     icon: 'data_object',
-    section: 'data-elements',
+    section: 'features',
   },
-  // ─── Phase 3 – Bulk Operations ─────────────────────────────────────────────
-  {
-    id: 'bulk-reorganise',
-    label: 'Bulk Reorganise',
-    path: '/bulk/reorganise',
-    icon: 'move_down',
-    section: 'bulk-operations',
-  },
+  // ── Feature 2: Bulk Rename ────────────────────────────────────────────────
   {
     id: 'bulk-rename',
     label: 'Bulk Rename',
     path: '/bulk/rename',
     icon: 'drive_file_rename_outline',
-    section: 'bulk-operations',
+    section: 'features',
   },
-  // ───────────────────────────────────────────────────────────────────────────
+  // ── Feature 3: Data Integrity ─────────────────────────────────────────────
   {
-    id: 'user-management',
-    label: 'User Management',
-    path: '/users',
-    icon: 'people',
-    section: 'users',
-  },
-  {
-    id: 'user-roles',
-    label: 'Roles & Authorities',
-    path: '/users/roles',
-    icon: 'admin_panel_settings',
-    section: 'users',
-  },
-  {
-    id: 'user-groups',
-    label: 'User Groups',
-    path: '/users/groups',
-    icon: 'group',
-    section: 'users',
-  },
-  {
-    id: 'audit-log',
-    label: 'Audit Log',
-    path: '/governance/audit',
-    icon: 'history',
-    section: 'governance',
-  },
-  {
-    id: 'ou-governance',
-    label: 'OU Governance Workflow',
-    path: '/governance/ou-workflow',
-    icon: 'account_tree',
-    section: 'governance',
-  },
-  {
-    id: 'access-control',
-    label: 'Access Control',
-    path: '/governance/access',
-    icon: 'lock',
-    section: 'governance',
-  },
-  {
-    id: 'usage-stats',
-    label: 'Usage Statistics',
-    path: '/analytics/usage',
-    icon: 'bar_chart',
-    section: 'analytics',
-  },
-  {
-    id: 'data-quality',
-    label: 'Data Quality',
-    path: '/analytics/quality',
-    icon: 'verified',
-    section: 'analytics',
-  },
-  {
-    id: 'system-settings',
-    label: 'System Settings',
-    path: '/system/settings',
-    icon: 'settings',
-    section: 'system',
-  },
-  {
-    id: 'notifications',
-    label: 'Notifications',
-    path: '/system/notifications',
-    icon: 'notifications',
-    section: 'system',
+    id: 'data-integrity',
+    label: 'Data Integrity',
+    path: '/integrity',
+    icon: 'verified_user',
+    section: 'features',
   },
 ]
 
 export const NAV_SECTIONS: Record<NavSection, string> = {
   overview: 'Overview',
-  'org-units': 'Organisation Units',
-  'data-elements': 'Data Elements',
-  'data-integrity': 'Data Integrity',
-  'bulk-operations': 'Bulk Operations',
-  users: 'Users & Access',
-  governance: 'Governance',
-  analytics: 'Analytics',
-  system: 'System',
+  features: 'Features',
 }
 
 export function groupBySection(items: NavItem[]): Record<NavSection, NavItem[]> {

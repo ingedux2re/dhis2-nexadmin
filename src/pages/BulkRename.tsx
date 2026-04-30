@@ -1,4 +1,5 @@
-// src/pages/BulkRename.tsx
+// src/pages/BulkRename.tsx — Competition version
+// UX improvements: status bar at top, compact loading, clear visual hierarchy
 import { useCallback } from 'react'
 import { useDataQuery } from '@dhis2/app-runtime'
 import i18n from '@dhis2/d2-i18n'
@@ -31,6 +32,7 @@ export default function BulkRename() {
   const { state, requestConfirm, cancelConfirm, execute, continueRenaming, reset } = useBulkRename()
 
   const orgUnits: OrgUnitListItem[] = data?.orgUnits?.organisationUnits ?? []
+  const totalLoaded = orgUnits.length
 
   const handleConfirmPreviews = useCallback(
     (previews: RenamePreview[]) => requestConfirm(previews),
@@ -47,30 +49,46 @@ export default function BulkRename() {
 
   return (
     <div className={styles.pageScroll}>
+      {/* ── Page Header ─────────────────────────────────────────── */}
       <PageHeader
         icon="drive_file_rename_outline"
         title={i18n.t('Bulk Rename')}
         description={i18n.t(
-          'Select org units, apply a rename rule to the selection, then repeat for other groups.'
+          'Select org units, choose a rename rule, preview changes live — then apply in one click. Auto-rollback on any failure.'
         )}
         accentColor="accent"
         badge={
           isDone && state.totalRenamed > 0 ? (
             <span className="nx-chip nx-chip-success">
-              {state.totalRenamed} {i18n.t('renamed')}
+              <span className="material-icons-round" style={{ fontSize: 13 }}>
+                check_circle
+              </span>
+              {state.totalRenamed} {i18n.t('renamed this session')}
+            </span>
+          ) : loading ? (
+            <span className="nx-chip nx-chip-neutral">{i18n.t('Loading org units…')}</span>
+          ) : !loading && !error ? (
+            <span className="nx-chip nx-chip-brand">
+              {totalLoaded.toLocaleString()} {i18n.t('org units loaded')}
             </span>
           ) : undefined
         }
       />
 
-      {loading && <p className={styles.loading}>{i18n.t('Loading org units…')}</p>}
+      {/* ── Error loading data ───────────────────────────────────── */}
       {error && (
-        <p className={styles.error}>
-          {i18n.t('Failed to load org units. {{message}}', { message: error.message })}
-        </p>
+        <div className={styles.error}>
+          <span
+            className="material-icons-round"
+            style={{ fontSize: 18, marginRight: 8, verticalAlign: 'middle' }}
+          >
+            error_outline
+          </span>
+          {i18n.t('Failed to load org units: {{message}}', { message: error.message })}
+        </div>
       )}
 
-      {/* ✅ Moved above the table so they're visible without scrolling */}
+      {/* ── Running progress ─────────────────────────────────────── */}
       {isRunning && (
         <ProgressBar
           percent={state.progress}
@@ -80,12 +98,14 @@ export default function BulkRename() {
         />
       )}
 
+      {/* ── Success banner ───────────────────────────────────────── */}
       {isDone && (
         <div className={styles.successBanner}>
+          <span className="material-icons-round" style={{ fontSize: 18 }}>
+            check_circle
+          </span>
           <span>
-            {i18n.t('{{count}} org units renamed this session.', {
-              count: state.totalRenamed,
-            })}
+            {i18n.t('{{count}} org units renamed successfully.', { count: state.totalRenamed })}
           </span>
           <button type="button" className={styles.resetBtn} onClick={continueRenaming}>
             {i18n.t('Continue Renaming')}
@@ -96,9 +116,17 @@ export default function BulkRename() {
         </div>
       )}
 
+      {/* ── Error banner ─────────────────────────────────────────── */}
       {isError && (
         <div className={styles.errorBanner}>
-          <p>{i18n.t('Operation failed. {{n}} renames rolled back.', { n: state.rolledBack })}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontWeight: 600 }}>
+            <span className="material-icons-round" style={{ fontSize: 18 }}>
+              undo
+            </span>
+            {i18n.t('Operation failed — {{n}} rename(s) rolled back automatically.', {
+              n: state.rolledBack,
+            })}
+          </div>
           {state.errors.map((e, idx) => (
             <p key={idx} className={styles.errorItem}>
               {e}
@@ -110,6 +138,7 @@ export default function BulkRename() {
         </div>
       )}
 
+      {/* ── Main table ───────────────────────────────────────────── */}
       {!loading && !error && (
         <BulkRenameTable
           orgUnits={orgUnits}
@@ -119,18 +148,19 @@ export default function BulkRename() {
         />
       )}
 
+      {/* ── Confirm modal ────────────────────────────────────────── */}
       {state.status === 'confirming' && (
         <ConfirmDialog
           title={i18n.t('Confirm Rename')}
           message={i18n.t(
-            'This will rename {{count}} org units. This cannot be undone without a snapshot.',
+            'This will rename {{count}} org unit(s). The operation includes automatic rollback — if any rename fails, all completed renames in this batch are reversed.',
             { count: state.previews.length }
           )}
           warnings={
             state.longNameWarnings.length > 0
               ? [
                   i18n.t(
-                    '{{n}} org unit name(s) exceed 50 characters. Their shortName will be automatically truncated: {{names}}',
+                    '{{n}} name(s) exceed 50 characters. Their shortName will be auto-truncated: {{names}}',
                     {
                       n: state.longNameWarnings.length,
                       names: state.longNameWarnings.map((w) => w.name).join(', '),
