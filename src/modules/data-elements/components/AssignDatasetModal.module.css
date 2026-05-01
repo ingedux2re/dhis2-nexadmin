@@ -57,7 +57,7 @@
   gap: var(--space-3);
   padding: var(--space-4) var(--space-5);
   border-bottom: 1px solid var(--border-subtle);
-  background: linear-gradient(135deg, var(--color-success-solid, #2e7d32), #1b5e20);
+  background: linear-gradient(135deg, var(--brand-600), var(--brand-800));
   flex-shrink: 0;
 }
 
