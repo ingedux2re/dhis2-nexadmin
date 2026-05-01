@@ -92,14 +92,27 @@ function CopyIdButton({ id, name }: { id: string; name: string }) {
 // baseUrl from useConfig() is always '..', which makes window.open build a
 // broken relative path. A native <a href> is also never blocked by popup blockers.
 function ViewOrgUnitButton({ id, name }: { id: string; name: string }) {
-  const href = `../dhis-web-maintenance/index.html#/edit/organisationUnitSection/organisationUnit/${id}`
+  // Build an absolute URL at click time so HashRouter never intercepts it.
+  // The app lives at e.g. http://localhost:3000/dhis-web-nexadmin/index.html
+  // DHIS2 apps are siblings: http://localhost:3000/dhis-web-maintenance/...
+  // window.location.origin + pathname gives us the base without the hash.
+  const getHref = () => {
+    const base = window.location.origin + window.location.pathname
+    const root = base.substring(0, base.lastIndexOf('/') + 1)
+    return `${root}../dhis-web-maintenance/index.html#/edit/organisationUnitSection/organisationUnit/${id}`
+  }
+
   return (
     <a
-      href={href}
+      href={getHref()}
       target="_blank"
       rel="noopener noreferrer"
       title={i18n.t('Open {{name}} in Maintenance app', { name })}
       className={styles.viewLink}
+      onClick={(e) => {
+        e.preventDefault()
+        window.open(getHref(), '_blank', 'noopener,noreferrer')
+      }}
     >
       <span
         className="material-icons-round"
