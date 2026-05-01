@@ -88,16 +88,17 @@ function CopyIdButton({ id, name }: { id: string; name: string }) {
   )
 }
 
-// ── View-in-DHIS2 link — plain <a> so the browser resolves the URL natively.
-// baseUrl from useConfig() is always '..', which makes window.open build a
-// broken relative path. A native <a href> is also never blocked by popup blockers.
 function ViewOrgUnitButton({ id, name }: { id: string; name: string }) {
-  const href = `../dhis-web-maintenance/index.html#/edit/organisationUnitSection/organisationUnit/${id}`
+  // Use window.location.origin — same origin the browser already has a session
+  // for. In dev this is http://localhost:3000 which the proxy forwards to :8080,
+  // so the DHIS2 maintenance app lives at the same origin under /dhis-web-maintenance.
+  // A plain <a> with an absolute http:// href is never caught by HashRouter.
+  const href = `${window.location.origin}/dhis-web-maintenance/#/edit/organisationUnitSection/organisationUnit/${id}`
   return (
     <a
       href={href}
       target="_blank"
-      rel="noopener noreferrer"
+      rel="noreferrer"
       title={i18n.t('Open {{name}} in Maintenance app', { name })}
       className={styles.viewLink}
     >
