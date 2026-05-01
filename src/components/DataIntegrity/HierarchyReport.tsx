@@ -92,10 +92,7 @@ function CopyIdButton({ id, name }: { id: string; name: string }) {
 // baseUrl from useConfig() is always '..', which makes window.open build a
 // broken relative path. A native <a href> is also never blocked by popup blockers.
 function ViewOrgUnitButton({ id, name }: { id: string; name: string }) {
-  const base = (window.localStorage.getItem('DHIS2_BASE_URL') ?? '').replace(/\/$/, '')
-  const href = base
-    ? `${base}/dhis-web-maintenance/#/edit/organisationUnitSection/organisationUnit/${id}`
-    : '#'
+  const href = `${window.location.origin}/dhis-web-maintenance/#/edit/organisationUnitSection/organisationUnit/${id}`
 
   return (
     <a

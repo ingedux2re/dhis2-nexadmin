@@ -10,12 +10,6 @@ export default function Dashboard() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <div className={styles.hero}>
         <div className={styles.heroContent}>
-          <div className={styles.heroBadge}>
-            <span className="material-icons-round" style={{ fontSize: 13 }}>
-              verified
-            </span>
-            {i18n.t('DHIS2 Competition 2026')}
-          </div>
           <h1 className={styles.heroTitle}>
             {i18n.t('Welcome to')}{' '}
             <span className={styles.heroTitleAccent}>{i18n.t('NexAdmin')}</span>
@@ -48,10 +42,7 @@ export default function Dashboard() {
               <span className="material-icons-round">data_object</span>
             </div>
             <div className={styles.featureBody}>
-              <div className={styles.featureTitle}>
-                {i18n.t('Data Element Engineering')}
-                <span className={styles.featureBadgeNew}>{i18n.t('New')}</span>
-              </div>
+              <div className={styles.featureTitle}>{i18n.t('Data Element Engineering')}</div>
               <p className={styles.featureDesc}>
                 {i18n.t(
                   'Bulk-create dozens of data elements in seconds. Paste directly from Excel, auto-map columns, and assign to datasets — all in one workflow.'
@@ -81,10 +72,7 @@ export default function Dashboard() {
               <span className="material-icons-round">drive_file_rename_outline</span>
             </div>
             <div className={styles.featureBody}>
-              <div className={styles.featureTitle}>
-                {i18n.t('Bulk Rename')}
-                <span className={styles.featureBadgePopular}>{i18n.t('Popular')}</span>
-              </div>
+              <div className={styles.featureTitle}>{i18n.t('Bulk Rename')}</div>
               <p className={styles.featureDesc}>
                 {i18n.t(
                   'Rename hundreds of org units at once. Find & Replace, Prefix, Suffix, or Regex — with live preview before any change is committed.'
@@ -114,10 +102,7 @@ export default function Dashboard() {
               <span className="material-icons-round">verified_user</span>
             </div>
             <div className={styles.featureBody}>
-              <div className={styles.featureTitle}>
-                {i18n.t('Data Integrity Scan')}
-                <span className={styles.featureBadgeIntegrity}>{i18n.t('Integrity')}</span>
-              </div>
+              <div className={styles.featureTitle}>{i18n.t('Data Integrity Scan')}</div>
               <p className={styles.featureDesc}>
                 {i18n.t(
                   'One scan, three checks. Detect duplicate org units, hierarchy violations, and geo inconsistencies across your entire instance in seconds.'
