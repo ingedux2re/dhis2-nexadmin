@@ -16,9 +16,11 @@
   --brand-800: #1a237e;
   --brand-900: #0d1757;
 
+  --accent-300: #4dd0e1;
   --accent-400: #26c6da;
   --accent-500: #00bcd4;
   --accent-600: #00acc1;
+  --accent-700: #0097a7;
 
   /* ── Neutral palette ────────────────────────────────────── */
   --grey-0: #ffffff;
@@ -59,6 +61,7 @@
   --surface-page: #f0f2f5;
   --surface-card: #ffffff;
   --surface-raised: #ffffff;
+  --surface-hover: #f8fafc;
   --surface-overlay: rgba(15, 23, 42, 0.55);
   --surface-sidebar: #1e293b;
   --surface-topbar: #1e293b;
