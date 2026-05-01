@@ -1,7 +1,6 @@
 import type React from 'react'
 import { useState, useCallback } from 'react'
 import i18n from '@dhis2/d2-i18n'
-import { useConfig } from '@dhis2/app-runtime'
 import {
   DataTable,
   DataTableHead,
@@ -89,21 +88,18 @@ function CopyIdButton({ id, name }: { id: string; name: string }) {
   )
 }
 
-// ── View-in-DHIS2 button — opens the org unit in the Maintenance app ──────────
+// ── View-in-DHIS2 link — plain <a> so the browser resolves the URL natively.
+// baseUrl from useConfig() is always '..', which makes window.open build a
+// broken relative path. A native <a href> is also never blocked by popup blockers.
 function ViewOrgUnitButton({ id, name }: { id: string; name: string }) {
-  const { baseUrl } = useConfig()
-
-  const handleOpen = useCallback(() => {
-    const url = `${baseUrl}/dhis-web-maintenance/index.html#/edit/organisationUnitSection/organisationUnit/${id}`
-    window.open(url, '_blank', 'noopener,noreferrer')
-  }, [baseUrl, id])
-
+  const href = `../dhis-web-maintenance/index.html#/edit/organisationUnitSection/organisationUnit/${id}`
   return (
-    <Button
-      small
-      secondary
-      onClick={handleOpen}
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
       title={i18n.t('Open {{name}} in Maintenance app', { name })}
+      className={styles.viewLink}
     >
       <span
         className="material-icons-round"
@@ -112,7 +108,7 @@ function ViewOrgUnitButton({ id, name }: { id: string; name: string }) {
         open_in_new
       </span>
       {i18n.t('View in DHIS2')}
-    </Button>
+    </a>
   )
 }
 

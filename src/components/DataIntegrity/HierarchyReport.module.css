@@ -83,6 +83,30 @@
   display: flex;
   gap: var(--space-1);
   flex-wrap: wrap;
+  align-items: center;
+}
+
+.viewLink {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 10px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  color: var(--primary-600);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: var(--grey-0);
+  text-decoration: none;
+  white-space: nowrap;
+  transition:
+    background 0.15s,
+    border-color 0.15s;
+}
+
+.viewLink:hover {
+  background: var(--primary-50);
+  border-color: var(--primary-400);
+  text-decoration: none;
 }
 
 /* ── GeoConsistency extras ───────────────────────────────────── */
