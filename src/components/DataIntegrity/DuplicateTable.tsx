@@ -1,5 +1,7 @@
 import type React from 'react'
+import { useState, useCallback } from 'react'
 import i18n from '@dhis2/d2-i18n'
+import { useConfig } from '@dhis2/app-runtime'
 import {
   DataTable,
   DataTableHead,
@@ -58,6 +60,63 @@ function handleExport(pairs: DuplicatePair[]) {
   exportCsv('duplicates.csv', headers, rows)
 }
 
+// ── Copy-ID button with transient "Copied!" feedback ─────────────────────────
+function CopyIdButton({ id, name }: { id: string; name: string }) {
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = useCallback(() => {
+    navigator.clipboard
+      .writeText(id)
+      .then(() => {
+        setCopied(true)
+        setTimeout(() => setCopied(false), 1800)
+      })
+      .catch(() => {
+        /* ignore */
+      })
+  }, [id])
+
+  return (
+    <Button small secondary onClick={handleCopy} title={i18n.t('Copy UID for {{name}}', { name })}>
+      <span
+        className="material-icons-round"
+        style={{ fontSize: 14, marginRight: 4, verticalAlign: 'middle' }}
+      >
+        {copied ? 'check' : 'content_copy'}
+      </span>
+      {copied ? i18n.t('Copied!') : i18n.t('Copy ID')}
+    </Button>
+  )
+}
+
+// ── View-in-DHIS2 button — opens the org unit in the Maintenance app ──────────
+function ViewOrgUnitButton({ id, name }: { id: string; name: string }) {
+  const { baseUrl } = useConfig()
+
+  const handleOpen = useCallback(() => {
+    // DHIS2 Maintenance app deep-link for org unit editing
+    const url = `${baseUrl}/dhis-web-maintenance/index.html#/edit/organisationUnitSection/organisationUnit/${id}`
+    window.open(url, '_blank', 'noopener,noreferrer')
+  }, [baseUrl, id])
+
+  return (
+    <Button
+      small
+      secondary
+      onClick={handleOpen}
+      title={i18n.t('Open {{name}} in Maintenance app', { name })}
+    >
+      <span
+        className="material-icons-round"
+        style={{ fontSize: 14, marginRight: 4, verticalAlign: 'middle' }}
+      >
+        open_in_new
+      </span>
+      {i18n.t('View in DHIS2')}
+    </Button>
+  )
+}
+
 export const DuplicateTable: React.FC<DuplicateTableProps> = ({ pairs, loading, error }) => {
   if (loading) {
     return (
@@ -104,7 +163,7 @@ export const DuplicateTable: React.FC<DuplicateTableProps> = ({ pairs, loading, 
             <DataTableColumnHeader>{i18n.t('Parent B')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Level')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Match Type')}</DataTableColumnHeader>
-            <DataTableColumnHeader>{i18n.t('Similarity Score')}</DataTableColumnHeader>
+            <DataTableColumnHeader>{i18n.t('Similarity')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Severity')}</DataTableColumnHeader>
             <DataTableColumnHeader>{i18n.t('Actions')}</DataTableColumnHeader>
           </DataTableRow>
@@ -138,13 +197,8 @@ export const DuplicateTable: React.FC<DuplicateTableProps> = ({ pairs, loading, 
               </DataTableCell>
               <DataTableCell>
                 <div className={styles.actions}>
-                  <Button
-                    small
-                    secondary
-                    onClick={() => window.open(`#/org-units?id=${pair.idA}`, '_blank')}
-                  >
-                    {i18n.t('View Details')}
-                  </Button>
+                  <CopyIdButton id={pair.idA} name={pair.nameA} />
+                  <ViewOrgUnitButton id={pair.idA} name={pair.nameA} />
                 </div>
               </DataTableCell>
             </DataTableRow>
