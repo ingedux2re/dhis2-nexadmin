@@ -1,5 +1,5 @@
-// src/pages/Dashboard.tsx — Competition version
-// Clean, focused landing page for exactly 3 features
+// src/pages/Dashboard.tsx — Competition version v3
+// Competition-ready landing page: stronger hero, polished cards, no badges
 import i18n from '@dhis2/d2-i18n'
 import { Link } from 'react-router-dom'
 import styles from './Dashboard.module.css'
@@ -10,36 +10,62 @@ export default function Dashboard() {
       {/* ── Hero ─────────────────────────────────────────────── */}
       <div className={styles.hero}>
         <div className={styles.heroContent}>
+          <div className={styles.heroEyebrow}>
+            <span className="material-icons-round" style={{ fontSize: 13 }}>
+              bolt
+            </span>
+            {i18n.t('DHIS2 Administration Toolkit')}
+          </div>
           <h1 className={styles.heroTitle}>
-            {i18n.t('Welcome to')}{' '}
-            <span className={styles.heroTitleAccent}>{i18n.t('NexAdmin')}</span>
+            {i18n.t('Meet')} <span className={styles.heroTitleAccent}>{i18n.t('NexAdmin')}</span>
           </h1>
           <p className={styles.heroSubtitle}>
             {i18n.t(
-              'The administration toolkit DHIS2 was missing. Bulk operations, data integrity, and metadata engineering — all in one place.'
+              'What used to take your team days now takes seconds. Bulk operations, integrity scanning, and metadata engineering — purpose-built for DHIS2 at scale.'
             )}
           </p>
+          <div className={styles.heroCtas}>
+            <Link to="/data-elements" className={styles.heroPrimaryBtn}>
+              <span className="material-icons-round" style={{ fontSize: 16 }}>
+                rocket_launch
+              </span>
+              {i18n.t('Get Started')}
+            </Link>
+            <Link to="/integrity" className={styles.heroSecondaryBtn}>
+              <span className="material-icons-round" style={{ fontSize: 16 }}>
+                radar
+              </span>
+              {i18n.t('Run Integrity Scan')}
+            </Link>
+          </div>
         </div>
-        <div className={styles.heroIllustration} aria-hidden="true">
-          <div className={styles.heroOrb} />
-          <div className={styles.heroOrb2} />
-          <span
-            className="material-icons-round"
-            style={{ fontSize: 80, color: 'rgba(255,255,255,0.15)', position: 'relative' }}
-          >
-            data_object
-          </span>
+        <div className={styles.heroVisual} aria-hidden="true">
+          <div className={styles.heroRingOuter} />
+          <div className={styles.heroRingInner} />
+          <div className={styles.heroIconGroup}>
+            <span className="material-icons-round">data_object</span>
+            <span className="material-icons-round">drive_file_rename_outline</span>
+            <span className="material-icons-round">verified_user</span>
+          </div>
         </div>
       </div>
 
       {/* ── 3 Feature cards ───────────────────────────────────── */}
       <section>
-        <h2 className={styles.sectionTitle}>{i18n.t('Core Features')}</h2>
+        <div className={styles.sectionHead}>
+          <h2 className={styles.sectionTitle}>{i18n.t('Three Capabilities. One Tool.')}</h2>
+          <p className={styles.sectionSub}>
+            {i18n.t('Everything a DHIS2 administrator needs — no scripts, no CLI, no waiting.')}
+          </p>
+        </div>
         <div className={styles.featureGrid}>
-          {/* Feature 1 */}
-          <Link to="/data-elements" className={`${styles.featureCard} ${styles.featureCardGreen}`}>
-            <div className={styles.featureIconWrap}>
-              <span className="material-icons-round">data_object</span>
+          {/* Feature 1 — Data Element Engineering */}
+          <Link to="/data-elements" className={`${styles.featureCard} ${styles.featureCardBrand}`}>
+            <div className={styles.featureTop}>
+              <div className={styles.featureIconWrap}>
+                <span className="material-icons-round">data_object</span>
+              </div>
+              <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
             </div>
             <div className={styles.featureBody}>
               <div className={styles.featureTitle}>{i18n.t('Data Element Engineering')}</div>
@@ -63,13 +89,15 @@ export default function Dashboard() {
                 </li>
               </ul>
             </div>
-            <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
           </Link>
 
-          {/* Feature 2 */}
+          {/* Feature 2 — Bulk Rename */}
           <Link to="/bulk/rename" className={`${styles.featureCard} ${styles.featureCardAccent}`}>
-            <div className={styles.featureIconWrap}>
-              <span className="material-icons-round">drive_file_rename_outline</span>
+            <div className={styles.featureTop}>
+              <div className={styles.featureIconWrap}>
+                <span className="material-icons-round">drive_file_rename_outline</span>
+              </div>
+              <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
             </div>
             <div className={styles.featureBody}>
               <div className={styles.featureTitle}>{i18n.t('Bulk Rename')}</div>
@@ -85,7 +113,7 @@ export default function Dashboard() {
                 </li>
                 <li>
                   <span className="material-icons-round">preview</span>
-                  {i18n.t('Live preview panel — zero surprises')}
+                  {i18n.t('Live preview — zero surprises')}
                 </li>
                 <li>
                   <span className="material-icons-round">undo</span>
@@ -93,13 +121,15 @@ export default function Dashboard() {
                 </li>
               </ul>
             </div>
-            <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
           </Link>
 
-          {/* Feature 3 */}
+          {/* Feature 3 — Data Integrity */}
           <Link to="/integrity" className={`${styles.featureCard} ${styles.featureCardWarning}`}>
-            <div className={styles.featureIconWrap}>
-              <span className="material-icons-round">verified_user</span>
+            <div className={styles.featureTop}>
+              <div className={styles.featureIconWrap}>
+                <span className="material-icons-round">verified_user</span>
+              </div>
+              <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
             </div>
             <div className={styles.featureBody}>
               <div className={styles.featureTitle}>{i18n.t('Data Integrity Scan')}</div>
@@ -123,7 +153,6 @@ export default function Dashboard() {
                 </li>
               </ul>
             </div>
-            <span className={`material-icons-round ${styles.featureArrow}`}>arrow_forward</span>
           </Link>
         </div>
       </section>
@@ -131,27 +160,46 @@ export default function Dashboard() {
       {/* ── Quick stat strip ──────────────────────────────────── */}
       <section className={styles.statStrip}>
         <div className={styles.statItem}>
-          <span className="material-icons-round">bolt</span>
-          <strong>{i18n.t('Hours → Seconds')}</strong>
-          <span>{i18n.t('Bulk metadata operations')}</span>
+          <div className={styles.statIconWrap} style={{ background: '#ede9fe', color: '#7c3aed' }}>
+            <span className="material-icons-round">bolt</span>
+          </div>
+          <div className={styles.statText}>
+            <strong>{i18n.t('Hours → Seconds')}</strong>
+            <span>{i18n.t('Bulk metadata operations')}</span>
+          </div>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
-          <span className="material-icons-round">undo</span>
-          <strong>{i18n.t('Auto-Rollback')}</strong>
-          <span>{i18n.t('Every destructive op is safe')}</span>
+          <div className={styles.statIconWrap} style={{ background: '#fef9c3', color: '#b45309' }}>
+            <span className="material-icons-round">undo</span>
+          </div>
+          <div className={styles.statText}>
+            <strong>{i18n.t('Auto-Rollback')}</strong>
+            <span>{i18n.t('Every destructive op is safe')}</span>
+          </div>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
-          <span className="material-icons-round">radar</span>
-          <strong>{i18n.t('3-in-1 Integrity Scan')}</strong>
-          <span>{i18n.t('Duplicates · Hierarchy · Geo')}</span>
+          <div className={styles.statIconWrap} style={{ background: '#fee2e2', color: '#b91c1c' }}>
+            <span className="material-icons-round">radar</span>
+          </div>
+          <div className={styles.statText}>
+            <strong>{i18n.t('3-in-1 Integrity Scan')}</strong>
+            <span>{i18n.t('Duplicates · Hierarchy · Geo')}</span>
+          </div>
         </div>
         <div className={styles.statDivider} />
         <div className={styles.statItem}>
-          <span className="material-icons-round">table_view</span>
-          <strong>{i18n.t('Excel-Native Import')}</strong>
-          <span>{i18n.t('Paste directly from spreadsheets')}</span>
+          <div
+            className={styles.statIconWrap}
+            style={{ background: 'var(--brand-100)', color: 'var(--brand-600)' }}
+          >
+            <span className="material-icons-round">table_view</span>
+          </div>
+          <div className={styles.statText}>
+            <strong>{i18n.t('Excel-Native Import')}</strong>
+            <span>{i18n.t('Paste directly from spreadsheets')}</span>
+          </div>
         </div>
       </section>
     </div>
