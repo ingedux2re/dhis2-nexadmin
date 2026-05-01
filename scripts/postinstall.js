@@ -18,7 +18,33 @@ if (!fs.existsSync(stubPath)) {
   console.log('postinstall: created multi-calendar-dates stub')
 }
 
-// ── 2. patch generate.js — deduplicate langs array ────────────────────────────
+// ── 2. patch proxy.js — strip SameSite cookie attribute ──────────────────────
+// DHIS2 2.40+ sets SameSite=Lax on JSESSIONID. The dev proxy redirects from
+// localhost:3000 → localhost:8080, causing the browser to drop the cookie.
+// Stripping SameSite keeps the session alive (same fix already applied to Secure).
+const proxyPath = path.join(
+  __dirname, '..', 'node_modules',
+  '@dhis2/cli-app-scripts/src/lib/proxy.js'
+)
+
+if (fs.existsSync(proxyPath)) {
+  let proxySrc = fs.readFileSync(proxyPath, 'utf8')
+  const PROXY_ORIGINAL = `filter((v) => v.trim().toLowerCase() !== 'secure')`
+  const PROXY_PATCHED  = `filter((v) => { const p = v.trim().toLowerCase(); return p !== 'secure' && !p.startsWith('samesite') })`
+  if (proxySrc.includes(PROXY_PATCHED)) {
+    console.log('postinstall: proxy.js already patched — nothing to do')
+  } else if (proxySrc.includes(PROXY_ORIGINAL)) {
+    proxySrc = proxySrc.replace(PROXY_ORIGINAL, PROXY_PATCHED)
+    fs.writeFileSync(proxyPath, proxySrc, 'utf8')
+    console.log('postinstall: patched proxy.js — SameSite stripped from cookies ✓')
+  } else {
+    console.warn('postinstall: WARNING — expected line not found in proxy.js, check manually')
+  }
+} else {
+  console.warn('postinstall: proxy.js not found — skipping patch')
+}
+
+// ── 3. patch generate.js — deduplicate langs array ────────────────────────────
 const genPath = path.join(
   __dirname, '..', 'node_modules',
   '@dhis2/cli-app-scripts/src/lib/i18n/generate.js'
