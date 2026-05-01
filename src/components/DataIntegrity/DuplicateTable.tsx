@@ -92,13 +92,13 @@ function CopyIdButton({ id, name }: { id: string; name: string }) {
 // baseUrl from useConfig() is always '..', which makes window.open build a
 // broken relative path. A native <a href> is also never blocked by popup blockers.
 function ViewOrgUnitButton({ id, name }: { id: string; name: string }) {
-  // Compute the absolute DHIS2 URL once on render.
-  // Dev: app=:3000, DHIS2 proxy=:8080 → swap port.
-  // Production: both share the same origin, port is empty.
-  const { protocol, hostname, port } = window.location
-  const dhis2Port = port === '3000' ? '8080' : port
-  const origin = `${protocol}//${hostname}${dhis2Port ? `:${dhis2Port}` : ''}`
-  const href = `${origin}/dhis-web-maintenance/index.html#/edit/organisationUnitSection/organisationUnit/${id}`
+  // window.localStorage.DHIS2_BASE_URL is set by the DHIS2 app-adapter login modal
+  // and always contains the real server URL the user logged in with (e.g. http://localhost:8080).
+  // This is the only reliable way to get the correct base URL at runtime.
+  const base = (window.localStorage.getItem('DHIS2_BASE_URL') ?? '').replace(/\/$/, '')
+  const href = base
+    ? `${base}/dhis-web-maintenance/#/edit/organisationUnitSection/organisationUnit/${id}`
+    : '#'
 
   // Use a plain <a> with a full http:// href — React Router / HashRouter only
   // intercepts relative paths and hash-only links, never absolute http URLs.
